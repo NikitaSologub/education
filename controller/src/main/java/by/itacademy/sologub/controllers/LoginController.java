@@ -1,5 +1,6 @@
 package by.itacademy.sologub.controllers;
 
+import by.itacademy.sologub.User;
 import by.itacademy.sologub.constants.Constant;
 
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import java.io.IOException;
 
 import static by.itacademy.sologub.constants.Constant.*;
 import static by.itacademy.sologub.constants.Constants.ADMIN_CREDENTIAL;
+import static by.itacademy.sologub.constants.Constants.ADMIN_USER;
 
 @WebServlet(LOGIN_CONTROLLER)
 public class LoginController extends BaseController {
@@ -20,11 +22,11 @@ public class LoginController extends BaseController {
         String password = req.getParameter(Constant.PASSWORD).trim();
 
         checkForAdmin(login, password, req, res);
-//        checkForTeacher(login, password, req, res);
-//        checkForStudent(login, password, req, res);
+        checkForTeacher(login, password, req, res);
+        checkForStudent(login, password, req, res);
+
 //        IUserDAO userDAO = DAOFactory.getDAO(IUserDAO.class);
 //        boolean checkItOut = userDAO.userVerification(login, password);
-//
 //        if (checkItOut) {
 //            user.setLogin(login);
 //            HttpSession session = req.getSession();
@@ -42,15 +44,17 @@ public class LoginController extends BaseController {
 
         if (adminLogin.equals(login)) {
             if (adminPassword.equals(password)) {
-                //положить в сессию - придумать атрибут
+//                setSession(ADMIN_USER, req);//TODO - проверить работу сессии
                 forward(ADMIN_FRONT_PAGE, "добро пожаловать ADMIN", req, res);
             } else {
                 forwardError(LOGIN_PAGE, "вы ввели неверный пароль", req, res);
             }
-        } else {
-            //удалить потом
-            forwardError(LOGIN_PAGE, "пользователя с таким логином не существует", req, res);
         }
+    }
+
+    void setSession(User user, HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        session.setAttribute(SESSION_ENTITY, user);
     }
 
     void checkForTeacher(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
