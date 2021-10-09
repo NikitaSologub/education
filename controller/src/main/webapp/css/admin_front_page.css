@@ -1,0 +1,11 @@
+.body{
+    background: url("../img/front_wallpaper.jpg");
+    font-family: "Roboto", sans-serif;
+    margin: 50px;
+    padding: 0;
+    background-size: 100%;
+}
+
+.message{
+    color: green;
+}
