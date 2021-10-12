@@ -1,11 +1,11 @@
 body{
-    background: url("../img/front_wallpaper.jpg");
     font-family: "Roboto", sans-serif;
     margin: 50px;
     padding: 0;
     background-size: 100%;
+    background: url("../img/wallpaper.jpg");
 }
 
 .errorMessage{
-    color: red;
+    color: #ff0000;
 }

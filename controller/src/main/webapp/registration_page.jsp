@@ -5,7 +5,7 @@
 <head>
     <title>Title</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="css/registration.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/registration.css'/>"/>
     <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
 </head>
 
@@ -36,7 +36,7 @@
     <input type="reset">
 </form>
 
-<h3 id="errorMessage">
+<h3 class="errorMessage">
     <c:if test="${not empty errorMessage}">
         <c:out value="${errorMessage}"/>
     </c:if>

@@ -20,6 +20,8 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <jstl.version>1.2</jstl.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+        <slf4j-api.version>1.7.32</slf4j-api.version>
+        <logback-classic.version>1.2.3</logback-classic.version>
     </properties>
 
     <dependencyManagement>
@@ -36,7 +38,18 @@
                 <version>${javax.servlet-api.version}</version>
                 <scope>provided</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback-classic.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-
 </project>

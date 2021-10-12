@@ -1,17 +1,17 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@include file="css/login.css" %>
 <!DOCTYPE HTML>
 <html>
 <head>
     <title>Login page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="css/login.css" type="text/css"/>
-    <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
+    <link rel="stylesheet" type="text/css" href="<c:url value='css/login.css'/>"/>
+    <link rel="icon" href="img/book_favicon.png" type="image/png">
 </head>
-<body>
+<body class="basic">
 <h1>Welcome in login page!</h1>
 <h1>Please login</h1>
-
 <form action="<c:url value="/LoginController"/>" method="post">
     Username: <label>
     <input type="text" name="login"/>
@@ -22,9 +22,7 @@
     <input type="submit" title="Отправить"/>
     <input type="reset" title="Очистить">
 </form>
-
-<h3 id="errorMessage">
-    <%--@elvariable id="errorMessage" type="java.lang.String"--%>
+<h3 class="errorMessage">
     <c:if test="${not empty errorMessage}">
         <c:out value="${errorMessage}"/>
     </c:if>

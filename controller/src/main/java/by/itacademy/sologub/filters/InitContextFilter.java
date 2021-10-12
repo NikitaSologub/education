@@ -6,7 +6,6 @@ import by.itacademy.sologub.factory.ModelRepoFactoryHardcodeImpl;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import java.io.IOException;
 
 import static by.itacademy.sologub.constants.Constant.CREDENTIAL_REPO;
 

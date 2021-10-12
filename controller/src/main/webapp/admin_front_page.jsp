@@ -5,7 +5,7 @@
 <head>
     <title>Admin front page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="css/admin_front_page.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/admin_front_page.css'/>"/>
     <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
 </head>
 <body>

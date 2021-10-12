@@ -2,6 +2,8 @@ package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.User;
 import by.itacademy.sologub.constants.Constant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +18,8 @@ import static by.itacademy.sologub.constants.Constants.ADMIN_USER;
 
 @WebServlet(LOGIN_CONTROLLER)
 public class LoginController extends BaseController {
+    private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String login = req.getParameter(Constant.LOGIN).trim();
@@ -24,18 +28,6 @@ public class LoginController extends BaseController {
         checkForAdmin(login, password, req, res);
         checkForTeacher(login, password, req, res);
         checkForStudent(login, password, req, res);
-
-//        IUserDAO userDAO = DAOFactory.getDAO(IUserDAO.class);
-//        boolean checkItOut = userDAO.userVerification(login, password);
-//        if (checkItOut) {
-//            user.setLogin(login);
-//            HttpSession session = req.getSession();
-//            session.setAttribute(Constant.LOGIN, user.getLogin());
-//            req.setAttribute(Constant.KEY_LIST_NAME, ConstantsJSP.MESSAGE_FIRST_MESSAGE_AFTER_LOGIN);
-//            forward(Constant.JUMP_TODO, req, res);
-//        } else {
-//            forwardError(ConstantsJSP.ERROR_WRONG_LOGIN_OR_PASSWORD, req, res);
-//        }
     }
 
     void checkForAdmin(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -44,28 +36,42 @@ public class LoginController extends BaseController {
 
         if (adminLogin.equals(login)) {
             if (adminPassword.equals(password)) {
-//                setSession(ADMIN_USER, req);//TODO - проверить работу сессии
+//                setSessionAttribute(ADMIN_USER, req);//TODO - проверить работу сессии
+                LOG.info("Логин и пароль администратора совпали. Админ входит в систему. Форвард на ADMIN_FRONT_PAGE");
                 forward(ADMIN_FRONT_PAGE, "добро пожаловать ADMIN", req, res);
             } else {
                 forwardError(LOGIN_PAGE, "вы ввели неверный пароль", req, res);
+                LOG.info("Логин совпал а пароль не верен. АДМИН- в доступе отказано. Форвард на LOGIN_PAGE");
             }
         }
     }
 
-    void setSession(User user, HttpServletRequest req) {
+    void setSessionAttribute(User user, HttpServletRequest req) {
         HttpSession session = req.getSession();
         session.setAttribute(SESSION_ENTITY, user);
     }
 
     void checkForTeacher(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         //временная заглушка - делать то же что и с админом
-        //достать репозиторий и проверять так же как и админа
+        //а именно - достать из servletContext обьект TeacherRepo
+        // а из него достать по паролю и логину объект Teacher
+        //далее - проверить на соответствие и выбрать одно из трёх
+        // если пароль и логин правильные - forward на TEACHER_FRONT_PAGE + установить SESSION
+        // если пароль не правильный - forwardError(LOGIN_PAGE - вы ввели неверный пароль
+        // если логин не правильный - forwardError(LOGIN_PAGE - такого пользователя не существует
+        LOG.info("Логин не верен. УЧИТЕЛЬ- в доступе отказано. Форвард на LOGIN_PAGE");
         forwardError(LOGIN_PAGE, "пользователя с таким логином не существует", req, res);
     }
 
     void checkForStudent(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         //временная заглушка - делать то же что и с админом
-        //достать репозиторий и проверять так же как и админа
+        //а именно - достать из servletContext обьект StudentRepo
+        // а из него достать по паролю и логину объект Student
+        //далее - проверить на соответствие и выбрать одно из трёх
+        // если пароль и логин правильные - forward на Student_FRONT_PAGE + установить SESSION
+        // если пароль не правильный - forwardError(LOGIN_PAGE - вы ввели неверный пароль
+        // если логин не правильный - forwardError(LOGIN_PAGE - такого пользователя не существует
+        LOG.info("Логин не верен. СТУДЕНТ- в доступе отказано. Форвард на LOGIN_PAGE");
         forwardError(LOGIN_PAGE, "пользователя с таким логином не существует", req, res);
     }
 }
