@@ -21,13 +21,29 @@ public class LoginController extends BaseController {
     private static final Logger LOG = LoggerFactory.getLogger(LoginController.class);
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        forwardError(LOGIN_PAGE, "Вам нельзя переходить по URL /LoginController", req, res);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        String login = req.getParameter(Constant.LOGIN).trim();
-        String password = req.getParameter(Constant.PASSWORD).trim();
+        String login = req.getParameter(Constant.LOGIN);
+        String password = req.getParameter(Constant.PASSWORD);
+
+        if (login != null) {
+            login = login.trim();
+        }
+        if (password != null) {
+            password = password.trim();
+        }
+        LOG.info("Пользователь {} пытается войти в систему. Пароль {}", login, password);
 
         checkForAdmin(login, password, req, res);
         checkForTeacher(login, password, req, res);
         checkForStudent(login, password, req, res);
+
+        LOG.info("логина {} нет в системе в доступе отказано.", login);
+        forwardError(LOGIN_PAGE, "пользователя с таким логином не существует", req, res);
     }
 
     void checkForAdmin(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -36,19 +52,20 @@ public class LoginController extends BaseController {
 
         if (adminLogin.equals(login)) {
             if (adminPassword.equals(password)) {
-//                setSessionAttribute(ADMIN_USER, req);//TODO - проверить работу сессии
+                createSessionAndSetAttribute(ADMIN_USER, req);
                 LOG.info("Логин и пароль администратора совпали. Админ входит в систему. Форвард на ADMIN_FRONT_PAGE");
                 forward(ADMIN_FRONT_PAGE, "добро пожаловать ADMIN", req, res);
             } else {
-                forwardError(LOGIN_PAGE, "вы ввели неверный пароль", req, res);
+                forwardError(LOGIN_PAGE, "Админ ввёл неверный пароль.", req, res);
                 LOG.info("Логин совпал а пароль не верен. АДМИН- в доступе отказано. Форвард на LOGIN_PAGE");
             }
         }
     }
 
-    void setSessionAttribute(User user, HttpServletRequest req) {
+    void createSessionAndSetAttribute(User user, HttpServletRequest req) {
         HttpSession session = req.getSession();
         session.setAttribute(SESSION_ENTITY, user);
+        LOG.info("пользователь {} положен в сессию.", user);
     }
 
     void checkForTeacher(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -58,9 +75,8 @@ public class LoginController extends BaseController {
         //далее - проверить на соответствие и выбрать одно из трёх
         // если пароль и логин правильные - forward на TEACHER_FRONT_PAGE + установить SESSION
         // если пароль не правильный - forwardError(LOGIN_PAGE - вы ввели неверный пароль
-        // если логин не правильный - forwardError(LOGIN_PAGE - такого пользователя не существует
-        LOG.info("Логин не верен. УЧИТЕЛЬ- в доступе отказано. Форвард на LOGIN_PAGE");
-        forwardError(LOGIN_PAGE, "пользователя с таким логином не существует", req, res);
+        // если логин не правильный - ничего не делай, пропускай, и пусть другие методы попытаются
+//        LOG.info("Логин не верен. УЧИТЕЛЬ- в доступе отказано. Форвард на LOGIN_PAGE");
     }
 
     void checkForStudent(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -70,8 +86,7 @@ public class LoginController extends BaseController {
         //далее - проверить на соответствие и выбрать одно из трёх
         // если пароль и логин правильные - forward на Student_FRONT_PAGE + установить SESSION
         // если пароль не правильный - forwardError(LOGIN_PAGE - вы ввели неверный пароль
-        // если логин не правильный - forwardError(LOGIN_PAGE - такого пользователя не существует
-        LOG.info("Логин не верен. СТУДЕНТ- в доступе отказано. Форвард на LOGIN_PAGE");
-        forwardError(LOGIN_PAGE, "пользователя с таким логином не существует", req, res);
+        // если логин не правильный - ничего не делай, пропускай, и пусть другие методы попытаются
+//        LOG.info("Логин не верен. СТУДЕНТ- в доступе отказано. Форвард на LOGIN_PAGE");
     }
 }

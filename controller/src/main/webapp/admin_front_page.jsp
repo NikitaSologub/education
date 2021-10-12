@@ -11,8 +11,11 @@
 <body>
 <h1>Welcome in ADMIN HOME PAGE!</h1>
 
-<%--Заменим позже адрес выхода на /LogoutController который будет инвалидировать сессию
-и посылать дальнейший httpRequest на страницу /login_page.jsp--%>
-<a href="${pageContext.request.contextPath}/login_page.jsp">Log out.</a>
+<h3 class="message">
+    <c:if test="${not empty message}">
+        <c:out value="${message}"/>
+    </c:if>
+</h3>
+<a href="${pageContext.request.contextPath}/LogoutController">Log out.</a>
 </body>
 </html>

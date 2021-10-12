@@ -26,10 +26,10 @@ public class Constant {
     public static final String ROLE = "role";
 
     public static final String ADMIN_ENTITY = "adminEntity";
+    public static final String SESSION_ENTITY = "sessionEntity";
 
     public static final String MESSAGE = "message";
     public static final String ERROR_MESSAGE = "errorMessage";
-    public static final String SESSION_ENTITY = "sessionEntity";
     public static final String CREDENTIAL_REPO ="credentialRepo";
     public static final String TEACHER_REPO ="teacherRepo";
     public static final String STUDENT_REPO ="studentRepo";

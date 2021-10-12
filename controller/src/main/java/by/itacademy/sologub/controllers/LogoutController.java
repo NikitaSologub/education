@@ -8,16 +8,15 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-import static by.itacademy.sologub.constants.Constant.LOGIN_PAGE;
-import static by.itacademy.sologub.constants.Constant.LOGOUT_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.*;
 
 @WebServlet(LOGOUT_CONTROLLER)
 public class LogoutController extends BaseController {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //придумать инвалидацию сессии
-//        HttpSession session = req.getSession();  TODO - проверить работу сессии
-//        session.invalidate();
+        HttpSession session = req.getSession();
+        req.setAttribute(SESSION_ENTITY,null);
+        session.invalidate(); //TODO - проверить работу сессии
         forward(LOGIN_PAGE, req, resp);
     }
 }

@@ -14,10 +14,10 @@
 <h1>Please login</h1>
 <form action="<c:url value="/LoginController"/>" method="post">
     Username: <label>
-    <input type="text" name="login"/>
+    <input type="text" name="login" required placeholder="ваш логин"/>
 </label><br/>
     Password: <label>
-    <input type="password" name="password"/>
+    <input type="password" name="password" required placeholder="ваш пароль"/>
 </label><br/>
     <input type="submit" title="Отправить"/>
     <input type="reset" title="Очистить">

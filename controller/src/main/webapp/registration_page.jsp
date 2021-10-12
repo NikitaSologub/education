@@ -13,7 +13,7 @@
 <h1>Welcome in registration page!</h1>
 <h1>Please register your account</h1>
 
-<form action="<c:url value="/FrontController"/>" method="post">
+<form action="<c:url value="/"/>" method="post"><!--форма пока что ведет в никуда-->
     Username: <label>
     <input type="text" name="username"/>
 </label><br/>
