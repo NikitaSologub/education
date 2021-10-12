@@ -1,5 +1,8 @@
 package by.itacademy.sologub.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,11 +15,14 @@ import static by.itacademy.sologub.constants.Constant.*;
 
 @WebServlet(LOGOUT_CONTROLLER)
 public class LogoutController extends BaseController {
+    public static final Logger LOG = LoggerFactory.getLogger(LogoutController.class);
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        req.setAttribute(SESSION_ENTITY,null);
-        session.invalidate(); //TODO - проверить работу сессии
+        req.getSession()
+                .invalidate();
+        LOG.info("Инвалидируем сессию");
+//        req.setAttribute(SESSION_ENTITY,null);
+
         forward(LOGIN_PAGE, req, resp);
     }
 }

@@ -5,7 +5,7 @@
 <html>
 <head>
     <title>Login page</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<%--    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">--%>
     <link rel="stylesheet" type="text/css" href="<c:url value='css/login.css'/>"/>
     <link rel="icon" href="img/book_favicon.png" type="image/png">
 </head>
