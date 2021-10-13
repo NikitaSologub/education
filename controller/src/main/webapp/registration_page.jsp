@@ -37,8 +37,8 @@
 </form>
 
 <h3 class="errorMessage">
-    <c:if test="${not empty errorMessage}">
-        <c:out value="${errorMessage}"/>
+    <c:if test="${not empty requestScope.errorMessage}">
+        <c:out value="${requestScope.errorMessage}"/>
     </c:if>
 </h3>
 <a href="${pageContext.request.contextPath}/login_page.jsp">Already have an account? Login here.</a>

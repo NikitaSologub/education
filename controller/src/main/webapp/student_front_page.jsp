@@ -9,8 +9,8 @@
 <h1>Welcome in Student front page</h1>
 
 <h3 class="message">
-    <c:if test="${not empty message}">
-        <c:out value="${message}"/>
+    <c:if test="${not empty requestScope.message}">
+        <c:out value="${requestScope.message}"/>
     </c:if>
 </h3>
 <a href="${pageContext.request.contextPath}/LogoutController">Log out.</a>

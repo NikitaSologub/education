@@ -23,8 +23,8 @@
     <input type="reset" title="Очистить">
 </form>
 <h3 class="errorMessage">
-    <c:if test="${not empty errorMessage}">
-        <c:out value="${errorMessage}"/>
+    <c:if test="${not empty requestScope.errorMessage}">
+        <c:out value="${requestScope.errorMessage}"/>
     </c:if>
 </h3>
 <a href="${pageContext.request.contextPath}/registration_page.jsp">Not registered? Create an account.</a>

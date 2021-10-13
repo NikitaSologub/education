@@ -56,7 +56,7 @@ public class LoginController extends BaseController {
                 LOG.info("Логин и пароль администратора совпали. Админ входит в систему. Форвард на ADMIN_FRONT_PAGE");
                 forward(ADMIN_FRONT_PAGE, "добро пожаловать ADMIN", req, res);
             } else {
-                forwardError(LOGIN_PAGE, "Админ ввёл неверный пароль.", req, res);
+                forwardError(LOGIN_PAGE, "Введён неверный пароль.", req, res);
                 LOG.info("Логин совпал а пароль не верен. АДМИН- в доступе отказано. Форвард на LOGIN_PAGE");
             }
         }
