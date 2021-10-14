@@ -42,7 +42,7 @@ public class InitContextFilter implements Filter {
         t1.setCredential(cr1);
         t1.setFirstname("Валерия");
         t1.setPatronymic("Леонидовна");
-        t1.setLastname("Леонидовна");
+        t1.setLastname("Грузинова");
         t1.setDateOfBirth(LocalDate.of(1974, Month.SEPTEMBER, 21));
         t1.setRole(Role.TEACHER);
 
