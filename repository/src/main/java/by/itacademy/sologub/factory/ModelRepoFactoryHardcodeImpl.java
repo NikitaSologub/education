@@ -7,6 +7,7 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     private static final CredentialRepo credentialRepo;
     private static final TeacherRepo teacherRepo;
     private static final StudentRepo studentRepo;
+    private static final SalariesRepo salariesRepo;
 
     private ModelRepoFactoryHardcodeImpl() {
         //singleton
@@ -17,6 +18,7 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
         credentialRepo = new CredentialRepoHardcodeImpl();
         teacherRepo = new TeacherRepoHardcodedImpl(credentialRepo);
         studentRepo = new StudentRepoHardcodedImpl(credentialRepo);
+        salariesRepo = new SalariesRepoHardcodedImpl();
     }
 
     @Override
@@ -32,6 +34,11 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     @Override
     public StudentRepo getStudentRepo() {
         return studentRepo;
+    }
+
+    @Override
+    public SalariesRepo getSalariesRepo() {
+        return salariesRepo;
     }
 
     public static ModelRepoFactory getInstance(){

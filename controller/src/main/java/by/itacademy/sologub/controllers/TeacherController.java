@@ -29,7 +29,7 @@ public class TeacherController extends BaseController {
         } else {
             msg = "Не удалось добавить чителя " + req.getParameter("login");
         }
-        forward(ADMIN_SALARIES_PAGE, msg, req, resp);
+        forward(ADMIN_TEACHERS_PAGE, msg, req, resp);
     }
 
     Teacher extractTeacherFromForm(HttpServletRequest req) {
@@ -73,7 +73,7 @@ public class TeacherController extends BaseController {
         } else {
             msg = "Не удалось изменить учителя " + req.getParameter("login");
         }
-        forward(ADMIN_SALARIES_PAGE, msg, req, resp);
+        forward(ADMIN_TEACHERS_PAGE, msg, req, resp);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class TeacherController extends BaseController {
         } else {
             msg = "Не удалось удалить чителя " + req.getParameter("teacherLogin");
         }
-        forward(ADMIN_SALARIES_PAGE, msg, req, resp);
+        forward(ADMIN_TEACHERS_PAGE, msg, req, resp);
     }
 
     @Override

@@ -20,15 +20,18 @@ public class InitContextFilter implements Filter {
     public void init(FilterConfig filterConfig) {
         ModelRepoFactory factory = ModelRepoFactoryHardcodeImpl.getInstance();
 
+        SalariesRepo salariesRepo = factory.getSalariesRepo();
         CredentialRepo credentialRepo = factory.getCredentialRepo();
         TeacherRepo teacherRepo = factory.getTeacherRepo();
         StudentRepo studentRepo = factory.getStudentRepo();
+
 
         ServletContext context = filterConfig.getServletContext();
 
         setStudents(studentRepo);
         setTeachers(teacherRepo);
 
+        context.setAttribute(SALARIES_REPO, salariesRepo);
         context.setAttribute(CREDENTIAL_REPO, credentialRepo);
         context.setAttribute(TEACHER_REPO, teacherRepo);
         context.setAttribute(STUDENT_REPO, studentRepo);

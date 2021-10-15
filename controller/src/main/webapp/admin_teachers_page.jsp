@@ -37,6 +37,13 @@
                     <button type="submit">Удалить учителя</button>
                 </form>
             </td>
+
+            <td>
+                <form action="SalariesController" method="post">
+                    <input name="teacher" type="hidden" value="${teacher}">
+                    <button type="submit">На страницу зарплат</button>
+                </form>
+            </td>
         </tr>
         <br>
         <tr>

@@ -1,9 +1,6 @@
 package by.itacademy.sologub.constants;
 
-import by.itacademy.sologub.Admin;
-import by.itacademy.sologub.Credential;
-import by.itacademy.sologub.Student;
-import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.*;
 import by.itacademy.sologub.role.Role;
 
 import java.time.LocalDate;
@@ -15,10 +12,14 @@ public class Constants {
 
     public static final Credential LOGIN_NOT_EXISTS;
     public static final Credential PASSWORD_WRONG;
+
     public static final Teacher TEACHER_NOT_EXISTS;
     public static final Teacher TEACHER_PASSWORD_WRONG;
+
     public static final Student STUDENT_NOT_EXISTS;
     public static final Student STUDENT_PASSWORD_WRONG;
+
+    public static final Salary SALARY_NOT_EXISTS;
 
     static {
         ADMIN_CREDENTIAL = new Credential();
@@ -64,5 +65,11 @@ public class Constants {
         STUDENT_PASSWORD_WRONG.setId(-7);
         STUDENT_PASSWORD_WRONG.setCredential(PASSWORD_WRONG);
         STUDENT_PASSWORD_WRONG.setRole(Role.SYSTEM);
+
+        SALARY_NOT_EXISTS = new Salary();
+        SALARY_NOT_EXISTS.setId(-1);
+        SALARY_NOT_EXISTS.setCoins(0);
+        SALARY_NOT_EXISTS.setDate(LocalDate.now());
+        SALARY_NOT_EXISTS.setTeacherId(-100);
     }
 }
