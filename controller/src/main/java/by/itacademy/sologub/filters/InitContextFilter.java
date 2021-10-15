@@ -25,11 +25,10 @@ public class InitContextFilter implements Filter {
         TeacherRepo teacherRepo = factory.getTeacherRepo();
         StudentRepo studentRepo = factory.getStudentRepo();
 
-
         ServletContext context = filterConfig.getServletContext();
 
         setStudents(studentRepo);
-        setTeachers(teacherRepo);
+        setTeachersAndSalaries(teacherRepo, salariesRepo);
 
         context.setAttribute(SALARIES_REPO, salariesRepo);
         context.setAttribute(CREDENTIAL_REPO, credentialRepo);
@@ -37,7 +36,7 @@ public class InitContextFilter implements Filter {
         context.setAttribute(STUDENT_REPO, studentRepo);
     }
 
-    void setTeachers(TeacherRepo repo) {
+    void setTeachersAndSalaries(TeacherRepo teacherRepo, SalariesRepo salariesRepo) {
         Credential cr1 = new Credential();
         cr1.setLogin("VIK_k");
         cr1.setPassword("teach12");
@@ -82,10 +81,75 @@ public class InitContextFilter implements Filter {
         t4.setDateOfBirth(LocalDate.of(1957, Month.DECEMBER, 11));
         t4.setRole(Role.TEACHER);
 
-        repo.putTeacherIfNotExists(t1);
-        repo.putTeacherIfNotExists(t2);
-        repo.putTeacherIfNotExists(t3);
-        repo.putTeacherIfNotExists(t4);
+        teacherRepo.putTeacherIfNotExists(t1);
+        teacherRepo.putTeacherIfNotExists(t2);
+        teacherRepo.putTeacherIfNotExists(t3);
+        teacherRepo.putTeacherIfNotExists(t4);
+
+        Salary s1 = new Salary();
+        s1.setTeacherId(t1.getId());
+        s1.setDate(LocalDate.parse("2021-01-12"));
+        s1.setCoins(64140);
+        Salary s2 = new Salary();
+        s2.setTeacherId(t1.getId());
+        s2.setDate(LocalDate.parse("2021-02-11"));
+        s2.setCoins(63716);
+        Salary s3 = new Salary();
+        s3.setTeacherId(t1.getId());
+        s3.setDate(LocalDate.parse("2021-03-13"));
+        s3.setCoins(61898);
+
+        Salary s4 = new Salary();
+        s4.setTeacherId(t2.getId());
+        s4.setDate(LocalDate.parse("2021-04-12"));
+        s4.setCoins(64140);
+        Salary s5 = new Salary();
+        s5.setTeacherId(t2.getId());
+        s5.setDate(LocalDate.parse("2021-05-11"));
+        s5.setCoins(63716);
+        Salary s6 = new Salary();
+        s6.setTeacherId(t2.getId());
+        s6.setDate(LocalDate.parse("2021-06-21"));
+        s6.setCoins(61898);
+
+        Salary s7 = new Salary();
+        s7.setTeacherId(t3.getId());
+        s7.setDate(LocalDate.parse("2021-07-16"));
+        s7.setCoins(64140);
+        Salary s8 = new Salary();
+        s8.setTeacherId(t3.getId());
+        s8.setDate(LocalDate.parse("2021-08-14"));
+        s8.setCoins(63716);
+        Salary s9 = new Salary();
+        s9.setTeacherId(t3.getId());
+        s9.setDate(LocalDate.parse("2021-09-11"));
+        s9.setCoins(61898);
+
+        Salary s10 = new Salary();
+        s10.setTeacherId(t4.getId());
+        s10.setDate(LocalDate.parse("2021-10-14"));
+        s10.setCoins(64140);
+        Salary s11 = new Salary();
+        s11.setTeacherId(t4.getId());
+        s11.setDate(LocalDate.parse("2021-11-16"));
+        s11.setCoins(63716);
+        Salary s12 = new Salary();
+        s12.setTeacherId(t4.getId());
+        s12.setDate(LocalDate.parse("2021-12-15"));
+        s12.setCoins(61898);
+
+        salariesRepo.addSalary(s1);
+        salariesRepo.addSalary(s2);
+        salariesRepo.addSalary(s3);
+        salariesRepo.addSalary(s4);
+        salariesRepo.addSalary(s5);
+        salariesRepo.addSalary(s6);
+        salariesRepo.addSalary(s7);
+        salariesRepo.addSalary(s8);
+        salariesRepo.addSalary(s9);
+        salariesRepo.addSalary(s10);
+        salariesRepo.addSalary(s11);
+        salariesRepo.addSalary(s12);
     }
 
     void setStudents(StudentRepo repo) {

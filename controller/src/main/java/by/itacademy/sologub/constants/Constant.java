@@ -20,6 +20,7 @@ public class Constant {
     public static final String LOGOUT_CONTROLLER = "/LogoutController";
 
     //attributes
+    public static final String ID = "id";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
     public static final String FIRSTNAME = "firstname";

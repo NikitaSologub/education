@@ -40,7 +40,7 @@
 
             <td>
                 <form action="SalariesController" method="post">
-                    <input name="teacher" type="hidden" value="${teacher}">
+                    <input name="login" type="hidden" value="${teacher.credential.login}">
                     <button type="submit">На страницу зарплат</button>
                 </form>
             </td>
@@ -81,7 +81,7 @@
                 </label>
                 </td>
                 <td>
-                    <button type="submit">Change some teacher's parameters</button>
+                    <button type="submit">Изменить параметры учителя</button>
                 </td>
             </form>
         </tr>
@@ -115,25 +115,6 @@
     <input type="reset">
 </form>
 <br>
-<br>
-
-
-<c:forEach var="teacher" items="${applicationScope.teacherRepo.teachersList}">
-    <div>
-        <div>
-            <p>LOGIN | FIRST NAME | LAST NAME | PATRONYMIC | DATE OF BIRTH</p>
-            <p>${teacher.credential.login} | ${teacher.firstname} | ${teacher.lastname} | ${teacher.patronymic}
-                | ${teacher.dateOfBirth}</p>
-            <form action="/web-app/salary" method="post">
-                <input name="id" type="hidden" value="${teacher.credential.login}">
-                <input name="name" type="hidden" value="${teacher.firstname}">
-                <input name="age" type="hidden" value="${teacher.lastname}">
-                <input name="salary" type="hidden" value="${teacher.patronymic}">
-                <button type="submit">Average salary</button>
-            </form>
-        </div>
-    </div>
-</c:forEach>
 
 <h5>
     <a href="${pageContext.request.contextPath}/admin_front_page.jsp">Go back to admin home page.</a>

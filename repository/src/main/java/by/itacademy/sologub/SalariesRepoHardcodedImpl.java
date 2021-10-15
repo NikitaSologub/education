@@ -15,14 +15,14 @@ public class SalariesRepoHardcodedImpl implements SalariesRepo {
     @Override
     public List<Salary> getAllSalariesByTeacherId(int teacherId) {
         return repo.values().stream()
-                .filter(salary -> salary.getId() == teacherId)
+                .filter(salary -> salary.getTeacherId() == teacherId)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Salary> getAllSalariesByTeacherIdAfterDate(int teacherId, LocalDate date) {
         return repo.values().stream()
-                .filter(salary -> salary.getId() == teacherId)
+                .filter(salary -> salary.getTeacherId() == teacherId)
                 .filter(salary -> salary.getDate().isAfter(date))
                 .collect(Collectors.toList());
     }
