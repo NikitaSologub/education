@@ -1,6 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML>
 <html>
 <head>
     <title>Admin front page</title>
@@ -16,6 +15,13 @@
         <c:out value="${requestScope.message}"/>
     </c:if>
 </h3>
-<a href="${pageContext.request.contextPath}/LogoutController">Log out.</a>
+<br>
+<h5>
+    <a href="${pageContext.request.contextPath}/admin_salaries_page.jsp">Go to admin salaries page.</a>
+</h5>
+<br>
+<h5>
+    <a href="${pageContext.request.contextPath}/LogoutController">Log out.</a>
+</h5>
 </body>
 </html>

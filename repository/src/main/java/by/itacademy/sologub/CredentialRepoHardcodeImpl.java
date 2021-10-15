@@ -2,6 +2,7 @@ package by.itacademy.sologub;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static by.itacademy.sologub.constants.Constants.*;
 
@@ -14,7 +15,12 @@ public class CredentialRepoHardcodeImpl implements CredentialRepo {
 
     @Override
     public Credential getCredentialIfExistsOrGetSpecialValue(String login) {
+        if(login == null) {
+            System.out.println("такой логин не существуе");
+            return LOGIN_NOT_EXISTS;
+        }
         return repo.keySet().stream()
+                .filter(Objects::nonNull)
                 .filter(cred -> cred.getLogin().equals(login))
                 .findAny()
                 .orElse(LOGIN_NOT_EXISTS);
@@ -47,5 +53,16 @@ public class CredentialRepoHardcodeImpl implements CredentialRepo {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean removeCredentialIfExists(String login) {
+        Credential cr = getCredentialIfExistsOrGetSpecialValue(login);
+        if(LOGIN_NOT_EXISTS == cr){
+            return false;
+        }else {
+            repo.remove(cr);
+            return true;
+        }
     }
 }

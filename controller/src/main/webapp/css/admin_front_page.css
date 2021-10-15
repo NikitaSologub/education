@@ -1,11 +1,19 @@
 body{
+    background: url("../img/wallpaper.jpg");
     font-family: "Roboto", sans-serif;
     margin: 50px;
     padding: 0;
     background-size: 100%;
-    background: url("../img/wallpaper.jpg");
 }
 
 .message{
+    margin: 15px 0 0;
     color: #008075;
+    font-size: 25px;
+}
+.table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 3px solid purple;
 }

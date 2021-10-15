@@ -9,8 +9,10 @@ public class Constant {
     public static final String REGISTRATION_PAGE = "/registration_page.jsp";
 
     public static final String LOGIN_CONTROLLER = "/LoginController";
+    public static final String TEACHER_CONTROLLER = "/TeacherController";
 
     public static final String ADMIN_FRONT_PAGE = "/admin_front_page.jsp";
+    public static final String ADMIN_SALARIES_PAGE = "/admin_salaries_page.jsp";
     public static final String STUDENT_FRONT_PAGE = "/student_front_page.jsp";
     public static final String TEACHER_FRONT_PAGE = "/teacher_front_page.jsp";
 
