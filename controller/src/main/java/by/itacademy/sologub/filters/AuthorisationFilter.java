@@ -11,7 +11,8 @@ import java.io.IOException;
 
 import static by.itacademy.sologub.constants.Constant.*;
 
-@WebFilter(urlPatterns = {ADMIN_FRONT_PAGE, STUDENT_FRONT_PAGE, TEACHER_FRONT_PAGE})
+@WebFilter(urlPatterns = {ADMIN_FRONT_PAGE, STUDENT_FRONT_PAGE, TEACHER_FRONT_PAGE,
+        ADMIN_TEACHERS_PAGE, ADMIN_SALARIES_PAGE, SALARIES_CONTROLLER, TEACHER_CONTROLLER})
 public class AuthorisationFilter extends BaseFilter implements Filter {
     public static final Logger LOG = LoggerFactory.getLogger(AuthorisationFilter.class);
 

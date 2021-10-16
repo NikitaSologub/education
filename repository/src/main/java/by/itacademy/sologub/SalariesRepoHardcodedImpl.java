@@ -21,6 +21,9 @@ public class SalariesRepoHardcodedImpl implements SalariesRepo {
 
     @Override
     public List<Salary> getAllSalariesByTeacherIdAfterDate(int teacherId, LocalDate date) {
+        if (date == null) {
+            return getAllSalariesByTeacherId(teacherId);
+        }
         return repo.values().stream()
                 .filter(salary -> salary.getTeacherId() == teacherId)
                 .filter(salary -> salary.getDate().isAfter(date))

@@ -1,19 +1,16 @@
 package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.SalariesRepo;
-import by.itacademy.sologub.Salary;
 import by.itacademy.sologub.Teacher;
 import by.itacademy.sologub.TeacherRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 import static by.itacademy.sologub.constants.Constant.*;
 
@@ -25,16 +22,15 @@ public class SalaryController extends BaseController {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SalariesRepo salariesRepo = (SalariesRepo) getServletContext().getAttribute(SALARIES_REPO);
         TeacherRepo teacherRepo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-
-        log.debug("атрибут salariesRepo получен в SalaryController {}", salariesRepo);
-        log.debug("атрибут teacherRepo получен в SalaryController {}", teacherRepo);
+        log.debug("атрибут salariesRepo {} и teacherRepo {} получен", salariesRepo, teacherRepo);
 
         String teacherLogin = req.getParameter(LOGIN);
+        log.debug("параметр teacherLogin {}  получен", teacherLogin);
 
         Teacher teacher = teacherRepo.getTeacherIfExistsOrGetSpecialValue(teacherLogin);
         teacher.setSalaries(salariesRepo.getAllSalariesByTeacherId(teacher.getId()));
 
-        log.debug("зарплаты {} которые имет учитель",teacher.getSalaries());
+        log.debug("зарплаты которые имет учитель (добавляем к запросу){}", teacher.getSalaries());
         req.setAttribute(TEACHER, teacher);
 
         forward(ADMIN_SALARIES_PAGE, req, resp);

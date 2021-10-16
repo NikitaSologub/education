@@ -21,8 +21,6 @@ public class LogoutController extends BaseController {
         req.getSession()
                 .invalidate();
         LOG.info("Инвалидируем сессию");
-//        req.setAttribute(SESSION_ENTITY,null);
-
         forward(LOGIN_PAGE, req, resp);
     }
 }

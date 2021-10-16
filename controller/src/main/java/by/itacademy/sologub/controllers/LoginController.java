@@ -21,6 +21,7 @@ public class LoginController extends BaseController {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        LOG.info("Попытка входа через недопустимый протокол");
         forwardError(LOGIN_PAGE, "Вам нельзя переходить по URL /LoginController", req, res);
     }
 
