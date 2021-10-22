@@ -3,22 +3,17 @@ package by.itacademy.sologub.factory;
 import by.itacademy.sologub.*;
 
 public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
-    private static final ModelRepoFactory modelRepoFactory;
-    private static final CredentialRepo credentialRepo;
-    private static final TeacherRepo teacherRepo;
-    private static final StudentRepo studentRepo;
-    private static final SalariesRepo salariesRepo;
+    private static ModelRepoFactoryHardcodeImpl instance;
+    private static CredentialRepo credentialRepo;
+    private static TeacherRepo teacherRepo;
+    private static StudentRepo studentRepo;
+    private static SalariesRepo salariesRepo;
 
     private ModelRepoFactoryHardcodeImpl() {
-        //singleton
-    }
-
-    static {
-        modelRepoFactory = new ModelRepoFactoryHardcodeImpl();
-        credentialRepo = new CredentialRepoHardcodeImpl();
-        teacherRepo = new TeacherRepoHardcodedImpl(credentialRepo);
-        studentRepo = new StudentRepoHardcodedImpl(credentialRepo);
-        salariesRepo = new SalariesRepoHardcodedImpl();
+        credentialRepo = CredentialRepoHardcodeImpl.getInstance();
+        teacherRepo = TeacherRepoHardcodedImpl.getInstance(credentialRepo);
+        studentRepo = StudentRepoHardcodedImpl.getInstance(credentialRepo);
+        salariesRepo = SalariesRepoHardcodedImpl.getInstance();
     }
 
     @Override
@@ -41,7 +36,14 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
         return salariesRepo;
     }
 
-    public static ModelRepoFactory getInstance(){
-        return modelRepoFactory;
+    public static ModelRepoFactoryHardcodeImpl getInstance() {
+        if (instance == null) {
+            synchronized (ModelRepoFactoryHardcodeImpl.class) {
+                if (instance == null) {
+                    instance = new ModelRepoFactoryHardcodeImpl();
+                }
+            }
+        }
+        return instance;
     }
 }

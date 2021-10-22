@@ -10,7 +10,23 @@ import static by.itacademy.sologub.constants.Constants.SALARY_NOT_EXISTS;
 
 public class SalariesRepoHardcodedImpl implements SalariesRepo {
     static int CURRENT_MAX_SALARY_ID = 10;
-    private final Map<Integer, Salary> repo = new HashMap<>();
+    private static SalariesRepoHardcodedImpl instance;
+    private final Map<Integer, Salary> repo;
+
+    private SalariesRepoHardcodedImpl(){
+        repo = new HashMap<>();
+    }
+
+    public static SalariesRepoHardcodedImpl getInstance(){
+        if (instance == null) {
+            synchronized (SalariesRepoHardcodedImpl.class){
+                if (instance == null) {
+                    instance = new SalariesRepoHardcodedImpl();
+                }
+            }
+        }
+        return instance;
+    }
 
     @Override
     public List<Salary> getAllSalariesByTeacherId(int teacherId) {

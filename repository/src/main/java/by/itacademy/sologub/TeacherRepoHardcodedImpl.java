@@ -11,13 +11,25 @@ import static by.itacademy.sologub.constants.Constants.*;
 
 @Slf4j
 public class TeacherRepoHardcodedImpl implements TeacherRepo {
+    public static TeacherRepoHardcodedImpl instance;
     static int CURRENT_MAX_TEACHER_ID = 10;
     private final CredentialRepo credentialRepo;
     private final Map<Credential, Teacher> teachers;
 
-    public TeacherRepoHardcodedImpl(CredentialRepo credentialRepo) {
+    private TeacherRepoHardcodedImpl(CredentialRepo credentialRepo) {
         this.credentialRepo = credentialRepo;
         teachers = new HashMap<>();
+    }
+
+    public static TeacherRepoHardcodedImpl getInstance(CredentialRepo credentialRepo) {
+        if (instance == null) {
+            synchronized (CredentialRepoHardcodeImpl.class) {
+                if (instance == null) {
+                    instance = new TeacherRepoHardcodedImpl(credentialRepo);
+                }
+            }
+        }
+        return instance;
     }
 
     @Override

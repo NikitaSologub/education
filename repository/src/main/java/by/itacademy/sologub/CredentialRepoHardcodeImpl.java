@@ -12,9 +12,22 @@ import static by.itacademy.sologub.constants.Constants.PASSWORD_WRONG;
 @Slf4j
 public class CredentialRepoHardcodeImpl implements CredentialRepo {
     static int CURRENT_MAX_CREDENTIAL_ID = 10;
+    private static CredentialRepoHardcodeImpl instance;
     private final Map<Credential, Credential> repo = new HashMap<>();
 
-    public CredentialRepoHardcodeImpl() {
+    private CredentialRepoHardcodeImpl() {
+        //singleton
+    }
+
+    public static CredentialRepoHardcodeImpl getInstance() {
+        if (instance == null) {
+            synchronized (CredentialRepoHardcodeImpl.class) {
+                if (instance == null) {
+                    instance = new CredentialRepoHardcodeImpl();
+                }
+            }
+        }
+        return instance;
     }
 
     @Override

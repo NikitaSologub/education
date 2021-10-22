@@ -7,12 +7,24 @@ import static by.itacademy.sologub.constants.Constants.*;
 
 public class StudentRepoHardcodedImpl implements StudentRepo{
     static int CURRENT_MAX_STUDENT_ID = 100;
+    private static StudentRepoHardcodedImpl instance;
     private final CredentialRepo credentialRepo;
     private final Map<Credential, Student> students;
 
-    public StudentRepoHardcodedImpl(CredentialRepo credentialRepo) {
+    private StudentRepoHardcodedImpl(CredentialRepo credentialRepo) {
         this.credentialRepo = credentialRepo;
         students = new HashMap<>();
+    }
+
+    public static StudentRepoHardcodedImpl getInstance(CredentialRepo credentialRepo){
+        if(instance == null){
+            synchronized (StudentRepoHardcodedImpl.class){
+                if(instance == null){
+                    instance = new StudentRepoHardcodedImpl(credentialRepo);
+                }
+            }
+        }
+        return instance;
     }
 
     @Override
