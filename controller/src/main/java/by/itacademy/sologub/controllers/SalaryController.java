@@ -3,8 +3,7 @@ package by.itacademy.sologub.controllers;
 import by.itacademy.sologub.SalariesRepo;
 import by.itacademy.sologub.Teacher;
 import by.itacademy.sologub.TeacherRepo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,9 +14,8 @@ import java.io.IOException;
 import static by.itacademy.sologub.constants.Constant.*;
 
 @WebServlet(SALARIES_CONTROLLER)
+@Slf4j
 public class SalaryController extends BaseController {
-    public static final Logger log = LoggerFactory.getLogger(SalaryController.class);
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SalariesRepo salariesRepo = (SalariesRepo) getServletContext().getAttribute(SALARIES_REPO);
