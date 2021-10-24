@@ -8,8 +8,12 @@ import by.itacademy.sologub.role.Role;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ResourceBundle;
 
 import static by.itacademy.sologub.constants.Constant.*;
 
@@ -17,6 +21,38 @@ import static by.itacademy.sologub.constants.Constant.*;
 public class InitContextFilter implements Filter {
     @Override        //Тут я буду инициализировать все что можно
     public void init(FilterConfig filterConfig) {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(DB_CONFIG_FILE);
+        String databaseType = resourceBundle.getString(TYPE);
+
+        initRepositoryAndSetContext(databaseType, filterConfig);
+    }
+
+    private void initRepositoryAndSetContext(String databaseType, FilterConfig filterConfig) {
+        switch (databaseType) {
+            case ("postgres"):
+                loadDatabasePostgres(filterConfig);
+                break;
+            case ("memory"):
+            default:
+                loadDatabaseInMemory(filterConfig);
+                break;
+        }
+    }
+
+    private void loadDatabasePostgres(FilterConfig filterConfig){
+        throw new IllegalStateException();
+    }
+
+    Connection getConnection() throws SQLException, ClassNotFoundException {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(DB_CONFIG_FILE);
+        Class.forName(resourceBundle.getString(HOST));
+        String url = resourceBundle.getString(URL);
+        String login = resourceBundle.getString(LOGIN);
+        String password = resourceBundle.getString(PASSWORD);
+        return DriverManager.getConnection(url, login, password);
+    }
+
+    private void loadDatabaseInMemory(FilterConfig filterConfig) {
         ModelRepoFactory factory = ModelRepoFactoryHardcodeImpl.getInstance();
 
         SalariesRepo salariesRepo = factory.getSalariesRepo();
@@ -36,106 +72,118 @@ public class InitContextFilter implements Filter {
     }
 
     void setTeachersAndSalaries(TeacherRepo teacherRepo, SalariesRepo salariesRepo) {
-        Credential cr1 = new Credential();
-        cr1.setLogin("VIK_k");
-        cr1.setPassword("teach12");
-        Teacher t1 = new Teacher();
-        t1.setCredential(cr1);
-        t1.setFirstname("Валерия");
-        t1.setPatronymic("Леонидовна");
-        t1.setLastname("Грузинова");
-        t1.setDateOfBirth(LocalDate.of(1974, Month.SEPTEMBER, 21));
-        t1.setRole(Role.TEACHER);
+        Teacher t1 = new Teacher().
+                withCredential(new Credential()
+                        .withLogin("DETSUK59")
+                        .withPassword("ekology"))
+                .withLastname("Дэцук")
+                .withFirstname("Валерия")
+                .withPatronymic("Сергеевна")
+                .withDateOfBirth(LocalDate.of(1974, Month.SEPTEMBER, 21))
+                .withRole(Role.TEACHER);
 
-        Credential cr2 = new Credential();
-        cr2.setLogin("DETSUK59");
-        cr2.setPassword("teacher4students");
-        Teacher t2 = new Teacher();
-        t2.setCredential(cr2);
-        t2.setFirstname("Валерия");
-        t2.setPatronymic("Сергеевна");
-        t2.setLastname("Дэцук");
-        t2.setDateOfBirth(LocalDate.of(1959, Month.OCTOBER, 12));
-        t2.setRole(Role.TEACHER);
+        Teacher t2 = new Teacher().
+                withCredential(new Credential()
+                        .withLogin("VIK_k")
+                        .withPassword("teach12"))
+                .withLastname("Грузинова")
+                .withFirstname("Валерия")
+                .withPatronymic("Леонидовна")
+                .withDateOfBirth(LocalDate.of(1959, Month.OCTOBER, 12))
+                .withRole(Role.TEACHER);
 
-        Credential cr3 = new Credential();
-        cr3.setLogin("arti");
-        cr3.setPassword("soprofan");
-        Teacher t3 = new Teacher();
-        t3.setCredential(cr3);
-        t3.setFirstname("Артур");
-        t3.setPatronymic("Владимирович");
-        t3.setLastname("Путято");
-        t3.setDateOfBirth(LocalDate.of(1976, Month.FEBRUARY, 7));
-        t3.setRole(Role.TEACHER);
+        Teacher t3 = new Teacher().
+                withCredential(new Credential()
+                        .withLogin("arti")
+                        .withPassword("soprofan"))
+                .withLastname("Путято")
+                .withFirstname("Артур")
+                .withPatronymic("Владимирович")
+                .withDateOfBirth(LocalDate.of(1976, Month.FEBRUARY, 7))
+                .withRole(Role.TEACHER);
 
-        Credential cr4 = new Credential();
-        cr4.setLogin("Tvorog57");
-        cr4.setPassword("great123");
-        Teacher t4 = new Teacher();
-        t4.setCredential(cr4);
-        t4.setFirstname("Сергей");
-        t4.setPatronymic("Петрович");
-        t4.setLastname("Творогов");
-        t4.setDateOfBirth(LocalDate.of(1957, Month.DECEMBER, 11));
-        t4.setRole(Role.TEACHER);
+        Teacher t4 = new Teacher().
+                withCredential(new Credential()
+                        .withLogin("Tvorog57")
+                        .withPassword("great123"))
+                .withLastname("Творогов")
+                .withFirstname("Сергей")
+                .withPatronymic("Петрович")
+                .withDateOfBirth(LocalDate.of(1957, Month.DECEMBER, 11))
+                .withRole(Role.TEACHER);
+
+        Teacher t5 = new Teacher().
+                withCredential(new Credential()
+                        .withLogin("Med1")
+                        .withPassword("123"))
+                .withLastname("Мединский")
+                .withFirstname("Ян")
+                .withPatronymic("Станиславович")
+                .withDateOfBirth(LocalDate.of(1971, Month.NOVEMBER, 21))
+                .withRole(Role.TEACHER);
 
         teacherRepo.putTeacherIfNotExists(t1);
         teacherRepo.putTeacherIfNotExists(t2);
         teacherRepo.putTeacherIfNotExists(t3);
         teacherRepo.putTeacherIfNotExists(t4);
+        teacherRepo.putTeacherIfNotExists(t5);
 
-        Salary s1 = new Salary();
-        s1.setTeacherId(t1.getId());
-        s1.setDate(LocalDate.parse("2021-01-12"));
-        s1.setCoins(64140);
-        Salary s2 = new Salary();
-        s2.setTeacherId(t1.getId());
-        s2.setDate(LocalDate.parse("2021-02-11"));
-        s2.setCoins(63716);
-        Salary s3 = new Salary();
-        s3.setTeacherId(t1.getId());
-        s3.setDate(LocalDate.parse("2021-03-13"));
-        s3.setCoins(61898);
+        Salary s1 = new Salary()
+                .withTeacherId(t1.getId())
+                .withDate(LocalDate.parse("2021-01-12"))
+                .withCoins(64140);
+        Salary s2 = new Salary()
+                .withTeacherId(t1.getId())
+                .withDate(LocalDate.parse("2021-02-11"))
+                .withCoins(63716);
+        Salary s3 = new Salary()
+                .withTeacherId(t1.getId())
+                .withDate(LocalDate.parse("2021-03-13"))
+                .withCoins(61898);
 
-        Salary s4 = new Salary();
-        s4.setTeacherId(t2.getId());
-        s4.setDate(LocalDate.parse("2021-04-12"));
-        s4.setCoins(64140);
-        Salary s5 = new Salary();
-        s5.setTeacherId(t2.getId());
-        s5.setDate(LocalDate.parse("2021-05-11"));
-        s5.setCoins(63716);
-        Salary s6 = new Salary();
-        s6.setTeacherId(t2.getId());
-        s6.setDate(LocalDate.parse("2021-06-21"));
-        s6.setCoins(61898);
+        Salary s4 = new Salary()
+                .withTeacherId(t2.getId())
+                .withDate(LocalDate.parse("2021-04-12"))
+                .withCoins(64140);
+        Salary s5 = new Salary()
+                .withTeacherId(t2.getId())
+                .withDate(LocalDate.parse("2021-05-11"))
+                .withCoins(63716);
+        Salary s6 = new Salary()
+                .withTeacherId(t2.getId())
+                .withDate(LocalDate.parse("2021-06-21"))
+                .withCoins(61898);
 
-        Salary s7 = new Salary();
-        s7.setTeacherId(t3.getId());
-        s7.setDate(LocalDate.parse("2021-07-16"));
-        s7.setCoins(64140);
-        Salary s8 = new Salary();
-        s8.setTeacherId(t3.getId());
-        s8.setDate(LocalDate.parse("2021-08-14"));
-        s8.setCoins(63716);
-        Salary s9 = new Salary();
-        s9.setTeacherId(t3.getId());
-        s9.setDate(LocalDate.parse("2021-09-11"));
-        s9.setCoins(61898);
+        Salary s7 = new Salary()
+                .withTeacherId(t3.getId())
+                .withDate(LocalDate.parse("2021-07-16"))
+                .withCoins(64140);
+        Salary s8 = new Salary()
+                .withTeacherId(t3.getId())
+                .withDate(LocalDate.parse("2021-08-14"))
+                .withCoins(63716);
+        Salary s9 = new Salary()
+                .withTeacherId(t3.getId())
+                .withDate(LocalDate.parse("2021-09-11"))
+                .withCoins(61898);
 
-        Salary s10 = new Salary();
-        s10.setTeacherId(t4.getId());
-        s10.setDate(LocalDate.parse("2021-10-14"));
-        s10.setCoins(64140);
-        Salary s11 = new Salary();
-        s11.setTeacherId(t4.getId());
-        s11.setDate(LocalDate.parse("2021-11-16"));
-        s11.setCoins(63716);
-        Salary s12 = new Salary();
-        s12.setTeacherId(t4.getId());
-        s12.setDate(LocalDate.parse("2021-12-15"));
-        s12.setCoins(61898);
+        Salary s10 = new Salary()
+                .withTeacherId(t4.getId())
+                .withDate(LocalDate.parse("2021-10-14"))
+                .withCoins(64140);
+        Salary s11 = new Salary()
+                .withTeacherId(t4.getId())
+                .withDate(LocalDate.parse("2021-11-16"))
+                .withCoins(63716);
+        Salary s12 = new Salary()
+                .withTeacherId(t4.getId())
+                .withDate(LocalDate.parse("2021-12-15"))
+                .withCoins(61898);
+
+        Salary s13 = new Salary()
+                .withTeacherId(t5.getId())
+                .withDate(LocalDate.parse("2022-01-17"))
+                .withCoins(65085);
 
         salariesRepo.addSalary(s1);
         salariesRepo.addSalary(s2);
@@ -149,74 +197,69 @@ public class InitContextFilter implements Filter {
         salariesRepo.addSalary(s10);
         salariesRepo.addSalary(s11);
         salariesRepo.addSalary(s12);
+        salariesRepo.addSalary(s13);
     }
 
     void setStudents(StudentRepo repo) {
-        Credential cr1 = new Credential();
-        cr1.setLogin("AXEL23");
-        cr1.setPassword("loveshortpasswords");
-        Student s1 = new Student();
-        s1.setCredential(cr1);
-        s1.setFirstname("Илья");
-        s1.setPatronymic("Викторович");
-        s1.setLastname("Ярец");
-        s1.setDateOfBirth(LocalDate.of(1995, Month.JULY, 22));
-        s1.setRole(Role.STUDENT);
+        Student s1 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("AXEL23")
+                        .withPassword("loveshortpasswords"))
+                .withLastname("Ярец")
+                .withFirstname("Илья")
+                .withPatronymic("Викторович")
+                .withDateOfBirth(LocalDate.of(1995, Month.JULY, 22))
+                .withRole(Role.STUDENT);
 
-        Credential cr2 = new Credential();
-        cr2.setLogin("STOLYAR55");
-        cr2.setPassword("st678");
-        Student s2 = new Student();
-        s2.setCredential(cr2);
-        s2.setFirstname("Анастасия");
-        s2.setPatronymic("Ивановна");
-        s2.setLastname("Столярчук");
-        s2.setDateOfBirth(LocalDate.of(1995, Month.AUGUST, 17));
-        s2.setRole(Role.STUDENT);
+        Student s2 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("STOLYAR55")
+                        .withPassword("st678"))
+                .withLastname("Столярчук")
+                .withFirstname("Анастасия")
+                .withPatronymic("Ивановна")
+                .withDateOfBirth(LocalDate.of(1995, Month.AUGUST, 17))
+                .withRole(Role.STUDENT);
 
-        Credential cr3 = new Credential();
-        cr3.setLogin("BabkaVKedah");
-        cr3.setPassword("worldoftanks");
-        Student s3 = new Student();
-        s3.setCredential(cr3);
-        s3.setFirstname("Егор");
-        s3.setPatronymic("Антонович");
-        s3.setLastname("Татур");
-        s3.setDateOfBirth(LocalDate.of(1995, Month.NOVEMBER, 27));
-        s3.setRole(Role.STUDENT);
+        Student s3 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("BabkaVKedah")
+                        .withPassword("worldoftanks"))
+                .withLastname("Татур")
+                .withFirstname("Егор")
+                .withPatronymic("Евгеньевич")
+                .withDateOfBirth(LocalDate.of(1995, Month.NOVEMBER, 27))
+                .withRole(Role.STUDENT);
 
-        Credential cr4 = new Credential();
-        cr4.setLogin("Smartdyika");
-        cr4.setPassword("books34");
-        Student s4 = new Student();
-        s4.setCredential(cr4);
-        s4.setFirstname("Ксения");
-        s4.setPatronymic("Антонович");
-        s4.setLastname("Полошавец");
-        s4.setDateOfBirth(LocalDate.of(1995, Month.APRIL, 16));
-        s4.setRole(Role.STUDENT);
+        Student s4 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("Smartdyika")
+                        .withPassword("books34"))
+                .withLastname("Полошавец")
+                .withFirstname("Ксения")
+                .withPatronymic("Антоновна")
+                .withDateOfBirth(LocalDate.of(1995, Month.APRIL, 10))
+                .withRole(Role.STUDENT);
 
-        Credential cr5 = new Credential();
-        cr5.setLogin("azazello666");
-        cr5.setPassword("tech1");
-        Student s5 = new Student();
-        s5.setCredential(cr5);
-        s5.setFirstname("Андрей");
-        s5.setPatronymic("Сергеевич");
-        s5.setLastname("Анпилов");
-        s5.setDateOfBirth(LocalDate.of(1991, Month.DECEMBER, 11));
-        s5.setRole(Role.STUDENT);
+        Student s5 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("azazello666")
+                        .withPassword("tech1"))
+                .withLastname("Анпилов")
+                .withFirstname("Андрей")
+                .withPatronymic("Сергеевич")
+                .withDateOfBirth(LocalDate.of(1991, Month.DECEMBER, 11))
+                .withRole(Role.STUDENT);
 
-        Credential cr6 = new Credential();
-        cr6.setLogin("Shabalina_Anzhela");
-        cr6.setPassword("flower4");
-        Student s6 = new Student();
-        s6.setCredential(cr6);
-        s6.setFirstname("Анжелина");
-        s6.setPatronymic("Игоревна");
-        s6.setLastname("Шабалина");
-        s6.setDateOfBirth(LocalDate.of(1995, Month.MARCH, 28));
-        s6.setRole(Role.STUDENT);
+        Student s6 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("Shabalina_Anzhela")
+                        .withPassword("flower4"))
+                .withLastname("Шабалина")
+                .withFirstname("Анжелина")
+                .withPatronymic("Игоревна")
+                .withDateOfBirth(LocalDate.of(1995, Month.MARCH, 28))
+                .withRole(Role.STUDENT);
 
         repo.putStudentIfNotExists(s1);
         repo.putStudentIfNotExists(s2);

@@ -19,6 +19,12 @@ public class Constant {
 
     public static final String LOGOUT_CONTROLLER = "/LogoutController";
 
+    //configs
+    public static final String DB_CONFIG_FILE = "db_config";
+    public static final String HOST = "host";
+    public static final String URL = "url";
+    public static final String TYPE = "type";
+
     //attributes
     public static final String ID = "id";
     public static final String LOGIN = "login";

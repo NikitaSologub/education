@@ -5,7 +5,7 @@ import java.util.Map;
 
 import static by.itacademy.sologub.constants.Constants.*;
 
-public class StudentRepoHardcodedImpl implements StudentRepo{
+public class StudentRepoHardcodedImpl implements StudentRepo {
     static int CURRENT_MAX_STUDENT_ID = 100;
     private static StudentRepoHardcodedImpl instance;
     private final CredentialRepo credentialRepo;
@@ -16,10 +16,10 @@ public class StudentRepoHardcodedImpl implements StudentRepo{
         students = new HashMap<>();
     }
 
-    public static StudentRepoHardcodedImpl getInstance(CredentialRepo credentialRepo){
-        if(instance == null){
-            synchronized (StudentRepoHardcodedImpl.class){
-                if(instance == null){
+    public static StudentRepoHardcodedImpl getInstance(CredentialRepo credentialRepo) {
+        if (instance == null) {
+            synchronized (StudentRepoHardcodedImpl.class) {
+                if (instance == null) {
                     instance = new StudentRepoHardcodedImpl(credentialRepo);
                 }
             }
@@ -59,10 +59,10 @@ public class StudentRepoHardcodedImpl implements StudentRepo{
             credentialRepo.putCredentialIfNotExists(login, password);
             Credential studentCr = credentialRepo.getCredentialIfExistsOrGetSpecialValue(login, password);
 
-            if(isExistsAndPasswordRight(studentCr)){
+            if (isExistsAndPasswordRight(studentCr)) {
                 student.setId(CURRENT_MAX_STUDENT_ID++);
                 student.setCredential(studentCr);
-                students.put(studentCr,student);
+                students.put(studentCr, student);
                 return true;
             } else {
                 return false;
@@ -71,7 +71,7 @@ public class StudentRepoHardcodedImpl implements StudentRepo{
         return false;
     }
 
-    private boolean isExistsAndPasswordRight(Credential cr){
+    private boolean isExistsAndPasswordRight(Credential cr) {
         return (LOGIN_NOT_EXISTS != cr && PASSWORD_WRONG != cr);
     }
 }

@@ -64,6 +64,12 @@
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.mchange</groupId>
+                <artifactId>c3p0</artifactId>
+                <version>0.9.5.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

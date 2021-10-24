@@ -13,10 +13,10 @@ import static by.itacademy.sologub.constants.Constants.PASSWORD_WRONG;
 public class CredentialRepoHardcodeImpl implements CredentialRepo {
     static int CURRENT_MAX_CREDENTIAL_ID = 10;
     private static CredentialRepoHardcodeImpl instance;
-    private final Map<Credential, Credential> repo = new HashMap<>();
+    private final Map<Credential, Credential> repo;
 
     private CredentialRepoHardcodeImpl() {
-        //singleton
+        repo = new HashMap<>();
     }
 
     public static CredentialRepoHardcodeImpl getInstance() {
@@ -63,12 +63,13 @@ public class CredentialRepoHardcodeImpl implements CredentialRepo {
     @Override
     public boolean putCredentialIfNotExists(String login, String password) {
         Credential cr = getCredentialIfExistsOrGetSpecialValue(login);
-        log.debug("Пытаемся добавить обьект учётных данных {} в репозиторий", cr);
+        log.debug("Пытаемся добавить обьект учётных данных по логину {} и паролю {} в репозиторий", login, password);
         if (cr == LOGIN_NOT_EXISTS) {
-            Credential newCred = new Credential();
-            newCred.setId(CURRENT_MAX_CREDENTIAL_ID++);
-            newCred.setLogin(login);
-            newCred.setPassword(password);
+            Credential newCred = new Credential()
+                    .withId(CURRENT_MAX_CREDENTIAL_ID++)
+                    .withLogin(login)
+                    .withPassword(password);
+
             repo.put(newCred, newCred);
             log.info("Новый обьект учётных данных {} добавлен в репозиторий", newCred);
             return true;
