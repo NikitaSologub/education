@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import static by.itacademy.sologub.constants.Constant.*;
+import static by.itacademy.sologub.constants.Constants.*;
 
 @WebServlet(TEACHER_CONTROLLER)
 @Slf4j
@@ -36,47 +37,39 @@ public class TeacherController extends BaseController {
     }
 
     Teacher extractTeacherFromForm(HttpServletRequest req) {
-        String firstname = req.getParameter(FIRSTNAME);
-        String lastname = req.getParameter(LASTNAME);
-        String patronymic = req.getParameter(PATRONYMIC);
-        LocalDate dateOfBirth = LocalDate.parse(req.getParameter(DATE_OF_BIRTH));
+        Teacher teacher = new Teacher()
+                .withCredential(new Credential()
+                        .withLogin(req.getParameter(LOGIN))
+                        .withPassword(req.getParameter(PASSWORD)))
+                .withFirstname(req.getParameter(FIRSTNAME))
+                .withLastname(req.getParameter(LASTNAME))
+                .withPatronymic(req.getParameter(PATRONYMIC))
+                .withDateOfBirth(LocalDate.parse(req.getParameter(DATE_OF_BIRTH)));
 
-        Teacher teacher = new Teacher();
-        teacher.setCredential(extractCredentialFromForm(req));
-        teacher.setFirstname(firstname);
-        teacher.setLastname(lastname);
-        teacher.setPatronymic(patronymic);
-        teacher.setDateOfBirth(dateOfBirth);
-        teacher.setRole(Role.TEACHER);
-
-        log.debug("Из запроса извлечён обьект учителя {}", teacher);
+        log.debug("Из запроса извлечён обьект учителя (без id и credential_id) {}", teacher);
         return teacher;
     }
 
-    Credential extractCredentialFromForm(HttpServletRequest req) {
-        String login = req.getParameter(LOGIN);
-        String password = req.getParameter(PASSWORD);
-
-        Credential cr = new Credential();
-        cr.setLogin(login);
-        cr.setPassword(password);
-
-        log.debug("Из запроса извлечён обьект учётных данных {}", cr);
-        return cr;
+    Teacher extractTeacherFromFormWithIds(HttpServletRequest req){
+        Teacher teacher = extractTeacherFromForm(req);
+        teacher.setId(Integer.parseInt(req.getParameter(ID)));
+        teacher.getCredential().setId(Integer.parseInt(req.getParameter(CREDENTIAL_ID)));
+        log.debug("Из запроса извлечён обьект учителя {}", teacher);
+        return teacher;
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        Teacher newTeacherValues = extractTeacherFromForm(req);
+        Teacher newTeacherValues = extractTeacherFromFormWithIds(req);
         boolean result = repo.changeTeachersParametersIfExists(newTeacherValues);
         String msg;
         if (result) {
-            msg = "Учитель " + req.getParameter("login") + " успешно изменён";
-            log.info("Учитель {} успешно изменён", req.getParameter("login"));
+            msg = "Учитель " + req.getParameter(LOGIN) + " успешно изменён";
+            log.info("Учитель {} успешно изменён", req.getParameter(LOGIN));
         } else {
-            msg = "Не удалось изменить учителя " + req.getParameter("login");
-            log.info("Не удалось изменить учителя {}", req.getParameter("login"));
+            msg = "Не удалось изменить учителя " + req.getParameter(LOGIN);
+            log.info("Не удалось изменить учителя {}", req.getParameter(LOGIN));
         }
         forward(ADMIN_TEACHERS_PAGE, msg, req, resp);
     }
@@ -98,10 +91,10 @@ public class TeacherController extends BaseController {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if ("delete".equals(req.getParameter("action"))) {
+        if (DELETE.equals(req.getParameter(ACTION))) {
             doDelete(req, resp);
             return;
-        } else if ("put".equals(req.getParameter("action"))) {
+        } else if (PUT.equals(req.getParameter(ACTION))) {
             doPut(req, resp);
             return;
         }

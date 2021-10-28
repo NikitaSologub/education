@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static by.itacademy.sologub.constants.Constant.*;
+import static by.itacademy.sologub.constants.Constants.LOGIN;
+import static by.itacademy.sologub.constants.Constants.TEACHER;
 
 @WebServlet(SALARIES_CONTROLLER)
 @Slf4j

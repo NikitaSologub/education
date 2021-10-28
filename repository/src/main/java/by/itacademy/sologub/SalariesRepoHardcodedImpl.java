@@ -51,7 +51,7 @@ public class SalariesRepoHardcodedImpl implements SalariesRepo {
     }
 
     @Override
-    public boolean addSalary(Salary salary) {
+    public boolean putSalary(Salary salary) {
         Integer key = CURRENT_MAX_SALARY_ID++;
         if (repo.containsKey(key)) {
             log.info("Зарплата {} не может быть добавлена в репозиторий. Такой id уже существует", salary);

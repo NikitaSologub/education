@@ -16,41 +16,29 @@
     </c:if>
 </h3>
 <table id="teachersTable">
-    <tr>
-        <td>(LOGIN)</td>
-        <td>(FIRST NAME)</td>
-        <td>(LAST NAME)</td>
-        <td>(PATRONYMIC)</td>
-        <td>(DATE OF BIRTH)</td>
-    </tr>
+<%--    <tr>--%>
+<%--        <td>(LOGIN)</td>--%>
+<%--        <td>(FIRST NAME)</td>--%>
+<%--        <td>(LAST NAME)</td>--%>
+<%--        <td>(PATRONYMIC)</td>--%>
+<%--        <td>(DATE OF BIRTH)</td>--%>
+<%--    </tr>--%>
     <c:forEach var="teacher" items="${applicationScope.teacherRepo.teachersList}">
         <tr>
-            <td>${teacher.credential.login}</td>
-            <td>${teacher.firstname}</td>
-            <td>${teacher.lastname}</td>
-            <td>${teacher.patronymic}</td>
-            <td>${teacher.dateOfBirth}</td>
-            <td>
-                <form action="TeacherController" method="post">
-                    <input type="hidden" name="action" value="delete"/>
-                    <input name="teacherLogin" type="hidden" value="${teacher.credential.login}">
-                    <button type="submit">Удалить учителя</button>
-                </form>
-            </td>
+<%--            <td>${teacher.credential.login}</td>--%>
+<%--            <td>${teacher.firstname}</td>--%>
+<%--            <td>${teacher.lastname}</td>--%>
+<%--            <td>${teacher.patronymic}</td>--%>
+<%--            <td>${teacher.dateOfBirth}</td>--%>
 
-            <td>
-                <form action="SalariesController" method="post">
-                    <input name="login" type="hidden" value="${teacher.credential.login}">
-                    <button type="submit">На страницу зарплат</button>
-                </form>
-            </td>
         </tr>
         <br>
         <tr>
             <form action="TeacherController" method="post">
                 <td>
-
-                    <input type="hidden" name="action" value="put"/>
+                    <input type="hidden" name="action" value="put">
+                    <input type="hidden" name="id" value=${teacher.id}>
+                    <input type="hidden" name="credentialId" value=${teacher.credential.id}>
                     Username: ${teacher.credential.login}<label>
                     <input type="hidden" name="login" value="${teacher.credential.login}">
                 </label>
@@ -85,32 +73,35 @@
                 </td>
             </form>
         </tr>
+        <td>
+            <form action="TeacherController" method="post">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="id" value=${teacher.id}>
+                <input type="hidden" name="credentialId" value=${teacher.credential.id}>
+                <input name="teacherLogin" type="hidden" value="${teacher.credential.login}">
+                <button type="submit">Удалить учителя</button>
+            </form>
+        </td>
+
+        <td>
+            <form action="SalariesController" method="post">
+                <input name="login" type="hidden" value="${teacher.credential.login}">
+                <button type="submit">На страницу зарплат</button>
+            </form>
+        </td>
     </c:forEach>
 </table>
 <br>
 <br>
 
-
 Добавить нового учителя
 <form action="<c:url value="TeacherController"/>" method="post">
-    Username: <label>
-    <input type="text" name="login"/>
-</label><br/>
-    Password: <label>
-    <input type="text" name="password"/>
-</label><br/>
-    Firstname: <label>
-    <input type="text" name="firstname"/>
-</label><br/>
-    Lastname: <label>
-    <input type="text" name="lastname"/>
-</label><br/>
-    Patronymic: <label>
-    <input type="text" name="patronymic"/>
-</label><br/>
-    Date of birth: <label>
-    <input type="date" name="dateOfBirth"/>
-</label><br/>
+    Username: <label> <input type="text" name="login"/> </label><br/>
+    Password: <label> <input type="text" name="password"/> </label><br/>
+    Firstname: <label> <input type="text" name="firstname"/> </label><br/>
+    Lastname: <label> <input type="text" name="lastname"/> </label><br/>
+    Patronymic: <label> <input type="text" name="patronymic"/> </label><br/>
+    Date of birth: <label> <input type="date" name="dateOfBirth"/> </label><br/>
     <button type="submit">Создать учителя</button>
     <input type="reset">
 </form>

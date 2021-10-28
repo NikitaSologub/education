@@ -89,6 +89,9 @@ public class LoginController extends BaseController {
 
     boolean checkStudentLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
+        if (repo == null) {
+            return false;//TODO - временная мера из-за отсутствия STUDENT_REPO_POSTGRES_IMPL
+        }
         Student student = repo.getStudentIfExistsOrGetSpecialValue(login, password);
 
         if (student != null && STUDENT_NOT_EXISTS != student) {

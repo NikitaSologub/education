@@ -120,10 +120,15 @@ public class TeacherRepoHardcodedImpl implements TeacherRepo {
             return false;
         } else {
             teachers.remove(cr);
-            credentialRepo.removeCredentialIfExists(login);
+            credentialRepo.deleteCredentialIfExists(login);
             log.info("Объекты Teacher и Credentials удалены из репозиториев");
             return true;
         }
+    }
+
+    @Override
+    public boolean deleteTeacher(Teacher teacher) {
+        return deleteTeacher(teacher.getCredential().getLogin());
     }
 
     @Override

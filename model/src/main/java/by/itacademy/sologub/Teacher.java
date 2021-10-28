@@ -27,6 +27,11 @@ public class Teacher extends User {
         salaries.add(salary);
     }
 
+    public Teacher withId(int id){
+        setId(id);
+        return this;
+    }
+
     public Teacher withFirstname(String firstname) {
         setFirstname(firstname);
         return this;

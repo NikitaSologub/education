@@ -8,12 +8,11 @@ public interface SalariesRepo {
 
     List<Salary> getAllSalariesByTeacherIdAfterDate(int teacherId, LocalDate date);
 
-    boolean addSalary(Salary salary);
-
-    boolean deleteSalary(int id);
-
     Salary getSalary(int id);
+
+    boolean putSalary(Salary salary);
 
     boolean changeSalary(int id, Salary newValues);
 
+    boolean deleteSalary(int id);
 }

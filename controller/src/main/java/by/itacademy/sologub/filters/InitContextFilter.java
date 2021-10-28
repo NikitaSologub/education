@@ -4,30 +4,37 @@ import by.itacademy.sologub.*;
 import by.itacademy.sologub.factory.ModelRepoFactory;
 import by.itacademy.sologub.factory.ModelRepoFactoryHardcodeImpl;
 import by.itacademy.sologub.role.Role;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import java.beans.PropertyVetoException;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ResourceBundle;
 
 import static by.itacademy.sologub.constants.Constant.*;
+import static by.itacademy.sologub.constants.Constants.LOGIN;
+import static by.itacademy.sologub.constants.Constants.PASSWORD;
 
 @WebFilter
+@Slf4j
 public class InitContextFilter implements Filter {
+    ResourceBundle resourceBundle = ResourceBundle.getBundle(DB_CONFIG_FILE);
+
+    @SneakyThrows
     @Override        //Тут я буду инициализировать все что можно
     public void init(FilterConfig filterConfig) {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(DB_CONFIG_FILE);
         String databaseType = resourceBundle.getString(TYPE);
 
         initRepositoryAndSetContext(databaseType, filterConfig);
     }
 
-    private void initRepositoryAndSetContext(String databaseType, FilterConfig filterConfig) {
+    private void initRepositoryAndSetContext(String databaseType, FilterConfig filterConfig) throws PropertyVetoException {
+        log.info("Приложение должно загружать {} тип баз данных", databaseType);
         switch (databaseType) {
             case ("postgres"):
                 loadDatabasePostgres(filterConfig);
@@ -39,17 +46,46 @@ public class InitContextFilter implements Filter {
         }
     }
 
-    private void loadDatabasePostgres(FilterConfig filterConfig){
-        throw new IllegalStateException();
+    private void loadDatabasePostgres(FilterConfig filterConfig) throws PropertyVetoException {
+        if (loadDriverClass()) {
+            ComboPooledDataSource pool = getPoolConnection();
+            CredentialRepoPostgresImpl credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
+            TeacherRepoPostgresImpl teacherRepo = TeacherRepoPostgresImpl.getInstance(pool, credentialRepo);
+
+            ServletContext context = filterConfig.getServletContext();
+            context.setAttribute(CREDENTIAL_REPO, credentialRepo);
+            context.setAttribute(TEACHER_REPO, teacherRepo);
+        } else {
+            loadDatabaseInMemory(filterConfig);
+            log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
+        }
     }
 
-    Connection getConnection() throws SQLException, ClassNotFoundException {
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(DB_CONFIG_FILE);
-        Class.forName(resourceBundle.getString(HOST));
-        String url = resourceBundle.getString(URL);
-        String login = resourceBundle.getString(LOGIN);
-        String password = resourceBundle.getString(PASSWORD);
-        return DriverManager.getConnection(url, login, password);
+    boolean loadDriverClass() {
+        try {
+            Class.forName(resourceBundle.getString(DRIVER));
+            log.info("Драйвер {} загружен", resourceBundle.getString(DRIVER));
+            return true;
+        } catch (ClassNotFoundException e) {
+            log.error("не удалость подключить драйвер.", e);
+            return false;
+        }
+    }
+
+    private ComboPooledDataSource getPoolConnection() throws PropertyVetoException {
+        ComboPooledDataSource pool = new ComboPooledDataSource();
+        pool.setJdbcUrl(resourceBundle.getString(URL));
+        pool.setUser(resourceBundle.getString(LOGIN));
+        pool.setPassword(resourceBundle.getString(PASSWORD));
+
+        // Optional Settings
+        pool.setInitialPoolSize(1);
+        pool.setMinPoolSize(1);
+        pool.setAcquireIncrement(1);
+        pool.setMaxPoolSize(5);
+        pool.setMaxStatements(100);
+        pool.setDriverClass(resourceBundle.getString(DRIVER));
+        return pool;
     }
 
     private void loadDatabaseInMemory(FilterConfig filterConfig) {
@@ -185,19 +221,19 @@ public class InitContextFilter implements Filter {
                 .withDate(LocalDate.parse("2022-01-17"))
                 .withCoins(65085);
 
-        salariesRepo.addSalary(s1);
-        salariesRepo.addSalary(s2);
-        salariesRepo.addSalary(s3);
-        salariesRepo.addSalary(s4);
-        salariesRepo.addSalary(s5);
-        salariesRepo.addSalary(s6);
-        salariesRepo.addSalary(s7);
-        salariesRepo.addSalary(s8);
-        salariesRepo.addSalary(s9);
-        salariesRepo.addSalary(s10);
-        salariesRepo.addSalary(s11);
-        salariesRepo.addSalary(s12);
-        salariesRepo.addSalary(s13);
+        salariesRepo.putSalary(s1);
+        salariesRepo.putSalary(s2);
+        salariesRepo.putSalary(s3);
+        salariesRepo.putSalary(s4);
+        salariesRepo.putSalary(s5);
+        salariesRepo.putSalary(s6);
+        salariesRepo.putSalary(s7);
+        salariesRepo.putSalary(s8);
+        salariesRepo.putSalary(s9);
+        salariesRepo.putSalary(s10);
+        salariesRepo.putSalary(s11);
+        salariesRepo.putSalary(s12);
+        salariesRepo.putSalary(s13);
     }
 
     void setStudents(StudentRepo repo) {

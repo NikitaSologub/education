@@ -7,5 +7,11 @@ public interface CredentialRepo {
 
     boolean putCredentialIfNotExists(String login, String password);
 
-    boolean removeCredentialIfExists(String login);
+    boolean putCredentialIfNotExists(Credential credential);
+
+    int putCredentialIfNotExistsAndGetId(Credential credential);
+
+    boolean changeCredentialIfExists(String login, String password);
+
+    boolean deleteCredentialIfExists(String login);
 }
