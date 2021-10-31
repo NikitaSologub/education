@@ -90,25 +90,28 @@ public class TeacherRepoHardcodedImpl implements TeacherRepo {
 
     @Override
     public boolean changeTeachersParametersIfExists(Teacher newT) {
-        Credential newCred = credentialRepo.getCredentialIfExistsOrGetSpecialValue(newT.getCredential().getLogin());
-        Teacher oldT = teachers.get(newCred);
+        Credential oldCred = credentialRepo.getCredentialIfExistsOrGetSpecialValue(newT.getCredential().getLogin());
+        Teacher oldT = teachers.get(oldCred);
         log.debug("Пытаемся менять параметры Teacher и Credential на новые");
 
         if (oldT != null && TEACHER_NOT_EXISTS != oldT) {
             log.debug("Меняем параметры Teacher и Credential на новые");
-            oldT.setFirstname(newT.getFirstname());
-            oldT.setLastname(newT.getLastname());
-            oldT.setPatronymic(newT.getPatronymic());
-            oldT.setDateOfBirth(newT.getDateOfBirth());
 
-            Credential oldCred = oldT.getCredential();
-            oldCred.setLogin(newCred.getLogin());
-            oldCred.setPassword(newCred.getPassword());
-            return true;
+            boolean isChanged = credentialRepo.changeCredentialIfExists(newT.getCredential().getLogin(), newT.getCredential().getPassword());
+            if (isChanged) {
+                oldT.setFirstname(newT.getFirstname());
+                oldT.setLastname(newT.getLastname());
+                oldT.setPatronymic(newT.getPatronymic());
+                oldT.setDateOfBirth(newT.getDateOfBirth());
+                log.info("Учётная запись изменена, можно менять параметры учителя");
+                return true;
+            } else {
+                log.info("Учётная запись не изменена, параметры учителя тоже не будут изменены");
+            }
         } else {
             log.debug("Нельзя менять параметры Teacher или Credential если их не существует в репозитории");
-            return false;
         }
+        return false;
     }
 
     @Override

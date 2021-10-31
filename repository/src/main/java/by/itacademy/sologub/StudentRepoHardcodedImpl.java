@@ -83,26 +83,28 @@ public class StudentRepoHardcodedImpl implements StudentRepo {
 
     @Override
     public boolean changeStudentParametersIfExists(Student newS) {
-        Credential newCred = credentialRepo.getCredentialIfExistsOrGetSpecialValue(newS.getCredential().getLogin());
-        Student oldS = students.get(newCred);
+        Credential oldCred = credentialRepo.getCredentialIfExistsOrGetSpecialValue(newS.getCredential().getLogin());
+        Student oldS = students.get(oldCred);
         log.debug("Пытаемся менять параметры Student и Credential на новые");
 
         if (oldS != null && STUDENT_NOT_EXISTS != oldS) {
             log.debug("Меняем параметры Student и Credential на новые");
 
-            oldS.withCredential(oldS.getCredential()
-                            .withLogin(newCred.getLogin())
-                            .withPassword(newCred.getPassword()))
-                    .withFirstname(newS.getFirstname())
-                    .withLastname(newS.getLastname())
-                    .withPatronymic(newS.getPatronymic())
-                    .withDateOfBirth(newS.getDateOfBirth());
-
-            return true;
+            boolean isChanged = credentialRepo.changeCredentialIfExists(newS.getCredential().getLogin(), newS.getCredential().getPassword());
+            if (isChanged) {
+                oldS.setFirstname(newS.getFirstname());
+                oldS.setLastname(newS.getLastname());
+                oldS.setPatronymic(newS.getPatronymic());
+                oldS.setDateOfBirth(newS.getDateOfBirth());
+                log.info("Учётная запись изменена, можно менять параметры студента");
+                return true;
+            } else {
+                log.info("Учётная запись не изменена, параметры студента тоже не будут изменены");
+            }
         } else {
-            log.debug("Нельзя менять параметры Teacher или Credential если их не существует в репозитории");
-            return false;
+            log.debug("Нельзя менять параметры Student или Credential если их не существует в репозитории");
         }
+        return false;
     }
 
     @Override

@@ -17,7 +17,11 @@
 </h3>
 <br>
 <h5>
-    <a href="${pageContext.request.contextPath}/admin_teachers_page.jsp">Go to admin salaries page.</a>
+    <a href="${pageContext.request.contextPath}/admin_teachers_page.jsp">Go to admin teachers page.</a>
+</h5>
+<br>
+<h5>
+    <a href="${pageContext.request.contextPath}/admin_students_page.jsp">Go to admin students page.</a>
 </h5>
 <br>
 <h5>

@@ -3,7 +3,6 @@ package by.itacademy.sologub.controllers;
 import by.itacademy.sologub.Credential;
 import by.itacademy.sologub.Teacher;
 import by.itacademy.sologub.TeacherRepo;
-import by.itacademy.sologub.role.Role;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -27,11 +26,11 @@ public class TeacherController extends BaseController {
 
         String msg;
         if (result) {
-            msg = "Учитель " + req.getParameter("login") + " успешно добавлен";
-            log.info("Учитель {} успешно добавлен", req.getParameter("login"));
+            msg = "Учитель " + req.getParameter(LOGIN) + " успешно добавлен";
+            log.info("Учитель {} успешно добавлен", req.getParameter(LOGIN));
         } else {
-            msg = "Не удалось добавить чителя " + req.getParameter("login");
-            log.info("Не удалось добавить учителя {}", req.getParameter("login"));
+            msg = "Не удалось добавить Учителя " + req.getParameter(LOGIN);
+            log.info("Не удалось добавить учителя {}", req.getParameter(LOGIN));
         }
         forward(ADMIN_TEACHERS_PAGE, msg, req, resp);
     }
@@ -77,14 +76,14 @@ public class TeacherController extends BaseController {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        boolean result = repo.deleteTeacher(req.getParameter("teacherLogin"));
+        boolean result = repo.deleteTeacher(req.getParameter(LOGIN));
         String msg;
         if (result) {
-            msg = "Учитель " + req.getParameter("teacherLogin") + " успешно удалён";
-            log.info("Учитель {} успешно удалён", req.getParameter("teacherLogin"));
+            msg = "Учитель " + req.getParameter(LOGIN) + " успешно удалён";
+            log.info("Учитель {} успешно удалён", req.getParameter(LOGIN));
         } else {
-            msg = "Не удалось удалить чителя " + req.getParameter("teacherLogin");
-            log.info("Не удалось удалить учителя {}", req.getParameter("teacherLogin"));
+            msg = "Не удалось удалить чителя " + req.getParameter(LOGIN);
+            log.info("Не удалось удалить учителя {}", req.getParameter(LOGIN));
         }
         forward(ADMIN_TEACHERS_PAGE, msg, req, resp);
     }

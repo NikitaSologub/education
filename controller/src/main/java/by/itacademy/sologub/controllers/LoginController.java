@@ -98,7 +98,7 @@ public class LoginController extends BaseController {
             if (STUDENT_PASSWORD_WRONG != student) {
                 createSessionAndSetAttribute(student, req);
                 log.info("Логин и пароль студента совпали. Студент входит в систему. Форвард на STUDENT_FRONT_PAGE");
-                forward(STUDENT_FRONT_PAGE, "добро пожаловать TEACHER", req, res);
+                forward(STUDENT_FRONT_PAGE, "добро пожаловать STUDENT", req, res);
                 return true;
             } else {
                 forwardError(LOGIN_PAGE, "Введён неверный пароль.", req, res);

@@ -2,7 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <title>Admin salaries page</title>
+    <title>Admin teachers page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/admin_front_page.css'/>"/>
     <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
@@ -77,8 +77,8 @@
             <form action="TeacherController" method="post">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="id" value=${teacher.id}>
+                <input type="hidden" name="login" value="${teacher.credential.login}">
                 <input type="hidden" name="credentialId" value=${teacher.credential.id}>
-                <input name="teacherLogin" type="hidden" value="${teacher.credential.login}">
                 <button type="submit">Удалить учителя</button>
             </form>
         </td>
