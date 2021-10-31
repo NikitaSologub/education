@@ -22,6 +22,10 @@ public class Student extends User {
         this.salaries = salaries;
     }
 
+    public Student withId(int id){
+        setId(id);
+        return this;
+    }
 
     public Student withFirstname(String firstname) {
         setFirstname(firstname);

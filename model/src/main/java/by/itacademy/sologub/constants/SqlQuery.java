@@ -25,4 +25,16 @@ public class SqlQuery {
     public static final String DELETE_TEACHER_BY_CREDENTIAL_ID = "DELETE FROM teacher WHERE credential_id=?";
     public static final String UPDATE_TEACHER_BY_CREDENTIAL_ID =
             "UPDATE teacher SET firstname=?, lastname=?, patronymic=?, date_of_birth=? WHERE credential_id=?;";
-    }
+
+    //student postgres sql
+    public static final String GET_STUDENTS_LIST = "SELECT s.id, s.firstname, s.lastname, s.patronymic, s.date_of_birth," +
+            " s.credential_id, c.id, c.login, c.password FROM student S JOIN credential c ON c.id = s.credential_id;";
+    public static final String INSERT_STUDENT =
+            "INSERT INTO student (firstname, lastname, patronymic, date_of_birth, credential_id) VALUES (?,?,?,?,?)";
+    public static final String GET_STUDENT_BY_LOGIN = "SELECT s.id, s.firstname, s.lastname, s.patronymic," +
+            " s.date_of_birth, s.credential_id, c.id, c.login, c.password FROM student s JOIN credential c " +
+            "ON c.id = s.credential_id WHERE c.login =?;";
+    public static final String DELETE_STUDENT_BY_CREDENTIAL_ID = "DELETE FROM student WHERE credential_id=?";
+    public static final String UPDATE_STUDENT_BY_CREDENTIAL_ID =
+            "UPDATE student SET firstname=?, lastname=?, patronymic=?, date_of_birth=? WHERE credential_id=?;";
+}

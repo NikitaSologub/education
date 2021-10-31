@@ -1,10 +1,15 @@
 package by.itacademy.sologub;
 
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static by.itacademy.sologub.constants.Constants.*;
 
+@Slf4j
 public class StudentRepoHardcodedImpl implements StudentRepo {
     static int CURRENT_MAX_STUDENT_ID = 100;
     private static StudentRepoHardcodedImpl instance;
@@ -25,6 +30,11 @@ public class StudentRepoHardcodedImpl implements StudentRepo {
             }
         }
         return instance;
+    }
+
+    @Override
+    public List<Student> getStudentsList() {
+        return new ArrayList<>(students.values());
     }
 
     @Override
@@ -69,6 +79,50 @@ public class StudentRepoHardcodedImpl implements StudentRepo {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean changeStudentParametersIfExists(Student newS) {
+        Credential newCred = credentialRepo.getCredentialIfExistsOrGetSpecialValue(newS.getCredential().getLogin());
+        Student oldS = students.get(newCred);
+        log.debug("Пытаемся менять параметры Student и Credential на новые");
+
+        if (oldS != null && STUDENT_NOT_EXISTS != oldS) {
+            log.debug("Меняем параметры Student и Credential на новые");
+
+            oldS.withCredential(oldS.getCredential()
+                            .withLogin(newCred.getLogin())
+                            .withPassword(newCred.getPassword()))
+                    .withFirstname(newS.getFirstname())
+                    .withLastname(newS.getLastname())
+                    .withPatronymic(newS.getPatronymic())
+                    .withDateOfBirth(newS.getDateOfBirth());
+
+            return true;
+        } else {
+            log.debug("Нельзя менять параметры Teacher или Credential если их не существует в репозитории");
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteStudent(String login) {
+        Credential cr = credentialRepo.getCredentialIfExistsOrGetSpecialValue(login);
+        log.debug("Пытаемся проверить учетные данные обьекта Student {} в репозитории", cr);
+        if (LOGIN_NOT_EXISTS == cr) {
+            log.info("Объекта учётных данных нет в базе. Нечего удалять");
+            return false;
+        } else {
+            students.remove(cr);
+            credentialRepo.deleteCredentialIfExists(login);
+            log.info("Объекты Student и Credentials удалены из репозиториев");
+            return true;
+        }
+    }
+
+    @Override
+    public boolean deleteStudent(Student student) {
+        return deleteStudent(student.getCredential().getLogin());
     }
 
     private boolean isExistsAndPasswordRight(Credential cr) {

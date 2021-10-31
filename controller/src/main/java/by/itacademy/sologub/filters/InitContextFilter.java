@@ -46,48 +46,6 @@ public class InitContextFilter implements Filter {
         }
     }
 
-    private void loadDatabasePostgres(FilterConfig filterConfig) throws PropertyVetoException {
-        if (loadDriverClass()) {
-            ComboPooledDataSource pool = getPoolConnection();
-            CredentialRepoPostgresImpl credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
-            TeacherRepoPostgresImpl teacherRepo = TeacherRepoPostgresImpl.getInstance(pool, credentialRepo);
-
-            ServletContext context = filterConfig.getServletContext();
-            context.setAttribute(CREDENTIAL_REPO, credentialRepo);
-            context.setAttribute(TEACHER_REPO, teacherRepo);
-        } else {
-            loadDatabaseInMemory(filterConfig);
-            log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
-        }
-    }
-
-    boolean loadDriverClass() {
-        try {
-            Class.forName(resourceBundle.getString(DRIVER));
-            log.info("Драйвер {} загружен", resourceBundle.getString(DRIVER));
-            return true;
-        } catch (ClassNotFoundException e) {
-            log.error("не удалость подключить драйвер.", e);
-            return false;
-        }
-    }
-
-    private ComboPooledDataSource getPoolConnection() throws PropertyVetoException {
-        ComboPooledDataSource pool = new ComboPooledDataSource();
-        pool.setJdbcUrl(resourceBundle.getString(URL));
-        pool.setUser(resourceBundle.getString(LOGIN));
-        pool.setPassword(resourceBundle.getString(PASSWORD));
-
-        // Optional Settings
-        pool.setInitialPoolSize(1);
-        pool.setMinPoolSize(1);
-        pool.setAcquireIncrement(1);
-        pool.setMaxPoolSize(5);
-        pool.setMaxStatements(100);
-        pool.setDriverClass(resourceBundle.getString(DRIVER));
-        return pool;
-    }
-
     private void loadDatabaseInMemory(FilterConfig filterConfig) {
         ModelRepoFactory factory = ModelRepoFactoryHardcodeImpl.getInstance();
 
@@ -105,6 +63,50 @@ public class InitContextFilter implements Filter {
         context.setAttribute(CREDENTIAL_REPO, credentialRepo);
         context.setAttribute(TEACHER_REPO, teacherRepo);
         context.setAttribute(STUDENT_REPO, studentRepo);
+    }
+
+    private void loadDatabasePostgres(FilterConfig filterConfig) throws PropertyVetoException {
+        if (loadDriverClass()) {
+            ComboPooledDataSource pool = initAndGetPoolConnection();
+            CredentialRepoPostgresImpl credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
+            TeacherRepoPostgresImpl teacherRepo = TeacherRepoPostgresImpl.getInstance(pool, credentialRepo);
+            StudentRepoPostgres studentRepo = StudentRepoPostgres.getInstance(pool, credentialRepo);
+
+            ServletContext context = filterConfig.getServletContext();
+            context.setAttribute(CREDENTIAL_REPO, credentialRepo);
+            context.setAttribute(TEACHER_REPO, teacherRepo);
+            context.setAttribute(STUDENT_REPO, studentRepo);
+        } else {
+            loadDatabaseInMemory(filterConfig);
+            log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
+        }
+    }
+
+    boolean loadDriverClass() {
+        try {
+            Class.forName(resourceBundle.getString(DRIVER));
+            log.info("Драйвер {} загружен", resourceBundle.getString(DRIVER));
+            return true;
+        } catch (ClassNotFoundException e) {
+            log.error("не удалость подключить драйвер.", e);
+            return false;
+        }
+    }
+
+    private ComboPooledDataSource initAndGetPoolConnection() throws PropertyVetoException {
+        ComboPooledDataSource pool = new ComboPooledDataSource();
+        pool.setJdbcUrl(resourceBundle.getString(URL));
+        pool.setUser(resourceBundle.getString(LOGIN));
+        pool.setPassword(resourceBundle.getString(PASSWORD));
+
+        // Optional Settings
+        pool.setInitialPoolSize(1);
+        pool.setMinPoolSize(1);
+        pool.setAcquireIncrement(1);
+        pool.setMaxPoolSize(5);
+        pool.setMaxStatements(100);
+        pool.setDriverClass(resourceBundle.getString(DRIVER));
+        return pool;
     }
 
     void setTeachersAndSalaries(TeacherRepo teacherRepo, SalariesRepo salariesRepo) {

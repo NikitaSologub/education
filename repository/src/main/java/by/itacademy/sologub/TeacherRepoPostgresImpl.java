@@ -150,7 +150,7 @@ public class TeacherRepoPostgresImpl extends AbstractPostgresRepo implements Tea
                 return true;
             } else {
                 con.rollback();
-                log.info("не удалось изменить Учителя {} БД.", t);
+                log.info("не удалось изменить Учителя {} в БД.", t);
             }
         } catch (SQLException e) {
             log.error("Не удалось совершить операцию узменения Учителя", e);
