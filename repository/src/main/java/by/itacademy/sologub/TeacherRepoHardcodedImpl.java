@@ -11,10 +11,10 @@ import static by.itacademy.sologub.constants.Constants.*;
 
 @Slf4j
 public class TeacherRepoHardcodedImpl implements TeacherRepo {
-    public static TeacherRepoHardcodedImpl instance;
-    static int CURRENT_MAX_TEACHER_ID = 10;
+    static int CURRENT_MAX_TEACHER_ID = 19051;
+    private static TeacherRepoHardcodedImpl instance;
     private final CredentialRepo credentialRepo;
-    private final Map<Credential, Teacher> teachers;
+    private final Map<Integer, Teacher> teachers;
 
     private TeacherRepoHardcodedImpl(CredentialRepo credentialRepo) {
         this.credentialRepo = credentialRepo;
@@ -33,81 +33,85 @@ public class TeacherRepoHardcodedImpl implements TeacherRepo {
     }
 
     @Override
+    public List<Teacher> getTeachersList() {
+        return new ArrayList<>(teachers.values());
+    }
+
+    @Override
     public Teacher getTeacherIfExistsOrGetSpecialValue(String login) {
         Credential cr = credentialRepo.getCredentialIfExistsOrGetSpecialValue(login);
-        log.debug("Пытаемся проверить учетные данные обьекта Teacher {} в репозитории", cr);
         if (LOGIN_NOT_EXISTS == cr) {
-            log.info("Объекта учётных данных нет в базе. Возвращаем {}", TEACHER_NOT_EXISTS);
+            log.info("Логина не существует, возвращаем специальный обьект {}", LOGIN_NOT_EXISTS);
             return TEACHER_NOT_EXISTS;
         } else {
-            log.info("Объект учётных данных есть в базе. Пытаемся достать Teacher");
-            return teachers.get(cr);
+            log.info("Логин существует, патаемся вернуть учителя");
+            return teachers.values().stream()
+                    .filter(s -> s.getCredential().getLogin().equals(login))
+                    .findAny().orElse(TEACHER_NOT_EXISTS);
         }
     }
 
     @Override
     public Teacher getTeacherIfExistsOrGetSpecialValue(String login, String password) {
         Credential cr = credentialRepo.getCredentialIfExistsOrGetSpecialValue(login, password);
-        log.debug("Пытаемся проверить учетные данные обьекта Teacher {} в репозитории", cr);
         if (LOGIN_NOT_EXISTS == cr) {
-            log.info("Объекта учётных данных нет в базе. Возвращаем {}", TEACHER_NOT_EXISTS);
+            log.info("Логина не существует, возвращаем специальный обьект {}", LOGIN_NOT_EXISTS);
             return TEACHER_NOT_EXISTS;
         } else if (PASSWORD_WRONG == cr) {
-            log.info("Объект учётных данных есть но пароль неверен. Возвращаем {}", TEACHER_PASSWORD_WRONG);
+            log.info("Прароль не верен, возвращаем специальный обьект {}", TEACHER_PASSWORD_WRONG);
             return TEACHER_PASSWORD_WRONG;
         } else {
-            log.info("Объект учётных данных есть в базе. Пытаемся достать Teacher");
-            return teachers.get(cr);
+            log.info("Логин и пароль соответствуют, патаемся вернуть учителя");
+            return teachers.values().stream()
+                    .filter(s -> s.getCredential().getLogin().equals(login) &&
+                            s.getCredential().getPassword().equals(password))
+                    .findAny().orElse(TEACHER_NOT_EXISTS);
         }
     }
 
     @Override
     public boolean putTeacherIfNotExists(Teacher teacher) {
-        Credential cr = teacher.getCredential();
-        log.debug("Пытаемся проверить учетные данные {} обьекта Teacher в репозитории", cr);
-        boolean result = credentialRepo.putCredentialIfNotExists(cr.getLogin(), cr.getPassword());
-        if (result) {
-            Credential teacherCr = credentialRepo.getCredentialIfExistsOrGetSpecialValue(cr.getLogin());
-            log.debug("Учетные данные добавлены, пытаемся положить обьект {} в репозиторй", teacherCr);
-            if (isExistsAndPasswordRight(teacherCr)) {
+        Credential cr = credentialRepo.getCredentialIfExistsOrGetSpecialValue(teacher.getCredential().getLogin());
+        if (LOGIN_NOT_EXISTS == cr) {
+            log.info("логина не существует, значит можно добавить нового учителя");
+            String login = teacher.getCredential().getLogin();
+            String password = teacher.getCredential().getPassword();
+
+            credentialRepo.putCredentialIfNotExists(login, password);
+            cr = credentialRepo.getCredentialIfExistsOrGetSpecialValue(login, password);
+
+            if (isExistsAndPasswordRight(cr)) {
                 teacher.setId(CURRENT_MAX_TEACHER_ID++);
-                teacher.setCredential(teacherCr);
-                teachers.put(teacherCr, teacher);
-                log.debug("Teacher {} добавлен в репозиторий", teacher);
+                teacher.setCredential(cr);
+                teachers.put(teacher.getId(), teacher);
+                log.info("Удалось положить Credential, добавяем нового учителя {}", teacher);
                 return true;
             } else {
-                log.debug("Teacher не добавлен в репозиторий. Логин или пароль не совпали");
-                return false;
+                log.info("Не удалось положить Credential, нельзя добавить нового учителя");
             }
         }
-        log.debug("Учетные данные уже существуют Teacher не будет добавлен в репозиторий");
         return false;
-    }
-
-    private boolean isExistsAndPasswordRight(Credential cr) {
-        return (LOGIN_NOT_EXISTS != cr && PASSWORD_WRONG != cr);
     }
 
     @Override
     public boolean changeTeachersParametersIfExists(Teacher newT) {
-        Credential oldCred = credentialRepo.getCredentialIfExistsOrGetSpecialValue(newT.getCredential().getLogin());
-        Teacher oldT = teachers.get(oldCred);
+        Teacher oldT = teachers.get(newT.getId());
         log.debug("Пытаемся менять параметры Teacher и Credential на новые");
 
         if (oldT != null && TEACHER_NOT_EXISTS != oldT) {
             log.debug("Меняем параметры Teacher и Credential на новые");
 
+            oldT.setFirstname(newT.getFirstname());
+            oldT.setLastname(newT.getLastname());
+            oldT.setPatronymic(newT.getPatronymic());
+            oldT.setDateOfBirth(newT.getDateOfBirth());
             boolean isChanged = credentialRepo.changeCredentialIfExists(newT.getCredential().getLogin(), newT.getCredential().getPassword());
             if (isChanged) {
-                oldT.setFirstname(newT.getFirstname());
-                oldT.setLastname(newT.getLastname());
-                oldT.setPatronymic(newT.getPatronymic());
-                oldT.setDateOfBirth(newT.getDateOfBirth());
                 log.info("Учётная запись изменена, можно менять параметры учителя");
-                return true;
             } else {
-                log.info("Учётная запись не изменена, параметры учителя тоже не будут изменены");
+                log.info("Учётная запись не изменена, но параметры учителя будут изменены");
             }
+            return true;
         } else {
             log.debug("Нельзя менять параметры Teacher или Credential если их не существует в репозитории");
         }
@@ -120,13 +124,21 @@ public class TeacherRepoHardcodedImpl implements TeacherRepo {
         log.debug("Пытаемся проверить учетные данные обьекта Teacher {} в репозитории", cr);
         if (LOGIN_NOT_EXISTS == cr) {
             log.info("Объекта учётных данных нет в базе. Нечего удалять");
-            return false;
         } else {
-            teachers.remove(cr);
-            credentialRepo.deleteCredentialIfExists(login);
-            log.info("Объекты Teacher и Credentials удалены из репозиториев");
-            return true;
+            Teacher t = teachers.values().stream()
+                    .filter(student -> student.getCredential().getLogin().equals(cr.getLogin()))
+                    .findAny().orElse(TEACHER_NOT_EXISTS);
+            if (TEACHER_NOT_EXISTS != t) {
+                t.setCredential(null);// help GC
+                teachers.remove(t.getId());
+                credentialRepo.deleteCredentialIfExists(login);
+                log.info("Объекты Teacher и Credentials удалены из репозиториев");
+                return true;
+            } else {
+                log.info("Объекта учителей нет в базе. Нечего удалять");
+            }
         }
+        return false;
     }
 
     @Override
@@ -134,8 +146,7 @@ public class TeacherRepoHardcodedImpl implements TeacherRepo {
         return deleteTeacher(teacher.getCredential().getLogin());
     }
 
-    @Override
-    public List<Teacher> getTeachersList() {
-        return new ArrayList<>(teachers.values());
+    private boolean isExistsAndPasswordRight(Credential cr) {
+        return (LOGIN_NOT_EXISTS != cr && PASSWORD_WRONG != cr);
     }
 }
