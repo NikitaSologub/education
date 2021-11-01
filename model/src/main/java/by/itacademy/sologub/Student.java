@@ -1,6 +1,5 @@
 package by.itacademy.sologub;
 
-import by.itacademy.sologub.role.Role;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -44,11 +43,6 @@ public class Student extends User {
 
     public Student withDateOfBirth(LocalDate date) {
         setDateOfBirth(date);
-        return this;
-    }
-
-    public Student withRole(Role role) {
-        setRole(role);
         return this;
     }
 

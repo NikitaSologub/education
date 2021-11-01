@@ -1,6 +1,5 @@
 package by.itacademy.sologub;
 
-import by.itacademy.sologub.role.Role;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -15,6 +14,5 @@ public abstract class User extends AbstractEntity {
     private String lastname;
     private String patronymic;
     private LocalDate dateOfBirth;
-    private Role role;
     private Credential credential;
 }

@@ -60,6 +60,7 @@ public class LoginController extends BaseController {
                 log.info("Логин совпал а пароль не верен. АДМИН- в доступе отказано. Форвард на LOGIN_PAGE");
             }
         }
+        log.info("администратора с логином={} не существует в системе", login);
         return false;
     }
 
@@ -84,14 +85,12 @@ public class LoginController extends BaseController {
                 log.info("Логин совпал а пароль не верен. TEACHER- в доступе отказано. Форвард на LOGIN_PAGE");
             }
         }
+        log.info("учителя с логином={} не существует в системе", login);
         return false;
     }
 
     boolean checkStudentLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
-        if (repo == null) {
-            return false;//TODO - временная мера из-за отсутствия STUDENT_REPO_POSTGRES_IMPL
-        }
         Student student = repo.getStudentIfExistsOrGetSpecialValue(login, password);
 
         if (student != null && STUDENT_NOT_EXISTS != student) {
@@ -105,6 +104,7 @@ public class LoginController extends BaseController {
                 log.info("Логин совпал а пароль не верен. STUDENT- в доступе отказано. Форвард на LOGIN_PAGE");
             }
         }
+        log.info("студента с логином={} не существует в системе", login);
         return false;
     }
 }

@@ -1,6 +1,5 @@
 package by.itacademy.sologub;
 
-import by.itacademy.sologub.role.Role;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
 
@@ -106,8 +105,7 @@ public class StudentRepoPostgresImpl extends AbstractPostgresRepo implements Stu
                 .withFirstname(rs.getString(FIRSTNAME))
                 .withLastname(rs.getString(LASTNAME))
                 .withPatronymic(rs.getString(PATRONYMIC))
-                .withDateOfBirth(rs.getDate(DATE_OF_BIRTH_DB_FIELD).toLocalDate())
-                .withRole(Role.TEACHER);
+                .withDateOfBirth(rs.getDate(DATE_OF_BIRTH_DB_FIELD).toLocalDate());
     }
 
     @Override

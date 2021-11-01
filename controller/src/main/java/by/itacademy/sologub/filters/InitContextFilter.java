@@ -3,7 +3,6 @@ package by.itacademy.sologub.filters;
 import by.itacademy.sologub.*;
 import by.itacademy.sologub.factory.ModelRepoFactory;
 import by.itacademy.sologub.factory.ModelRepoFactoryHardcodeImpl;
-import by.itacademy.sologub.role.Role;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -119,8 +118,7 @@ public class InitContextFilter implements Filter {
                 .withLastname("Дэцук")
                 .withFirstname("Валерия")
                 .withPatronymic("Сергеевна")
-                .withDateOfBirth(LocalDate.of(1974, Month.SEPTEMBER, 21))
-                .withRole(Role.TEACHER);
+                .withDateOfBirth(LocalDate.of(1974, Month.SEPTEMBER, 21));
 
         Teacher t2 = new Teacher().
                 withCredential(new Credential()
@@ -129,8 +127,7 @@ public class InitContextFilter implements Filter {
                 .withLastname("Грузинова")
                 .withFirstname("Валерия")
                 .withPatronymic("Леонидовна")
-                .withDateOfBirth(LocalDate.of(1959, Month.OCTOBER, 12))
-                .withRole(Role.TEACHER);
+                .withDateOfBirth(LocalDate.of(1959, Month.OCTOBER, 12));
 
         Teacher t3 = new Teacher().
                 withCredential(new Credential()
@@ -139,8 +136,7 @@ public class InitContextFilter implements Filter {
                 .withLastname("Путято")
                 .withFirstname("Артур")
                 .withPatronymic("Владимирович")
-                .withDateOfBirth(LocalDate.of(1976, Month.FEBRUARY, 7))
-                .withRole(Role.TEACHER);
+                .withDateOfBirth(LocalDate.of(1976, Month.FEBRUARY, 7));
 
         Teacher t4 = new Teacher().
                 withCredential(new Credential()
@@ -149,8 +145,7 @@ public class InitContextFilter implements Filter {
                 .withLastname("Творогов")
                 .withFirstname("Сергей")
                 .withPatronymic("Петрович")
-                .withDateOfBirth(LocalDate.of(1957, Month.DECEMBER, 11))
-                .withRole(Role.TEACHER);
+                .withDateOfBirth(LocalDate.of(1957, Month.DECEMBER, 11));
 
         Teacher t5 = new Teacher().
                 withCredential(new Credential()
@@ -159,8 +154,7 @@ public class InitContextFilter implements Filter {
                 .withLastname("Мединский")
                 .withFirstname("Ян")
                 .withPatronymic("Станиславович")
-                .withDateOfBirth(LocalDate.of(1971, Month.NOVEMBER, 21))
-                .withRole(Role.TEACHER);
+                .withDateOfBirth(LocalDate.of(1971, Month.NOVEMBER, 21));
 
         teacherRepo.putTeacherIfNotExists(t1);
         teacherRepo.putTeacherIfNotExists(t2);
@@ -244,12 +238,11 @@ public class InitContextFilter implements Filter {
         Student s1 = new Student()
                 .withCredential(new Credential()
                         .withLogin("AXEL23")
-                        .withPassword("loveshortpasswords"))
+                        .withPassword("123"))
                 .withLastname("Ярец")
                 .withFirstname("Илья")
                 .withPatronymic("Викторович")
-                .withDateOfBirth(LocalDate.of(1995, Month.JULY, 22))
-                .withRole(Role.STUDENT);
+                .withDateOfBirth(LocalDate.of(1995, Month.JULY, 22));
 
         Student s2 = new Student()
                 .withCredential(new Credential()
@@ -258,8 +251,7 @@ public class InitContextFilter implements Filter {
                 .withLastname("Столярчук")
                 .withFirstname("Анастасия")
                 .withPatronymic("Ивановна")
-                .withDateOfBirth(LocalDate.of(1995, Month.AUGUST, 17))
-                .withRole(Role.STUDENT);
+                .withDateOfBirth(LocalDate.of(1995, Month.AUGUST, 17));
 
         Student s3 = new Student()
                 .withCredential(new Credential()
@@ -268,8 +260,7 @@ public class InitContextFilter implements Filter {
                 .withLastname("Татур")
                 .withFirstname("Егор")
                 .withPatronymic("Евгеньевич")
-                .withDateOfBirth(LocalDate.of(1995, Month.NOVEMBER, 27))
-                .withRole(Role.STUDENT);
+                .withDateOfBirth(LocalDate.of(1995, Month.NOVEMBER, 27));
 
         Student s4 = new Student()
                 .withCredential(new Credential()
@@ -278,8 +269,7 @@ public class InitContextFilter implements Filter {
                 .withLastname("Полошавец")
                 .withFirstname("Ксения")
                 .withPatronymic("Антоновна")
-                .withDateOfBirth(LocalDate.of(1995, Month.APRIL, 10))
-                .withRole(Role.STUDENT);
+                .withDateOfBirth(LocalDate.of(1995, Month.APRIL, 10));
 
         Student s5 = new Student()
                 .withCredential(new Credential()
@@ -288,8 +278,7 @@ public class InitContextFilter implements Filter {
                 .withLastname("Анпилов")
                 .withFirstname("Андрей")
                 .withPatronymic("Сергеевич")
-                .withDateOfBirth(LocalDate.of(1991, Month.DECEMBER, 11))
-                .withRole(Role.STUDENT);
+                .withDateOfBirth(LocalDate.of(1991, Month.DECEMBER, 11));
 
         Student s6 = new Student()
                 .withCredential(new Credential()
@@ -298,8 +287,7 @@ public class InitContextFilter implements Filter {
                 .withLastname("Шабалина")
                 .withFirstname("Анжелина")
                 .withPatronymic("Игоревна")
-                .withDateOfBirth(LocalDate.of(1995, Month.MARCH, 28))
-                .withRole(Role.STUDENT);
+                .withDateOfBirth(LocalDate.of(1995, Month.MARCH, 28));
 
         repo.putStudentIfNotExists(s1);
         repo.putStudentIfNotExists(s2);

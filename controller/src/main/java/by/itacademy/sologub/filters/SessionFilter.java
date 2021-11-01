@@ -1,7 +1,9 @@
 package by.itacademy.sologub.filters;
 
+import by.itacademy.sologub.Admin;
+import by.itacademy.sologub.Student;
+import by.itacademy.sologub.Teacher;
 import by.itacademy.sologub.User;
-import by.itacademy.sologub.role.Role;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.*;
@@ -23,15 +25,17 @@ public class SessionFilter extends BaseFilter implements Filter {
         if (session != null && session.getAttribute(SESSION_ENTITY) != null) {
             log.info("Сессия установлена. Пытаемся идентифицировать роль пользователя");
             User user = (User) session.getAttribute(SESSION_ENTITY);
-            if (Role.ADMIN == user.getRole()) {
-                log.info("Сессия установлена роль {} переходим по url {}", user.getRole(), ADMIN_FRONT_PAGE);
-                forward(ADMIN_FRONT_PAGE, "Добро пожаловать" + user.getRole(), req, res);
-            } else if (Role.TEACHER == user.getRole()) {
-                log.info("Сессия установлена роль {} переходим по url {}", user.getRole(), TEACHER_FRONT_PAGE);
-                forward(TEACHER_FRONT_PAGE, "Добро пожаловать" + user.getRole(), req, res);
-            } else if (Role.STUDENT == user.getRole()) {
-                log.info("Сессия установлена роль {} переходим по url {}", user.getRole(), STUDENT_FRONT_PAGE);
-                forward(STUDENT_FRONT_PAGE, "Добро пожаловать" + user.getRole(), req, res);
+            Class<? extends User> userClass = user.getClass();
+
+            if (Admin.class == userClass) {
+                log.info("Сессия установлена роль {} переходим по url {}", userClass.getName(), ADMIN_FRONT_PAGE);
+                forward(ADMIN_FRONT_PAGE, "Добро пожаловать" + userClass.getName(), req, res);
+            } else if (Teacher.class == userClass) {
+                log.info("Сессия установлена роль {} переходим по url {}", userClass.getName(), TEACHER_FRONT_PAGE);
+                forward(TEACHER_FRONT_PAGE, "Добро пожаловать" + userClass.getName(), req, res);
+            } else if (Student.class == userClass) {
+                log.info("Сессия установлена роль {} переходим по url {}", userClass.getName(), STUDENT_FRONT_PAGE);
+                forward(STUDENT_FRONT_PAGE, "Добро пожаловать" + userClass.getName(), req, res);
             } else {
                 log.info("Сессия установлена но роль пользователя не подлежит обслуживанию");
                 log.info("Инвалидируем сессию и переходим на страницу login_page");
