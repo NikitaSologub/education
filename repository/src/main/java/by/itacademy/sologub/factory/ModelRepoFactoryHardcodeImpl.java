@@ -16,6 +16,17 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
         salaryRepo = SalaryRepoHardcodedImpl.getInstance();
     }
 
+    public static ModelRepoFactoryHardcodeImpl getInstance() {
+        if (instance == null) {
+            synchronized (ModelRepoFactoryHardcodeImpl.class) {
+                if (instance == null) {
+                    instance = new ModelRepoFactoryHardcodeImpl();
+                }
+            }
+        }
+        return instance;
+    }
+
     @Override
     public CredentialRepo getCredentialRepo() {
         return credentialRepo;
@@ -34,16 +45,5 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     @Override
     public SalaryRepo getSalariesRepo() {
         return salaryRepo;
-    }
-
-    public static ModelRepoFactoryHardcodeImpl getInstance() {
-        if (instance == null) {
-            synchronized (ModelRepoFactoryHardcodeImpl.class) {
-                if (instance == null) {
-                    instance = new ModelRepoFactoryHardcodeImpl();
-                }
-            }
-        }
-        return instance;
     }
 }

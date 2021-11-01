@@ -3,6 +3,7 @@ package by.itacademy.sologub.filters;
 import by.itacademy.sologub.*;
 import by.itacademy.sologub.factory.ModelRepoFactory;
 import by.itacademy.sologub.factory.ModelRepoFactoryHardcodeImpl;
+import by.itacademy.sologub.factory.ModelRepoFactoryPostgresDbImpl;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -45,42 +46,37 @@ public class InitContextFilter implements Filter {
         }
     }
 
-    private void loadDatabaseInMemory(FilterConfig filterConfig) {
+    private void loadDatabaseInMemory(FilterConfig conf) {
         ModelRepoFactory factory = ModelRepoFactoryHardcodeImpl.getInstance();
+        setAppContext(conf, factory);
 
-        SalaryRepo salaryRepo = factory.getSalariesRepo();
+        setStudents((StudentRepo) conf.getServletContext().getAttribute(STUDENT_REPO));
+        setTeachersAndSalaries((TeacherRepo) conf.getServletContext().getAttribute(TEACHER_REPO),
+                (SalaryRepo) conf.getServletContext().getAttribute(SALARY_REPO));
+    }
+
+    private void loadDatabasePostgres(FilterConfig conf) throws PropertyVetoException {
+        if (loadDriverClass()) {
+            ComboPooledDataSource pool = initAndGetPoolConnection();
+            ModelRepoFactory factory = ModelRepoFactoryPostgresDbImpl.getInstance(pool);
+            setAppContext(conf, factory);
+        } else {
+            loadDatabaseInMemory(conf);
+            log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
+        }
+    }
+
+    private void setAppContext(FilterConfig filterConfig, ModelRepoFactory factory) {
         CredentialRepo credentialRepo = factory.getCredentialRepo();
         TeacherRepo teacherRepo = factory.getTeacherRepo();
         StudentRepo studentRepo = factory.getStudentRepo();
+        SalaryRepo salaryRepo = factory.getSalariesRepo();
 
         ServletContext context = filterConfig.getServletContext();
-
-        setStudents(studentRepo);
-        setTeachersAndSalaries(teacherRepo, salaryRepo);
-
-        context.setAttribute(SALARY_REPO, salaryRepo);
         context.setAttribute(CREDENTIAL_REPO, credentialRepo);
         context.setAttribute(TEACHER_REPO, teacherRepo);
         context.setAttribute(STUDENT_REPO, studentRepo);
-    }
-
-    private void loadDatabasePostgres(FilterConfig filterConfig) throws PropertyVetoException {
-        if (loadDriverClass()) {
-            ComboPooledDataSource pool = initAndGetPoolConnection();
-            CredentialRepoPostgresImpl credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
-            TeacherRepoPostgresImpl teacherRepo = TeacherRepoPostgresImpl.getInstance(pool, credentialRepo);
-            StudentRepoPostgresImpl studentRepo = StudentRepoPostgresImpl.getInstance(pool, credentialRepo);
-            SalaryRepoPostgresImpl salaryRepo = SalaryRepoPostgresImpl.getInstance(pool);
-
-            ServletContext context = filterConfig.getServletContext();
-            context.setAttribute(CREDENTIAL_REPO, credentialRepo);
-            context.setAttribute(TEACHER_REPO, teacherRepo);
-            context.setAttribute(STUDENT_REPO, studentRepo);
-            context.setAttribute(SALARY_REPO, salaryRepo);
-        } else {
-            loadDatabaseInMemory(filterConfig);
-            log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
-        }
+        context.setAttribute(SALARY_REPO, salaryRepo);
     }
 
     boolean loadDriverClass() {
