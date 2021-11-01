@@ -12,20 +12,20 @@ import static by.itacademy.sologub.constants.Constants.*;
 import static by.itacademy.sologub.constants.SqlQuery.*;
 
 @Slf4j
-public class StudentRepoPostgres extends AbstractPostgresRepo implements StudentRepo {
-    private static StudentRepoPostgres studentRepo;
+public class StudentRepoPostgresImpl extends AbstractPostgresRepo implements StudentRepo {
+    private static StudentRepoPostgresImpl studentRepo;
     private static CredentialRepoPostgresImpl credentialRepo;
 
-    private StudentRepoPostgres(ComboPooledDataSource pool, CredentialRepoPostgresImpl repo) {
+    private StudentRepoPostgresImpl(ComboPooledDataSource pool, CredentialRepoPostgresImpl repo) {
         super(pool);
         credentialRepo = repo;
     }
 
-    public static StudentRepoPostgres getInstance(ComboPooledDataSource pool, CredentialRepoPostgresImpl credRepo) {
+    public static StudentRepoPostgresImpl getInstance(ComboPooledDataSource pool, CredentialRepoPostgresImpl credRepo) {
         if (studentRepo == null) {
             synchronized (CredentialRepoHardcodeImpl.class) {
                 if (studentRepo == null) {
-                    studentRepo = new StudentRepoPostgres(pool, credRepo);
+                    studentRepo = new StudentRepoPostgresImpl(pool, credRepo);
                 }
             }
         }

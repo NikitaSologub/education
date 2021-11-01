@@ -37,4 +37,17 @@ public class SqlQuery {
     public static final String DELETE_STUDENT_BY_CREDENTIAL_ID = "DELETE FROM student WHERE credential_id=?";
     public static final String UPDATE_STUDENT_BY_CREDENTIAL_ID =
             "UPDATE student SET firstname=?, lastname=?, patronymic=?, date_of_birth=? WHERE credential_id=?;";
+
+    //salary postgres sql
+    public static final String GET_SALARIES_LIST_BY_TEACHER_ID = "SELECT id, coins_amount, date, teacher_id " +
+            "FROM salary WHERE teacher_id=?;";
+    public static final String GET_SALARIES_LIST_AFTER_DATE_BY_TEACHER_ID = "SELECT id, coins_amount, date, teacher_id" +
+            " FROM salary WHERE teacher_id=? AND date>?;";
+    public static final String GET_SALARY_BY_ID = "SELECT id, coins_amount, date, teacher_id FROM salary WHERE id=?;";
+    public static final String SET_SALARY_BY_TEACHER_ID_RETURNING_ID =
+            "INSERT INTO salary (coins_amount,date,teacher_id) VALUES(?,?,?) WHERE teacher_id=? RETURNING id;";
+    public static final String SET_SALARY_BY_TEACHER_ID =
+            "INSERT INTO salary (coins_amount,date,teacher_id) VALUES(?,?,?);";
+    public static final String DELETE_SALARY_BY_ID = "DELETE FROM salary WHERE id=?;";
+    public static final String UPDATE_SALARY_BY_ID = "UPDATE salary SET coins_amount=?, date=?, teacher_id=? WHERE id=?;";
 }

@@ -11,20 +11,20 @@ import java.util.stream.Collectors;
 import static by.itacademy.sologub.constants.Constants.SALARY_NOT_EXISTS;
 
 @Slf4j
-public class SalariesRepoHardcodedImpl implements SalariesRepo {
+public class SalaryRepoHardcodedImpl implements SalaryRepo {
     static int CURRENT_MAX_SALARY_ID = 10;
-    private static SalariesRepoHardcodedImpl instance;
+    private static SalaryRepoHardcodedImpl instance;
     private final Map<Integer, Salary> repo;
 
-    private SalariesRepoHardcodedImpl() {
+    private SalaryRepoHardcodedImpl() {
         repo = new HashMap<>();
     }
 
-    public static SalariesRepoHardcodedImpl getInstance() {
+    public static SalaryRepoHardcodedImpl getInstance() {
         if (instance == null) {
-            synchronized (SalariesRepoHardcodedImpl.class) {
+            synchronized (SalaryRepoHardcodedImpl.class) {
                 if (instance == null) {
-                    instance = new SalariesRepoHardcodedImpl();
+                    instance = new SalaryRepoHardcodedImpl();
                 }
             }
         }
@@ -82,9 +82,9 @@ public class SalariesRepoHardcodedImpl implements SalariesRepo {
     }
 
     @Override
-    public boolean changeSalary(int id, Salary newValues) {
-        if (repo.containsKey(id)) {
-            Salary oldValues = repo.get(id);
+    public boolean changeSalary(Salary newValues) {
+        if (repo.containsKey(newValues.getId())) {
+            Salary oldValues = repo.get(newValues.getId());
             if (newValues.equals(oldValues)) {
                 log.info("Нечего менять. Обьекты зарплат имеют эквивалентные значения");
                 return false;
@@ -96,7 +96,7 @@ public class SalariesRepoHardcodedImpl implements SalariesRepo {
                 return true;
             }
         } else {
-            log.info("Нечего менять.Обьект зарплаты который по id {} не существует в репозитории", id);
+            log.info("Нечего менять.Обьект зарплаты который по id {} не существует в репозитории", newValues.getId());
             return false;
         }
     }

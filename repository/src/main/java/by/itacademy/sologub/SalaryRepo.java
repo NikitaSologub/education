@@ -3,7 +3,7 @@ package by.itacademy.sologub;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface SalariesRepo {
+public interface SalaryRepo {
     List<Salary> getAllSalariesByTeacherId(int teacherId);
 
     List<Salary> getAllSalariesByTeacherIdAfterDate(int teacherId, LocalDate date);
@@ -12,7 +12,7 @@ public interface SalariesRepo {
 
     boolean putSalary(Salary salary);
 
-    boolean changeSalary(int id, Salary newValues);
+    boolean changeSalary(Salary newValues);
 
     boolean deleteSalary(int id);
 }

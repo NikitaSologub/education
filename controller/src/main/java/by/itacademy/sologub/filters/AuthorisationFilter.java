@@ -11,7 +11,7 @@ import java.io.IOException;
 import static by.itacademy.sologub.constants.Constant.*;
 
 @WebFilter(urlPatterns = {ADMIN_FRONT_PAGE, STUDENT_FRONT_PAGE, TEACHER_FRONT_PAGE, ADMIN_TEACHERS_PAGE,
-        ADMIN_SALARIES_PAGE, ADMIN_STUDENTS_PAGE, SALARIES_CONTROLLER, TEACHER_CONTROLLER})
+        ADMIN_SALARIES_PAGE, ADMIN_STUDENTS_PAGE, SALARY_CONTROLLER, TEACHER_CONTROLLER})
 @Slf4j
 public class AuthorisationFilter extends BaseFilter implements Filter {
     @Override

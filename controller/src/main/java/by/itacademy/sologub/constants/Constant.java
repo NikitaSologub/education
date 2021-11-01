@@ -8,7 +8,7 @@ public class Constant {
     public static final String LOGIN_CONTROLLER = "/LoginController";
     public static final String TEACHER_CONTROLLER = "/TeacherController";
     public static final String STUDENT_CONTROLLER = "/StudentController";
-    public static final String SALARIES_CONTROLLER = "/SalariesController";
+    public static final String SALARY_CONTROLLER = "/SalaryController";
     public static final String ADMIN_FRONT_PAGE = "/admin_front_page.jsp";
     public static final String ADMIN_TEACHERS_PAGE = "/admin_teachers_page.jsp";
     public static final String ADMIN_STUDENTS_PAGE = "/admin_students_page.jsp";
@@ -33,7 +33,7 @@ public class Constant {
     public static final String MESSAGE = "message";
     public static final String ERROR_MESSAGE = "errorMessage";
     public static final String CREDENTIAL_REPO ="credentialRepo";
-    public static final String SALARIES_REPO ="salariesRepo";
+    public static final String SALARY_REPO ="salaryRepo";
     public static final String TEACHER_REPO ="teacherRepo";
     public static final String STUDENT_REPO ="studentRepo";
     public static final String UTF_8 = "UTF-8";

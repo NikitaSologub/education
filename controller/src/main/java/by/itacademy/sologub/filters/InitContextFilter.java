@@ -49,7 +49,7 @@ public class InitContextFilter implements Filter {
     private void loadDatabaseInMemory(FilterConfig filterConfig) {
         ModelRepoFactory factory = ModelRepoFactoryHardcodeImpl.getInstance();
 
-        SalariesRepo salariesRepo = factory.getSalariesRepo();
+        SalaryRepo salaryRepo = factory.getSalariesRepo();
         CredentialRepo credentialRepo = factory.getCredentialRepo();
         TeacherRepo teacherRepo = factory.getTeacherRepo();
         StudentRepo studentRepo = factory.getStudentRepo();
@@ -57,9 +57,9 @@ public class InitContextFilter implements Filter {
         ServletContext context = filterConfig.getServletContext();
 
         setStudents(studentRepo);
-        setTeachersAndSalaries(teacherRepo, salariesRepo);
+        setTeachersAndSalaries(teacherRepo, salaryRepo);
 
-        context.setAttribute(SALARIES_REPO, salariesRepo);
+        context.setAttribute(SALARY_REPO, salaryRepo);
         context.setAttribute(CREDENTIAL_REPO, credentialRepo);
         context.setAttribute(TEACHER_REPO, teacherRepo);
         context.setAttribute(STUDENT_REPO, studentRepo);
@@ -70,12 +70,14 @@ public class InitContextFilter implements Filter {
             ComboPooledDataSource pool = initAndGetPoolConnection();
             CredentialRepoPostgresImpl credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
             TeacherRepoPostgresImpl teacherRepo = TeacherRepoPostgresImpl.getInstance(pool, credentialRepo);
-            StudentRepoPostgres studentRepo = StudentRepoPostgres.getInstance(pool, credentialRepo);
+            StudentRepoPostgresImpl studentRepo = StudentRepoPostgresImpl.getInstance(pool, credentialRepo);
+            SalaryRepoPostgresImpl salaryRepo = SalaryRepoPostgresImpl.getInstance(pool);
 
             ServletContext context = filterConfig.getServletContext();
             context.setAttribute(CREDENTIAL_REPO, credentialRepo);
             context.setAttribute(TEACHER_REPO, teacherRepo);
             context.setAttribute(STUDENT_REPO, studentRepo);
+            context.setAttribute(SALARY_REPO, salaryRepo);
         } else {
             loadDatabaseInMemory(filterConfig);
             log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
@@ -109,7 +111,7 @@ public class InitContextFilter implements Filter {
         return pool;
     }
 
-    void setTeachersAndSalaries(TeacherRepo teacherRepo, SalariesRepo salariesRepo) {
+    void setTeachersAndSalaries(TeacherRepo teacherRepo, SalaryRepo salaryRepo) {
         Teacher t1 = new Teacher().
                 withCredential(new Credential()
                         .withLogin("DETSUK59")
@@ -223,19 +225,19 @@ public class InitContextFilter implements Filter {
                 .withDate(LocalDate.parse("2022-01-17"))
                 .withCoins(65085);
 
-        salariesRepo.putSalary(s1);
-        salariesRepo.putSalary(s2);
-        salariesRepo.putSalary(s3);
-        salariesRepo.putSalary(s4);
-        salariesRepo.putSalary(s5);
-        salariesRepo.putSalary(s6);
-        salariesRepo.putSalary(s7);
-        salariesRepo.putSalary(s8);
-        salariesRepo.putSalary(s9);
-        salariesRepo.putSalary(s10);
-        salariesRepo.putSalary(s11);
-        salariesRepo.putSalary(s12);
-        salariesRepo.putSalary(s13);
+        salaryRepo.putSalary(s1);
+        salaryRepo.putSalary(s2);
+        salaryRepo.putSalary(s3);
+        salaryRepo.putSalary(s4);
+        salaryRepo.putSalary(s5);
+        salaryRepo.putSalary(s6);
+        salaryRepo.putSalary(s7);
+        salaryRepo.putSalary(s8);
+        salaryRepo.putSalary(s9);
+        salaryRepo.putSalary(s10);
+        salaryRepo.putSalary(s11);
+        salaryRepo.putSalary(s12);
+        salaryRepo.putSalary(s13);
     }
 
     void setStudents(StudentRepo repo) {

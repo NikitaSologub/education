@@ -13,7 +13,6 @@ import static by.itacademy.sologub.constants.SqlQuery.*;
 
 @Slf4j
 public class CredentialRepoPostgresImpl extends AbstractPostgresRepo implements CredentialRepo {
-    public static final int ID_NOT_EXISTS = -1;
     private static CredentialRepoPostgresImpl instance;
 
     private CredentialRepoPostgresImpl(ComboPooledDataSource pool) {

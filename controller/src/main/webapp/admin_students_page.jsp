@@ -8,7 +8,6 @@
     <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
 </head>
 <body>
-
 <h1>ADMIN - STUDENTS MARKS PAGE!</h1>
 <h4>Студенты наших клубов по интересам</h4>
 <h3 class="message">
@@ -16,69 +15,61 @@
         <c:out value="${requestScope.message}"/>
     </c:if>
 </h3>
-
-<table id="studentsTable">
-    <c:forEach var="student" items="${applicationScope.studentRepo.studentsList}">
+<h6>
+    <table border="1" width="100%">
         <tr>
-            <form action="StudentController" method="post">
+            <th>LOGIN</th>
+            <th>PASSWORD</th>
+            <th>ФАМИЛИЯ</th>
+            <th>ИМЯ</th>
+            <th>ОТЧЕСТВО</th>
+            <th>ДАТА РОЖДЕНИЯ</th>
+            <th>УДАЛИТЬ</th>
+            <th>ИЗМЕНИТЬ</th>
+            <th>К ОЦЕНКАМ</th>
+        </tr>
+        <c:forEach var="student" items="${applicationScope.studentRepo.studentsList}">
+            <tr>
+                <td><c:out value="${student.credential.login}"/></td>
+                <td><c:out value="${student.credential.password}"/></td>
+                <td><c:out value="${student.lastname}"/></td>
+                <td><c:out value="${student.firstname}"/></td>
+                <td><c:out value="${student.patronymic}"/></td>
+                <td><c:out value="${student.dateOfBirth}"/></td>
                 <td>
+                    <form action="StudentController" method="post">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="id" value=${student.id}>
+                        <input type="hidden" name="credentialId" value=${student.credential.id}>
+                        <input type="hidden" name="login" value="${student.credential.login}">
+                        <button type="submit">Удалить студента</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="StudentController" method="post">
                     <input type="hidden" name="action" value="put">
                     <input type="hidden" name="id" value=${student.id}>
                     <input type="hidden" name="credentialId" value=${student.credential.id}>
-                    Username: ${student.credential.login}<label>
-                    <input type="hidden" name="login" value="${student.credential.login}">
-                </label>
-                </td>
-                <td>
-                    Password: <label>
-                    <input type="text" name="password" value="${student.credential.password}">
-                </label>
-                </td>
-                <td>
-                    Firstname: <label>
-                    <input type="text" name="firstname" value="${student.firstname}">
-                </label>
-                </td>
-                <td>
-                    Lastname: <label>
-                    <input type="text" name="lastname" value="${student.lastname}">
-                </label>
-                </td>
-                <td>
-                    Patronymic: <label>
-                    <input type="text" name="patronymic" value="${student.patronymic}">
-                </label>
-                </td>
-                <td>
-                    Date of birth: <label>
-                    <input type="date" name="dateOfBirth" value="${student.dateOfBirth}">
-                </label>
-                </td>
-                <td>
+                    Username: ${student.credential.login} <input type="hidden" name="login" value="${student.credential.login}">
+                    Password: <input type="text" name="password" value="${student.credential.password}">
+                    Firstname: <input type="text" name="firstname" value="${student.firstname}">
+                    Lastname: <input type="text" name="lastname" value="${student.lastname}">
+                    Patronymic: <input type="text" name="patronymic" value="${student.patronymic}">
+                    Date of birth: <input type="date" name="dateOfBirth" value="${student.dateOfBirth}">
                     <button type="submit">Изменить параметры студента</button>
+                </form>
                 </td>
-            </form>
-        </tr>
-        <td>
-            <form action="StudentController" method="post">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="id" value=${student.id}>
-                <input type="hidden" name="credentialId" value=${student.credential.id}>
-                <input type="hidden" name="login" value="${student.credential.login}">
-                <button type="submit">Удалить студента</button>
-            </form>
-        </td>
-
-<%--        <td>--%>
-<%--            <form action="MarksController" method="post">--%>
-<%--                <input name="login" type="hidden" value="${student.credential.login}">--%>
-<%--                <button type="submit">На страницу оценок</button>--%>
-<%--            </form>--%>
-<%--        </td>--%>
-    </c:forEach>
-</table>
-<br>
-<br>
+                <td>
+                    к оценкам
+<%--                    <form action="MarkController" method="get">--%>
+<%--                        <input name="login" type="hidden" value="${student.credential.login}">--%>
+<%--                        <button type="submit">На страницу оценок</button>--%>
+<%--                    </form>--%>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+</h6>
 Добавить нового студента
 <form action="<c:url value="StudentController"/>" method="post">
     Username: <label> <input type="text" name="login"/> </label><br/>
@@ -90,14 +81,7 @@
     <button type="submit">Создать студента</button>
     <input type="reset">
 </form>
-<br>
-
-<h5>
-    <a href="${pageContext.request.contextPath}/admin_front_page.jsp">Go back to admin home page.</a>
-</h5>
-<br>
-<h5>
-    <a href="${pageContext.request.contextPath}/LogoutController">Log out.</a>
-</h5>
+<h5> <a href="${pageContext.request.contextPath}/admin_front_page.jsp">Go back to admin home page.</a> </h5>
+<h5> <a href="${pageContext.request.contextPath}/LogoutController">Log out.</a> </h5>
 </body>
 </html>

@@ -14,6 +14,11 @@ public class Salary extends AbstractEntity {
     private int teacherId;
     private LocalDate date;
 
+    public Salary withId(int id) {
+        setId(id);
+        return this;
+    }
+
     public Salary withCoins(int coins) {
         setCoins(coins);
         return this;

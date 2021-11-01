@@ -15,85 +15,60 @@
         <c:out value="${requestScope.message}"/>
     </c:if>
 </h3>
-<table id="teachersTable">
-<%--    <tr>--%>
-<%--        <td>(LOGIN)</td>--%>
-<%--        <td>(FIRST NAME)</td>--%>
-<%--        <td>(LAST NAME)</td>--%>
-<%--        <td>(PATRONYMIC)</td>--%>
-<%--        <td>(DATE OF BIRTH)</td>--%>
-<%--    </tr>--%>
-    <c:forEach var="teacher" items="${applicationScope.teacherRepo.teachersList}">
+<h6>
+    <table border="1" width="100%">
         <tr>
-<%--            <td>${teacher.credential.login}</td>--%>
-<%--            <td>${teacher.firstname}</td>--%>
-<%--            <td>${teacher.lastname}</td>--%>
-<%--            <td>${teacher.patronymic}</td>--%>
-<%--            <td>${teacher.dateOfBirth}</td>--%>
-
+            <th>LOGIN</th>
+            <th>PASSWORD</th>
+            <th>ФАМИЛИЯ</th>
+            <th>ИМЯ</th>
+            <th>ОТЧЕСТВО</th>
+            <th>ДАТА РОЖДЕНИЯ</th>
+            <th>УДАЛИТЬ</th>
+            <th>ИЗМЕНИТЬ</th>
+            <th>К ЗАРПЛАТАМ</th>
         </tr>
-        <br>
-        <tr>
-            <form action="TeacherController" method="post">
+        <c:forEach var="teacher" items="${applicationScope.teacherRepo.teachersList}">
+            <tr>
+                <td><c:out value="${teacher.credential.login}"/></td>
+                <td><c:out value="${teacher.credential.password}"/></td>
+                <td><c:out value="${teacher.lastname}"/></td>
+                <td><c:out value="${teacher.firstname}"/></td>
+                <td><c:out value="${teacher.patronymic}"/></td>
+                <td><c:out value="${teacher.dateOfBirth}"/></td>
                 <td>
-                    <input type="hidden" name="action" value="put">
-                    <input type="hidden" name="id" value=${teacher.id}>
-                    <input type="hidden" name="credentialId" value=${teacher.credential.id}>
-                    Username: ${teacher.credential.login}<label>
-                    <input type="hidden" name="login" value="${teacher.credential.login}">
-                </label>
+                    <form action="TeacherController" method="post">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="id" value=${teacher.id}>
+                        <input type="hidden" name="login" value="${teacher.credential.login}">
+                        <input type="hidden" name="credentialId" value=${teacher.credential.id}>
+                        <button type="submit">Удалить учителя</button>
+                    </form>
                 </td>
                 <td>
-                    Password: <label>
-                    <input type="text" name="password" value="${teacher.credential.password}">
-                </label>
+                    <form action="TeacherController" method="post">
+                        <input type="hidden" name="action" value="put">
+                        <input type="hidden" name="id" value=${teacher.id}>
+                        <input type="hidden" name="credentialId" value=${teacher.credential.id}>
+                        <input type="hidden" name="login" value="${teacher.credential.login}">
+                        Password: <input type="text" name="password" value="${teacher.credential.password}">
+                        Firstname: <input type="text" name="firstname" value="${teacher.firstname}">
+                        Lastname: <input type="text" name="lastname" value="${teacher.lastname}">
+                        Patronymic: <input type="text" name="patronymic" value="${teacher.patronymic}">
+                        Date of birth: <input type="date" name="dateOfBirth" value="${teacher.dateOfBirth}">
+                        <button type="submit">Изменить параметры учителя</button>
+                    </form>
                 </td>
                 <td>
-                    Firstname: <label>
-                    <input type="text" name="firstname" value="${teacher.firstname}">
-                </label>
+                    <form action="SalaryController" method="get">
+                        <input name="login" type="hidden" value="${teacher.credential.login}">
+                        <button type="submit">На страницу зарплат</button>
+                    </form>
                 </td>
-                <td>
-                    Lastname: <label>
-                    <input type="text" name="lastname" value="${teacher.lastname}">
-                </label>
-                </td>
-                <td>
-                    Patronymic: <label>
-                    <input type="text" name="patronymic" value="${teacher.patronymic}">
-                </label>
-                </td>
-                <td>
-                    Date of birth: <label>
-                    <input type="date" name="dateOfBirth" value="${teacher.dateOfBirth}">
-                </label>
-                </td>
-                <td>
-                    <button type="submit">Изменить параметры учителя</button>
-                </td>
-            </form>
-        </tr>
-        <td>
-            <form action="TeacherController" method="post">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="id" value=${teacher.id}>
-                <input type="hidden" name="login" value="${teacher.credential.login}">
-                <input type="hidden" name="credentialId" value=${teacher.credential.id}>
-                <button type="submit">Удалить учителя</button>
-            </form>
-        </td>
-
-        <td>
-            <form action="SalariesController" method="post">
-                <input name="login" type="hidden" value="${teacher.credential.login}">
-                <button type="submit">На страницу зарплат</button>
-            </form>
-        </td>
-    </c:forEach>
-</table>
-<br>
-<br>
-
+            </tr>
+        </c:forEach>
+    </table>
+</h6>
 Добавить нового учителя
 <form action="<c:url value="TeacherController"/>" method="post">
     Username: <label> <input type="text" name="login"/> </label><br/>
@@ -105,14 +80,7 @@
     <button type="submit">Создать учителя</button>
     <input type="reset">
 </form>
-<br>
-
-<h5>
-    <a href="${pageContext.request.contextPath}/admin_front_page.jsp">Go back to admin home page.</a>
-</h5>
-<br>
-<h5>
-    <a href="${pageContext.request.contextPath}/LogoutController">Log out.</a>
-</h5>
+<h5> <a href="${pageContext.request.contextPath}/admin_front_page.jsp">Go back to admin home page.</a> </h5>
+<h5> <a href="${pageContext.request.contextPath}/LogoutController">Log out.</a> </h5>
 </body>
 </html>
