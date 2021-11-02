@@ -99,11 +99,6 @@ public class CredentialRepoPostgresImpl extends AbstractPostgresRepo implements 
     }
 
     @Override
-    public boolean putCredentialIfNotExists(Credential cred) {
-        return putCredentialIfNotExists(cred.getLogin(), cred.getPassword());
-    }
-
-    @Override
     public int putCredentialIfNotExistsAndGetId(Credential credential) {
         ResultSet rs = null;
         int id = ID_NOT_EXISTS;
@@ -156,6 +151,24 @@ public class CredentialRepoPostgresImpl extends AbstractPostgresRepo implements 
                 result = true;
             } else {
                 log.info("Учётная запись логин={} не удалена из бд. Такого логина не существует", login);
+            }
+        } catch (SQLException e) {
+            log.error("Не удалось совершить операцию удаления пользователя", e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean deleteCredentialIfExists(int id) {
+        boolean result = false;
+        try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(DELETE_CREDENTIAL_BY_ID)) {
+            st.setInt(1, id);
+
+            if (st.executeUpdate() > 0) {
+                log.info("Учётная запись id={} удалена из бд", id);
+                result = true;
+            } else {
+                log.info("Учётная запись id={} не удалена из бд. Такого логина не существует", id);
             }
         } catch (SQLException e) {
             log.error("Не удалось совершить операцию удаления пользователя", e);

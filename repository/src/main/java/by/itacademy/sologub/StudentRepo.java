@@ -3,7 +3,7 @@ package by.itacademy.sologub;
 import java.util.List;
 
 public interface StudentRepo {
-    public List<Student> getStudentsList();
+    List<Student> getStudentsList();
 
     Student getStudentIfExistsOrGetSpecialValue(String login);
 

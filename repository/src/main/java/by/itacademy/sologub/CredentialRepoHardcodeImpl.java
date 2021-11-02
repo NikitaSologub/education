@@ -78,11 +78,6 @@ public class CredentialRepoHardcodeImpl implements CredentialRepo {
     }
 
     @Override
-    public boolean putCredentialIfNotExists(Credential cred) {
-        return putCredentialIfNotExists(cred.getLogin(), cred.getPassword());
-    }
-
-    @Override
     public int putCredentialIfNotExistsAndGetId(Credential credential) {
         if (putCredentialIfNotExists(credential.getLogin(), credential.getPassword())) {
             log.info("Credential {} добавлен. Возвращаем id", credential.getLogin());
@@ -121,5 +116,11 @@ public class CredentialRepoHardcodeImpl implements CredentialRepo {
             log.info("Обьект учётных данных {} успешно удалён из репозитория", cr);
             return true;
         }
+    }
+
+    @Override
+    public boolean deleteCredentialIfExists(int id) {
+        Credential cr = repo.remove(id);
+        return cr != null;
     }
 }
