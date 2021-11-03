@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Constants.*;
-import static by.itacademy.sologub.constants.Constants.CREDENTIAL_ID;
+import static by.itacademy.sologub.constants.Attributes.*;
+//import static by.itacademy.sologub.constants.Constants.CREDENTIAL_ID;
 
 @WebServlet(STUDENT_CONTROLLER)
 @Slf4j

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.itacademy.sologub.constants.Constants.SALARY_NOT_EXISTS;
+import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 
 @Data
 @NoArgsConstructor

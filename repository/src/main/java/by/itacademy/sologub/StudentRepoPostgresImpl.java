@@ -7,11 +7,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.itacademy.sologub.constants.Constants.*;
+import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.ConstantObject.*;
 import static by.itacademy.sologub.constants.SqlQuery.*;
 
 @Slf4j
-public class StudentRepoPostgresImpl extends AbstractPostgresRepo implements StudentRepo {
+public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo implements StudentRepo {
     private static StudentRepoPostgresImpl studentRepo;
     private static CredentialRepoPostgresImpl credentialRepo;
 
@@ -55,7 +56,7 @@ public class StudentRepoPostgresImpl extends AbstractPostgresRepo implements Stu
             ps.setString(1, login);
             rs = ps.executeQuery();
             if (rs.next()) {
-                student = extractStudent(rs);
+                student = extractObject(rs);
             }
         } catch (SQLException e) {
             log.error("Не удалось извлечь учителя из базы данных", e);
@@ -87,7 +88,7 @@ public class StudentRepoPostgresImpl extends AbstractPostgresRepo implements Stu
         List<Student> students = new ArrayList<>();
         log.debug("Создали пустой лист и переходим к извлечению данных");
         while (rs.next()) {
-            Student s = extractStudent(rs);
+            Student s = extractObject(rs);
             log.debug("Извлекли обьект студента {} добавляем его в список", s);
             students.add(s);
         }
@@ -95,7 +96,29 @@ public class StudentRepoPostgresImpl extends AbstractPostgresRepo implements Stu
         return students;
     }
 
-    private Student extractStudent(ResultSet rs) throws SQLException {
+    @Override
+    public boolean putStudentIfNotExists(Student s) {
+        return putUserIfNotExists(s, INSERT_STUDENT);
+    }
+
+    @Override
+    public boolean changeStudentParametersIfExists(Student s) {
+        return changeUsersParametersIfExists(s, UPDATE_STUDENT_BY_CREDENTIAL_ID);
+    }
+
+    @Override
+    public boolean deleteStudent(String login) {
+        Student s = studentRepo.getStudentIfExistsOrGetSpecialValue(login);
+        return deleteStudent(s);
+    }
+
+    @Override
+    public boolean deleteStudent(Student s) {
+        return deleteUser(s, DELETE_STUDENT_BY_CREDENTIAL_ID, STUDENT_NOT_EXISTS);
+    }
+
+    @Override
+    protected Student extractObject(ResultSet rs) throws SQLException {
         return new Student()
                 .withId(rs.getInt(ID))
                 .withCredential(new Credential()
@@ -106,94 +129,5 @@ public class StudentRepoPostgresImpl extends AbstractPostgresRepo implements Stu
                 .withLastname(rs.getString(LASTNAME))
                 .withPatronymic(rs.getString(PATRONYMIC))
                 .withDateOfBirth(rs.getDate(DATE_OF_BIRTH_DB_FIELD).toLocalDate());
-    }
-
-    @Override
-    public boolean putStudentIfNotExists(Student student) {
-        int id = credentialRepo.putCredentialIfNotExistsAndGetId(student.getCredential());
-
-        if (id == ID_NOT_EXISTS) {
-            log.info("Нельзя добавить Студента, такой логин уже существует");
-        } else {
-            student.getCredential().setId(id);
-
-            try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(INSERT_STUDENT)) {
-                st.setString(1, student.getFirstname());
-                st.setString(2, student.getLastname());
-                st.setString(3, student.getPatronymic());
-                st.setDate(4, Date.valueOf(student.getDateOfBirth()));
-                st.setInt(5, id);
-                if (st.executeUpdate() > 0) {
-                    log.info("Студент {} добавлен бд", student);
-                    return true;
-                }
-            } catch (SQLException e) {
-                log.error("Не удалось совершить операцию добавления Студента", e);
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean changeStudentParametersIfExists(Student s) {
-        try (Connection con = pool.getConnection();
-             PreparedStatement firstSt = con.prepareStatement(UPDATE_STUDENT_BY_CREDENTIAL_ID);
-             PreparedStatement secondSt = con.prepareStatement(UPDATE_CREDENTIAL_BY_ID)) {
-            con.setAutoCommit(false);
-
-            firstSt.setString(1, s.getFirstname());
-            firstSt.setString(2, s.getLastname());
-            firstSt.setString(3, s.getPatronymic());
-            firstSt.setDate(4, Date.valueOf(s.getDateOfBirth()));
-            firstSt.setInt(5, s.getCredential().getId());
-            secondSt.setString(1, s.getCredential().getLogin());
-            secondSt.setString(2, s.getCredential().getPassword());
-            secondSt.setInt(3, s.getCredential().getId());
-
-            if (firstSt.executeUpdate() > 0 && secondSt.executeUpdate() > 0) {
-                con.commit();
-                log.info("Студента {} изменили в БД.", s);
-                return true;
-            } else {
-                con.rollback();
-                log.info("не удалось изменить Студента {} в БД.", s);
-            }
-        } catch (SQLException e) {
-            log.error("Не удалось совершить операцию узменения Студента", e);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean deleteStudent(String login) {
-        Student s = studentRepo.getStudentIfExistsOrGetSpecialValue(login);
-        return deleteStudent(s);
-    }
-
-    @Override
-    public boolean deleteStudent(Student student) {
-        if (student != null && student != STUDENT_NOT_EXISTS) {
-            try (Connection con = pool.getConnection();
-                 PreparedStatement firstSt = con.prepareStatement(DELETE_STUDENT_BY_CREDENTIAL_ID);
-                 PreparedStatement secondSt = con.prepareStatement(DELETE_CREDENTIAL_BY_ID)) {
-
-                con.setAutoCommit(false);
-                firstSt.setInt(1, student.getCredential().getId());
-                secondSt.setInt(1, student.getCredential().getId());
-
-                if (firstSt.executeUpdate() > 0 && secondSt.executeUpdate() > 0) {
-                    con.commit();
-                    log.info("Студента {} удалили из БД.", student);
-                    return true;
-                } else {
-                    con.rollback();
-                }
-            } catch (SQLException e) {
-                log.error("Не удалось совершить операцию удаления Студента", e);
-            }
-        } else {
-            log.info("Нельзя удалить Студента {}. Логина не существует в базе", student);
-        }
-        return false;
     }
 }

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static by.itacademy.sologub.constants.Constants.*;
+import static by.itacademy.sologub.constants.ConstantObject.*;
 
 @Slf4j
 public class TeacherRepoHardcodedImpl implements TeacherRepo {

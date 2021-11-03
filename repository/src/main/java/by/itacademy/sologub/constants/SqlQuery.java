@@ -1,6 +1,6 @@
 package by.itacademy.sologub.constants;
 
-public class SqlQuery {
+public final class SqlQuery {
     //credential postgres sql
     public static final String GET_CREDENTIAL_BY_LOGIN =
             "SELECT id, login, password FROM credential c WHERE c.login=?";

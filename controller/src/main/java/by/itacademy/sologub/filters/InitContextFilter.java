@@ -16,9 +16,9 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ResourceBundle;
 
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Constants.LOGIN;
-import static by.itacademy.sologub.constants.Constants.PASSWORD;
 
 @WebFilter
 @Slf4j

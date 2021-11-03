@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static by.itacademy.sologub.constants.Constants.SALARY_NOT_EXISTS;
+import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 
 @Slf4j
 public class SalaryRepoHardcodedImpl implements SalaryRepo {

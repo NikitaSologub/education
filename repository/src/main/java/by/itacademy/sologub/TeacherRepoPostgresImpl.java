@@ -7,11 +7,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.itacademy.sologub.constants.Constants.*;
+import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.ConstantObject.*;
 import static by.itacademy.sologub.constants.SqlQuery.*;
 
 @Slf4j
-public class TeacherRepoPostgresImpl extends AbstractPostgresRepo implements TeacherRepo {
+public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo implements TeacherRepo {
     private static TeacherRepoPostgresImpl teacherRepo;
     private static CredentialRepoPostgresImpl credentialRepo;
 
@@ -40,7 +41,7 @@ public class TeacherRepoPostgresImpl extends AbstractPostgresRepo implements Tea
             ps.setString(1, login);
             rs = ps.executeQuery();
             if (rs.next()) {
-                teacher = extractTeacher(rs);
+                teacher = extractObject(rs);
             }
         } catch (SQLException e) {
             log.error("Не удалось извлечь учителя из базы данных", e);
@@ -70,28 +71,7 @@ public class TeacherRepoPostgresImpl extends AbstractPostgresRepo implements Tea
 
     @Override
     public boolean putTeacherIfNotExists(Teacher teacher) {
-        int id = credentialRepo.putCredentialIfNotExistsAndGetId(teacher.getCredential());
-
-        if (id == ID_NOT_EXISTS) {
-            log.info("Нельзя добавить Учителя, такой логин уже существует");
-        } else {
-            teacher.getCredential().setId(id);
-
-            try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(INSERT_TEACHER)) {
-                st.setString(1, teacher.getFirstname());
-                st.setString(2, teacher.getLastname());
-                st.setString(3, teacher.getPatronymic());
-                st.setDate(4, Date.valueOf(teacher.getDateOfBirth()));
-                st.setInt(5, id);
-                if (st.executeUpdate() > 0) {
-                    log.info("Учитель {} добавлен бд", teacher);
-                    return true;
-                }
-            } catch (SQLException e) {
-                log.error("Не удалось совершить операцию добавления Учителя", e);
-            }
-        }
-        return false;
+        return putUserIfNotExists(teacher, INSERT_TEACHER);
     }
 
     @Override
@@ -102,59 +82,12 @@ public class TeacherRepoPostgresImpl extends AbstractPostgresRepo implements Tea
 
     @Override
     public boolean deleteTeacher(Teacher teacher) {
-        if (teacher != null && teacher != TEACHER_NOT_EXISTS) {
-            try (Connection con = pool.getConnection();
-                 PreparedStatement firstSt = con.prepareStatement(DELETE_TEACHER_BY_CREDENTIAL_ID);
-                 PreparedStatement secondSt = con.prepareStatement(DELETE_CREDENTIAL_BY_ID)) {
-
-                con.setAutoCommit(false);
-                firstSt.setInt(1, teacher.getCredential().getId());
-                secondSt.setInt(1, teacher.getCredential().getId());
-
-                if (firstSt.executeUpdate() > 0 && secondSt.executeUpdate() > 0) {
-                    con.commit();
-                    log.info("Учителя {} удалили из БД.", teacher);
-                    return true;
-                } else {
-                    con.rollback();
-                }
-            } catch (SQLException e) {
-                log.error("Не удалось совершить операцию удаления Учителя", e);
-            }
-        } else {
-            log.info("Нельзя удалить Учителя {}. Логина не существует в базе", teacher);
-        }
-        return false;
+        return deleteUser(teacher, DELETE_TEACHER_BY_CREDENTIAL_ID, TEACHER_NOT_EXISTS);
     }
 
     @Override
     public boolean changeTeachersParametersIfExists(Teacher t) {
-        try (Connection con = pool.getConnection();
-             PreparedStatement firstSt = con.prepareStatement(UPDATE_TEACHER_BY_CREDENTIAL_ID);
-             PreparedStatement secondSt = con.prepareStatement(UPDATE_CREDENTIAL_BY_ID)) {
-            con.setAutoCommit(false);
-
-            firstSt.setString(1, t.getFirstname());
-            firstSt.setString(2, t.getLastname());
-            firstSt.setString(3, t.getPatronymic());
-            firstSt.setDate(4, Date.valueOf(t.getDateOfBirth()));
-            firstSt.setInt(5, t.getCredential().getId());
-            secondSt.setString(1, t.getCredential().getLogin());
-            secondSt.setString(2, t.getCredential().getPassword());
-            secondSt.setInt(3, t.getCredential().getId());
-
-            if (firstSt.executeUpdate() > 0 && secondSt.executeUpdate() > 0) {
-                con.commit();
-                log.info("Учителя {} изменили в БД.", t);
-                return true;
-            } else {
-                con.rollback();
-                log.info("не удалось изменить Учителя {} в БД.", t);
-            }
-        } catch (SQLException e) {
-            log.error("Не удалось совершить операцию узменения Учителя", e);
-        }
-        return false;
+        return changeUsersParametersIfExists(t, UPDATE_TEACHER_BY_CREDENTIAL_ID);
     }
 
     @Override
@@ -176,7 +109,7 @@ public class TeacherRepoPostgresImpl extends AbstractPostgresRepo implements Tea
         List<Teacher> teachers = new ArrayList<>();
         log.debug("Создали пустой лист и переходим к извлечению данных");
         while (rs.next()) {
-            Teacher t = extractTeacher(rs);
+            Teacher t = extractObject(rs);
             log.debug("Извлекли обьект учителя {} добавляем его в список", t);
             teachers.add(t);
         }
@@ -184,7 +117,8 @@ public class TeacherRepoPostgresImpl extends AbstractPostgresRepo implements Tea
         return teachers;
     }
 
-    private Teacher extractTeacher(ResultSet rs) throws SQLException {
+    @Override
+    protected Teacher extractObject(ResultSet rs) throws SQLException {
         return new Teacher()
                 .withId(rs.getInt(ID))
                 .withCredential(new Credential()

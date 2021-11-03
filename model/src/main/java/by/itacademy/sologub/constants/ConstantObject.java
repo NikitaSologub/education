@@ -5,27 +5,7 @@ import by.itacademy.sologub.*;
 import java.time.LocalDate;
 import java.time.Month;
 
-public class Constants {
-    //attributes
-    public static final int ID_NOT_EXISTS = -1;
-    public static final String ID = "id";
-    public static final String CREDENTIAL_ID_DB_FIELD = "credential_id";
-    public static final String CREDENTIAL_ID = "credentialId";
-    public static final String TEACHER_ID = "teacherId";
-    public static final String TEACHER_ID_DB_FIELD = "teacher_id";
-    public static final String LOGIN = "login";
-    public static final String PASSWORD = "password";
-    public static final String FIRSTNAME = "firstname";
-    public static final String LASTNAME = "lastname";
-    public static final String PATRONYMIC = "patronymic";
-    public static final String DATE = "date";
-    public static final String DATE_OF_BIRTH = "dateOfBirth";
-    public static final String DATE_OF_BIRTH_DB_FIELD = "date_of_birth";
-    public static final String TEACHER = "teacher";
-    public static final String STUDENT = "student";
-    public static final String COINS_AMOUNT_DB_FIELD = "coins_amount";
-    public static final String COINS = "coins";
-
+public final class ConstantObject {
     public static final Credential ADMIN_CREDENTIAL;
     public static final Admin ADMIN_USER;
 
@@ -39,6 +19,7 @@ public class Constants {
     public static final Student STUDENT_PASSWORD_WRONG;
 
     public static final Salary SALARY_NOT_EXISTS;
+    public static final Mark MARK_NOT_EXISTS;
 
     static {
         ADMIN_CREDENTIAL = new Credential();
@@ -85,5 +66,10 @@ public class Constants {
         SALARY_NOT_EXISTS.setCoins(0);
         SALARY_NOT_EXISTS.setDate(LocalDate.now());
         SALARY_NOT_EXISTS.setTeacherId(-100);
+
+        MARK_NOT_EXISTS = new Mark();
+        MARK_NOT_EXISTS.setId(-1);
+        MARK_NOT_EXISTS.setPoint(-100);
+        MARK_NOT_EXISTS.setStudentId(-100);
     }
 }

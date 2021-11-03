@@ -4,8 +4,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
-import static by.itacademy.sologub.constants.Constant.ALL_URL;
-import static by.itacademy.sologub.constants.Constant.UTF_8;
+import static by.itacademy.sologub.constants.Constant.*;
 
 @WebFilter(ALL_URL)
 public class EncodingFilter implements Filter {
@@ -13,7 +12,7 @@ public class EncodingFilter implements Filter {
 
     @Override
     public void init(FilterConfig config) {
-        encoding = config.getInitParameter("requestEncoding");
+        encoding = config.getInitParameter(REQUEST_ENCODING);
         if (encoding == null) encoding = UTF_8;
     }
 
@@ -21,8 +20,8 @@ public class EncodingFilter implements Filter {
         if (null == req.getCharacterEncoding()) {
             req.setCharacterEncoding(encoding);
         }
-        res.setContentType("text/html;charset=UTF-8");
-        res.setCharacterEncoding("UTF-8");
+        res.setContentType(CONTENT_TYPE);
+        res.setCharacterEncoding(UTF_8);
         chain.doFilter(req, res);
     }
 }

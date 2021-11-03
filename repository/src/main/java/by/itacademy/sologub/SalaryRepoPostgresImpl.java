@@ -8,7 +8,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.itacademy.sologub.constants.Constants.*;
+import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 import static by.itacademy.sologub.constants.SqlQuery.*;
 
 @Slf4j
@@ -17,6 +18,15 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo implements Sala
 
     private SalaryRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
+    }
+
+    @Override
+    protected Salary extractObject(ResultSet rs) throws SQLException {
+        return new Salary()
+                .withId(rs.getInt(ID))
+                .withCoins(rs.getInt(COINS_AMOUNT_DB_FIELD))
+                .withDate(rs.getDate(DATE).toLocalDate())
+                .withTeacherId(rs.getInt(TEACHER_ID_DB_FIELD));
     }
 
     public static SalaryRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
@@ -73,39 +83,14 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo implements Sala
     private List<Salary> extractSalaries(ResultSet rs) throws SQLException {
         List<Salary> salaries = new ArrayList<>();
         while (rs.next()) {
-            salaries.add(extractSalary(rs));
+            salaries.add(extractObject(rs));
         }
         return salaries;
     }
 
-    private Salary extractSalary(ResultSet rs) throws SQLException {
-        return new Salary()
-                .withId(rs.getInt(ID))
-                .withCoins(rs.getInt(COINS_AMOUNT_DB_FIELD))
-                .withDate(rs.getDate(DATE).toLocalDate())
-                .withTeacherId(rs.getInt(TEACHER_ID_DB_FIELD));
-    }
-
     @Override
     public Salary getSalary(int id) {
-        Salary salary = SALARY_NOT_EXISTS;
-        ResultSet rs = null;
-        try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(GET_SALARY_BY_ID)) {
-            st.setInt(1, id);
-
-            rs = st.executeQuery();
-            if (rs.next()) {
-                salary = extractSalary(rs);
-                log.info("Извлекли Salary из БД по salary id={}", id);
-            } else {
-                log.info("Не удалось извлечь Salary из БД по salary id={}, такого id нет в базе", id);
-            }
-        } catch (SQLException e) {
-            log.error("Не удалось совершить операцию извлечения зарплат по id учителя", e);
-        } finally {
-            closeResource(rs);
-        }
-        return salary;
+        return (Salary) get(id, GET_SALARY_BY_ID, SALARY, SALARY_NOT_EXISTS);
     }
 
     @Override
@@ -150,18 +135,6 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo implements Sala
 
     @Override
     public boolean deleteSalary(int id) {
-        try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(DELETE_SALARY_BY_ID)) {
-            st.setInt(1, id);
-
-            if (st.executeUpdate() > 0) {
-                log.info("Удалили Salary в БД по id={}", id);
-                return true;
-            } else {
-                log.info("Не удалось удалить Salary в БД по id={}, такого id нет в базе", id);
-            }
-        } catch (SQLException e) {
-            log.error("Не удалось совершить операцию удаления зарплаты по id", e);
-        }
-        return false;
+        return delete(id, DELETE_SALARY_BY_ID, SALARY);
     }
 }

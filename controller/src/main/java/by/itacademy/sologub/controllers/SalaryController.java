@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Constants.*;
+import static by.itacademy.sologub.constants.Attributes.*;
 
 @WebServlet(SALARY_CONTROLLER)
 @Slf4j

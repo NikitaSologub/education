@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static by.itacademy.sologub.constants.Constants.*;
+import static by.itacademy.sologub.constants.Attributes.ID_NOT_EXISTS;
+import static by.itacademy.sologub.constants.ConstantObject.*;
 
 @Slf4j
 public class CredentialRepoHardcodeImpl implements CredentialRepo {

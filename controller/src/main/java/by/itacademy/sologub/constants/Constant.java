@@ -1,6 +1,6 @@
 package by.itacademy.sologub.constants;
 
-public class Constant {
+public final class Constant {
     //urls
     public static final String ALL_URL = "/*";
     public static final String LOGIN_PAGE = "/login_page.jsp";
@@ -32,9 +32,11 @@ public class Constant {
     public static final String ACTION = "action";
     public static final String MESSAGE = "message";
     public static final String ERROR_MESSAGE = "errorMessage";
-    public static final String CREDENTIAL_REPO ="credentialRepo";
-    public static final String SALARY_REPO ="salaryRepo";
-    public static final String TEACHER_REPO ="teacherRepo";
-    public static final String STUDENT_REPO ="studentRepo";
+    public static final String CREDENTIAL_REPO = "credentialRepo";
+    public static final String SALARY_REPO = "salaryRepo";
+    public static final String TEACHER_REPO = "teacherRepo";
+    public static final String STUDENT_REPO = "studentRepo";
     public static final String UTF_8 = "UTF-8";
+    public static final String CONTENT_TYPE = "text/html;charset=UTF-8";
+    public static final String REQUEST_ENCODING = "requestEncoding";
 }

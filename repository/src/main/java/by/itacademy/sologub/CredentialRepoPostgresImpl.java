@@ -8,7 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static by.itacademy.sologub.constants.Constants.*;
+import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.ConstantObject.*;
 import static by.itacademy.sologub.constants.SqlQuery.*;
 
 @Slf4j
@@ -17,6 +18,14 @@ public class CredentialRepoPostgresImpl extends AbstractPostgresRepo implements 
 
     private CredentialRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
+    }
+
+    @Override
+    protected Credential extractObject(ResultSet rs) throws SQLException {
+        return new Credential()
+                .withId(rs.getInt(ID))
+                .withLogin(rs.getString(LOGIN))
+                .withPassword(rs.getString(PASSWORD));
     }
 
     public static CredentialRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
@@ -50,31 +59,25 @@ public class CredentialRepoPostgresImpl extends AbstractPostgresRepo implements 
 
     @Override
     public Credential getCredentialIfExistsOrGetSpecialValue(String login) {
-        Credential cred = null;
+        Credential cred = LOGIN_NOT_EXISTS;
         ResultSet rs = null;
 
         try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(GET_CREDENTIAL_BY_LOGIN)) {
             st.setString(1, login);
             rs = st.executeQuery();
 
-            cred = extractCredential(rs);
-            log.debug("Получили из БД {}", cred);
+            if(rs.next()){
+                cred = extractObject(rs);
+                log.debug("Получили из БД {}", cred);
+            } else {
+                log.debug("Логин {} не существует", login);
+            }
         } catch (SQLException e) {
             log.error("Не удалось достать Credential по логину", e);
         } finally {
             closeResource(rs);
         }
         return cred;
-    }
-
-    private Credential extractCredential(ResultSet rs) throws SQLException {
-        if (rs.next()) {
-            return new Credential()
-                    .withId(rs.getInt(ID))
-                    .withLogin(rs.getString(LOGIN))
-                    .withPassword(rs.getString(PASSWORD));
-        }
-        return LOGIN_NOT_EXISTS;
     }
 
     @Override
@@ -108,7 +111,7 @@ public class CredentialRepoPostgresImpl extends AbstractPostgresRepo implements 
             rs = st.executeQuery();
 
             if (rs.next()) {
-                id = rs.getInt(ID);//todo - 1
+                id = rs.getInt(ID);
                 log.info("Учётная запись id={} логин={} пароль={} добавлена в бд", id, credential.getLogin(), credential.getPassword());
             } else {
                 log.info("Учётная запись логин={} не добавлена в бд , логин уже существует", credential.getLogin());

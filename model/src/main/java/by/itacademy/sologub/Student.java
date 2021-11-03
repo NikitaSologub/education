@@ -3,7 +3,10 @@ package by.itacademy.sologub;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
+import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
 
 @Data
 @NoArgsConstructor
@@ -11,14 +14,16 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Student extends User {
-    private List<Mark> salaries;
+    private List<Mark> marks = new ArrayList<>();
 
-    public List<Mark> getSalaries() {
-        return salaries;
+    public Mark getMark(int id) {
+        return marks.stream()
+                .filter(mark -> mark.getId() == id)
+                .findAny().orElse(MARK_NOT_EXISTS);
     }
 
-    public void setSalaries(List<Mark> salaries) {
-        this.salaries = salaries;
+    public void setMark(Mark mark) {
+        marks.add(mark);
     }
 
     public Student withId(int id){

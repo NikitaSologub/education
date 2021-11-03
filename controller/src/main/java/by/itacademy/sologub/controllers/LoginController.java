@@ -11,7 +11,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Constants.*;
+import static by.itacademy.sologub.constants.ConstantObject.*;
+import static by.itacademy.sologub.constants.Attributes.*;
 
 @WebServlet(LOGIN_CONTROLLER)
 @Slf4j

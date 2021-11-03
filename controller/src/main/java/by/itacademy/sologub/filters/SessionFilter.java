@@ -17,6 +17,8 @@ import static by.itacademy.sologub.constants.Constant.*;
 @WebFilter(LOGIN_PAGE)
 @Slf4j
 public class SessionFilter extends BaseFilter implements Filter {
+    public static final String MSG_SET = "Сессия установлена роль {} переходим по url {}";
+    public static final String WELCOME = "Добро пожаловать";
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain ch) throws IOException, ServletException {
         HttpServletRequest httpReq = (HttpServletRequest) req;
@@ -28,14 +30,14 @@ public class SessionFilter extends BaseFilter implements Filter {
             Class<? extends User> userClass = user.getClass();
 
             if (Admin.class == userClass) {
-                log.info("Сессия установлена роль {} переходим по url {}", userClass.getName(), ADMIN_FRONT_PAGE);
-                forward(ADMIN_FRONT_PAGE, "Добро пожаловать" + userClass.getName(), req, res);
+                log.info(MSG_SET, userClass.getName(), ADMIN_FRONT_PAGE);
+                forward(ADMIN_FRONT_PAGE, WELCOME + userClass.getName(), req, res);
             } else if (Teacher.class == userClass) {
-                log.info("Сессия установлена роль {} переходим по url {}", userClass.getName(), TEACHER_FRONT_PAGE);
-                forward(TEACHER_FRONT_PAGE, "Добро пожаловать" + userClass.getName(), req, res);
+                log.info(MSG_SET, userClass.getName(), TEACHER_FRONT_PAGE);
+                forward(TEACHER_FRONT_PAGE, WELCOME + userClass.getName(), req, res);
             } else if (Student.class == userClass) {
-                log.info("Сессия установлена роль {} переходим по url {}", userClass.getName(), STUDENT_FRONT_PAGE);
-                forward(STUDENT_FRONT_PAGE, "Добро пожаловать" + userClass.getName(), req, res);
+                log.info(MSG_SET, userClass.getName(), STUDENT_FRONT_PAGE);
+                forward(STUDENT_FRONT_PAGE, WELCOME + userClass.getName(), req, res);
             } else {
                 log.info("Сессия установлена но роль пользователя не подлежит обслуживанию");
                 log.info("Инвалидируем сессию и переходим на страницу login_page");
