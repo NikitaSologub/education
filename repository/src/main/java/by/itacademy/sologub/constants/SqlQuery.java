@@ -50,4 +50,11 @@ public final class SqlQuery {
             "INSERT INTO salary (coins_amount,date,teacher_id) VALUES(?,?,?);";
     public static final String DELETE_SALARY_BY_ID = "DELETE FROM salary WHERE id=?;";
     public static final String UPDATE_SALARY_BY_ID = "UPDATE salary SET coins_amount=?, date=?, teacher_id=? WHERE id=?;";
+
+    //subject postgres sql
+    public static final String DELETE_SUBJECT_BY_ID = "DELETE FROM subject WHERE id=?;";
+    public static final String GET_SUBJECT_BY_ID = "SELECT id, title FROM subject WHERE id=?;";
+    public static final String UPDATE_SUBJECT_BY_ID = "UPDATE subject SET title=? WHERE id=?;";
+    public static final String SET_SUBJECT_BY_ID = "INSERT INTO subject (title) VALUES(?);";
+    public static final String GET_SUBJECTS_LIST = "SELECT id, title FROM subject;";
 }

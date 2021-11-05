@@ -8,12 +8,14 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     private static TeacherRepo teacherRepo;
     private static StudentRepo studentRepo;
     private static SalaryRepo salaryRepo;
+    private static SubjectRepo subjectRepo;
 
     private ModelRepoFactoryHardcodeImpl() {
         credentialRepo = CredentialRepoHardcodeImpl.getInstance();
         teacherRepo = TeacherRepoHardcodedImpl.getInstance(credentialRepo);
         studentRepo = StudentRepoHardcodedImpl.getInstance(credentialRepo);
         salaryRepo = SalaryRepoHardcodedImpl.getInstance();
+        subjectRepo = SubjectRepoHardcodedImpl.getInstance();
     }
 
     public static ModelRepoFactoryHardcodeImpl getInstance() {
@@ -45,5 +47,10 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     @Override
     public SalaryRepo getSalariesRepo() {
         return salaryRepo;
+    }
+
+    @Override
+    public SubjectRepo getSubjectRepo() {
+        return subjectRepo;
     }
 }

@@ -14,7 +14,7 @@ import static by.itacademy.sologub.constants.SqlQuery.*;
 
 @Slf4j
 public class SalaryRepoPostgresImpl extends AbstractPostgresRepo implements SalaryRepo {
-    private static SalaryRepoPostgresImpl instance;
+    private static volatile SalaryRepoPostgresImpl instance;
 
     private SalaryRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);

@@ -50,9 +50,9 @@ public class InitContextFilter implements Filter {
         ModelRepoFactory factory = ModelRepoFactoryHardcodeImpl.getInstance();
         setAppContext(conf, factory);
 
-        setStudents((StudentRepo) conf.getServletContext().getAttribute(STUDENT_REPO));
-        setTeachersAndSalaries((TeacherRepo) conf.getServletContext().getAttribute(TEACHER_REPO),
-                (SalaryRepo) conf.getServletContext().getAttribute(SALARY_REPO));
+        setStudents(factory.getStudentRepo());
+        setTeachersAndSalaries(factory.getTeacherRepo(), factory.getSalariesRepo());
+        setSubjects(factory.getSubjectRepo());
     }
 
     private void loadDatabasePostgres(FilterConfig conf) throws PropertyVetoException {
@@ -71,12 +71,14 @@ public class InitContextFilter implements Filter {
         TeacherRepo teacherRepo = factory.getTeacherRepo();
         StudentRepo studentRepo = factory.getStudentRepo();
         SalaryRepo salaryRepo = factory.getSalariesRepo();
+        SubjectRepo subjectRepo = factory.getSubjectRepo();
 
         ServletContext context = filterConfig.getServletContext();
         context.setAttribute(CREDENTIAL_REPO, credentialRepo);
         context.setAttribute(TEACHER_REPO, teacherRepo);
         context.setAttribute(STUDENT_REPO, studentRepo);
         context.setAttribute(SALARY_REPO, salaryRepo);
+        context.setAttribute(SUBJECT_REPO, subjectRepo);
     }
 
     boolean loadDriverClass() {
@@ -291,6 +293,12 @@ public class InitContextFilter implements Filter {
         repo.putStudentIfNotExists(s4);
         repo.putStudentIfNotExists(s5);
         repo.putStudentIfNotExists(s6);
+    }
+
+    void setSubjects(SubjectRepo repo) {
+        repo.putSubjectIfNotExists(new Subject().withTitle("География"));
+        repo.putSubjectIfNotExists(new Subject().withTitle("Экономика"));
+        repo.putSubjectIfNotExists(new Subject().withTitle("Информатика"));
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 @Slf4j
 public abstract class AbstractPostgresRepo {
-    protected ComboPooledDataSource pool;
+    protected volatile ComboPooledDataSource pool;
 
     public AbstractPostgresRepo(ComboPooledDataSource pool) {
         this.pool = pool;

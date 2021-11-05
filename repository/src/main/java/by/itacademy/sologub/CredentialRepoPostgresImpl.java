@@ -14,7 +14,7 @@ import static by.itacademy.sologub.constants.SqlQuery.*;
 
 @Slf4j
 public class CredentialRepoPostgresImpl extends AbstractPostgresRepo implements CredentialRepo {
-    private static CredentialRepoPostgresImpl instance;
+    private static volatile CredentialRepoPostgresImpl instance;
 
     private CredentialRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);

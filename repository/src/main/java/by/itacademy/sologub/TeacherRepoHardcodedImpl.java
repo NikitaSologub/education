@@ -12,7 +12,7 @@ import static by.itacademy.sologub.constants.ConstantObject.*;
 @Slf4j
 public class TeacherRepoHardcodedImpl implements TeacherRepo {
     static int CURRENT_MAX_TEACHER_ID = 19051;
-    private static TeacherRepoHardcodedImpl instance;
+    private static volatile TeacherRepoHardcodedImpl instance;
     private final CredentialRepo credentialRepo;
     private final Map<Integer, Teacher> teachers;
 

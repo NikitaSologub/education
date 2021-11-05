@@ -1,5 +1,5 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <html>
 <head>
     <title>Admin front page</title>
@@ -15,17 +15,10 @@
         <c:out value="${requestScope.message}"/>
     </c:if>
 </h3>
-<br>
-<h5>
-    <a href="${pageContext.request.contextPath}/admin_teachers_page.jsp">Go to admin teachers page.</a>
-</h5>
-<br>
-<h5>
-    <a href="${pageContext.request.contextPath}/admin_students_page.jsp">Go to admin students page.</a>
-</h5>
-<br>
-<h5>
-    <a href="${pageContext.request.contextPath}/LogoutController">Log out.</a>
-</h5>
+
+<h5><a href="${pageContext.request.contextPath}/admin_teachers_page.jsp">Go to admin teachers page.</a></h5>
+<h5><a href="${pageContext.request.contextPath}/admin_students_page.jsp">Go to admin students page.</a></h5>
+<h5><a href="${pageContext.request.contextPath}/SubjectController">Go to admin subjects page.</a></h5>
+<h5><a href="${pageContext.request.contextPath}/LogoutController">Log out.</a></h5>
 </body>
 </html>

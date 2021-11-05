@@ -12,8 +12,8 @@ import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 
 @Slf4j
 public class SalaryRepoHardcodedImpl implements SalaryRepo {
-    static int CURRENT_MAX_SALARY_ID = 10;
-    private static SalaryRepoHardcodedImpl instance;
+    static int CURRENT_MAX_SALARY_ID = 517;
+    private static volatile SalaryRepoHardcodedImpl instance;
     private final Map<Integer, Salary> repo;
 
     private SalaryRepoHardcodedImpl() {

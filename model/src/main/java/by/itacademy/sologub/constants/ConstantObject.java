@@ -20,6 +20,7 @@ public final class ConstantObject {
 
     public static final Salary SALARY_NOT_EXISTS;
     public static final Mark MARK_NOT_EXISTS;
+    public static final Subject SUBJECT_NOT_EXISTS;
 
     static {
         ADMIN_CREDENTIAL = new Credential();
@@ -71,5 +72,9 @@ public final class ConstantObject {
         MARK_NOT_EXISTS.setId(-1);
         MARK_NOT_EXISTS.setPoint(-100);
         MARK_NOT_EXISTS.setStudentId(-100);
+
+        SUBJECT_NOT_EXISTS = new Subject();
+        SUBJECT_NOT_EXISTS.setId(-1);
+        SUBJECT_NOT_EXISTS.setTitle("SUBJECT_NOT_EXISTS");
     }
 }

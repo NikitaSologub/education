@@ -1,9 +1,6 @@
 package by.itacademy.sologub.factory;
 
-import by.itacademy.sologub.CredentialRepo;
-import by.itacademy.sologub.SalaryRepo;
-import by.itacademy.sologub.StudentRepo;
-import by.itacademy.sologub.TeacherRepo;
+import by.itacademy.sologub.*;
 
 public interface ModelRepoFactory {
     CredentialRepo getCredentialRepo();
@@ -13,4 +10,6 @@ public interface ModelRepoFactory {
     StudentRepo getStudentRepo();
 
     SalaryRepo getSalariesRepo();
+
+    SubjectRepo getSubjectRepo();
 }

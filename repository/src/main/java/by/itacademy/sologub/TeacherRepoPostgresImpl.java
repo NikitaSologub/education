@@ -13,8 +13,8 @@ import static by.itacademy.sologub.constants.SqlQuery.*;
 
 @Slf4j
 public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo implements TeacherRepo {
-    private static TeacherRepoPostgresImpl teacherRepo;
-    private static CredentialRepoPostgresImpl credentialRepo;
+    private static volatile TeacherRepoPostgresImpl teacherRepo;
+    private static volatile CredentialRepoPostgresImpl credentialRepo;
 
     private TeacherRepoPostgresImpl(ComboPooledDataSource pool, CredentialRepoPostgresImpl repo) {
         super(pool);

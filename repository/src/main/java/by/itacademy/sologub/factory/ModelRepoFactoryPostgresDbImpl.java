@@ -9,12 +9,14 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
     private static TeacherRepoPostgresImpl teacherRepo;
     private static StudentRepoPostgresImpl studentRepo;
     private static SalaryRepoPostgresImpl salaryRepo;
+    private static SubjectRepoPostgresImpl subjectRepo;
 
     private ModelRepoFactoryPostgresDbImpl(ComboPooledDataSource pool) {
         credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
         teacherRepo = TeacherRepoPostgresImpl.getInstance(pool, credentialRepo);
         studentRepo = StudentRepoPostgresImpl.getInstance(pool, credentialRepo);
         salaryRepo = SalaryRepoPostgresImpl.getInstance(pool);
+        subjectRepo = SubjectRepoPostgresImpl.getInstance(pool);
     }
 
     public static ModelRepoFactory getInstance(ComboPooledDataSource pool) {
@@ -46,5 +48,10 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
     @Override
     public SalaryRepo getSalariesRepo() {
         return salaryRepo;
+    }
+
+    @Override
+    public SubjectRepo getSubjectRepo() {
+        return subjectRepo;
     }
 }

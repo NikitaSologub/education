@@ -4,19 +4,19 @@ public final class Attributes {
     //fields and attributes
     public static final int ID_NOT_EXISTS = -1;
     public static final String ID = "id";
-    public static final String TEACHER_ID = "teacherId";
-    public static final String CREDENTIAL_ID = "credentialId";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
     public static final String FIRSTNAME = "firstname";
     public static final String LASTNAME = "lastname";
     public static final String PATRONYMIC = "patronymic";
-    public static final String DATE_OF_BIRTH = "dateOfBirth";
     public static final String DATE = "date";
     public static final String TEACHER = "teacher";
     public static final String STUDENT = "student";
     public static final String SALARY = "salary";
+    public static final String SUBJECT = "subject";
+    public static final String SUBJECTS = "subjects";
     public static final String COINS = "coins";
+    public static final String TITLE = "title";
 
     // db fields
     public static final String DATE_OF_BIRTH_DB_FIELD = "date_of_birth";

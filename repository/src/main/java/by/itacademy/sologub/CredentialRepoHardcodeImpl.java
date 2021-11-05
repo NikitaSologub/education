@@ -12,7 +12,7 @@ import static by.itacademy.sologub.constants.ConstantObject.*;
 @Slf4j
 public class CredentialRepoHardcodeImpl implements CredentialRepo {
     static int CURRENT_MAX_CREDENTIAL_ID = 137;
-    private static CredentialRepoHardcodeImpl instance;
+    private static volatile CredentialRepoHardcodeImpl instance;
     private final Map<Integer, Credential> repo;
 
     private CredentialRepoHardcodeImpl() {
