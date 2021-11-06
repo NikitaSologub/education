@@ -2,8 +2,7 @@ package by.itacademy.sologub.constants;
 
 public final class SqlQuery {
     //credential postgres sql
-    public static final String GET_CREDENTIAL_BY_LOGIN =
-            "SELECT id, login, password FROM credential c WHERE c.login=?";
+    public static final String GET_CREDENTIAL_BY_LOGIN = "SELECT id, login, password FROM credential WHERE login=?";
     public static final String SET_CREDENTIAL_IF_NOT_EXISTS =
             "INSERT INTO credential(login, password) VALUES(?,?) ON CONFLICT (login) DO NOTHING;";
     public static final String UPDATE_CREDENTIAL = "UPDATE credential SET password=? WHERE login=?;";
@@ -14,29 +13,46 @@ public final class SqlQuery {
             "INSERT INTO credential(login, password) VALUES(?,?) ON CONFLICT (login) DO NOTHING RETURNING id;";
 
     //teacher postgres sql
-    public static final String GET_TEACHERS_LIST = "SELECT t.id, t.firstname, t.lastname, t.patronymic, t.date_of_birth," +
-            " t.credential_id, c.id, c.login, c.password FROM teacher t JOIN credential c ON c.id = t.credential_id;";
-    public static final String GET_TEACHER_BY_LOGIN = "SELECT t.id, t.firstname, t.lastname, t.patronymic," +
-            " t.date_of_birth, t.credential_id, c.id, c.login, c.password FROM teacher t JOIN credential c " +
-            "ON c.id = t.credential_id WHERE c.login = ?;";
-    public static final String INSERT_TEACHER =
-            "INSERT INTO teacher (firstname, lastname, patronymic, date_of_birth, credential_id) VALUES (?,?,?,?,?)";
-    public static final String DELETE_TEACHER_CASCADE_BY_CREDENTIAL_ID = "DELETE FROM teacher WHERE credential_id=?";
-    public static final String DELETE_TEACHER_BY_CREDENTIAL_ID = "DELETE FROM teacher WHERE credential_id=?";
-    public static final String UPDATE_TEACHER_BY_CREDENTIAL_ID =
-            "UPDATE teacher SET firstname=?, lastname=?, patronymic=?, date_of_birth=? WHERE credential_id=?;";
+    public static final String UPDATE_TEACHER_BY_CREDENTIAL_ID = "UPDATE person SET firstname=?,lastname=?,patronymic=?," +
+            "date_of_birth=? WHERE credential_id=? AND role_id=(SELECT id FROM \"role\" WHERE role.\"name\"='TEACHER');";
+    public static final String INSERT_TEACHER = "INSERT INTO  person (firstname, lastname, patronymic, date_of_birth," +
+            " credential_id, role_id) VALUES (?,?,?,?,?, (SELECT id FROM \"role\" WHERE role.\"name\" = 'TEACHER'))\n" +
+            "ON CONFLICT (credential_id) DO NOTHING;";
+    public static final String GET_TEACHER_BY_LOGIN = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
+            " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
+            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE c.login=? and r.\"name\"='TEACHER';";
+    public static final String GET_TEACHER_BY_CREDENTIAL_ID = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
+            " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
+            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE c.id=? and r.\"name\"='TEACHER';";
+    public static final String GET_TEACHER_BY_ID = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
+            " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
+            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE p.id=? and r.\"name\"='TEACHER';";
+    public static final String GET_TEACHERS_LIST = "SELECT p.id, p.firstname, p.lastname, p.patronymic, p.date_of_birth," +
+            "p.credential_id, c.login, c.\"password\", r.\"name\" FROM person p JOIN credential c ON c.id = p.credential_id \n" +
+            "JOIN role r ON r.id = p.role_id WHERE r.\"name\" = 'TEACHER';";
+    public static final String DELETE_TEACHER_BY_CREDENTIAL_ID =
+            "DELETE FROM person p USING role r WHERE p.role_id = r.id and r.\"name\"='TEACHER' and p.credential_id=?;";
 
     //student postgres sql
-    public static final String GET_STUDENTS_LIST = "SELECT s.id, s.firstname, s.lastname, s.patronymic, s.date_of_birth," +
-            " s.credential_id, c.id, c.login, c.password FROM student S JOIN credential c ON c.id = s.credential_id;";
-    public static final String INSERT_STUDENT =
-            "INSERT INTO student (firstname, lastname, patronymic, date_of_birth, credential_id) VALUES (?,?,?,?,?)";
-    public static final String GET_STUDENT_BY_LOGIN = "SELECT s.id, s.firstname, s.lastname, s.patronymic," +
-            " s.date_of_birth, s.credential_id, c.id, c.login, c.password FROM student s JOIN credential c " +
-            "ON c.id = s.credential_id WHERE c.login =?;";
-    public static final String DELETE_STUDENT_BY_CREDENTIAL_ID = "DELETE FROM student WHERE credential_id=?";
-    public static final String UPDATE_STUDENT_BY_CREDENTIAL_ID =
-            "UPDATE student SET firstname=?, lastname=?, patronymic=?, date_of_birth=? WHERE credential_id=?;";
+    public static final String UPDATE_STUDENT_BY_CREDENTIAL_ID = "UPDATE person SET firstname=?,lastname=?,patronymic=?," +
+            "date_of_birth=? WHERE credential_id=? AND role_id=(SELECT id FROM \"role\" WHERE role.\"name\"='STUDENT');";
+    public static final String INSERT_STUDENT = "INSERT INTO  person (firstname, lastname, patronymic, date_of_birth," +
+            " credential_id, role_id) VALUES (?,?,?,?,?, (SELECT id FROM \"role\" WHERE role.\"name\" = 'STUDENT'))\n" +
+            "ON CONFLICT (credential_id) DO NOTHING;";
+    public static final String GET_STUDENT_BY_LOGIN = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
+            " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
+            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE c.login=? and r.\"name\"='STUDENT';";
+    public static final String GET_STUDENT_BY_CREDENTIAL_ID = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
+            " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
+            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE c.id=? and r.\"name\"='STUDENT';";
+    public static final String GET_STUDENT_BY_ID = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
+            " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
+            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE p.id=? and r.\"name\"='STUDENT';";
+    public static final String GET_STUDENTS_LIST = "SELECT p.id, p.firstname, p.lastname, p.patronymic, p.date_of_birth," +
+            "p.credential_id, c.login, c.\"password\", r.\"name\" FROM person p JOIN credential c ON c.id = p.credential_id \n" +
+            "JOIN role r ON r.id = p.role_id WHERE r.\"name\" = 'STUDENT';";
+    public static final String DELETE_STUDENT_BY_CREDENTIAL_ID =
+            "DELETE FROM person p USING role r WHERE p.role_id = r.id and r.\"name\"='STUDENT' and p.credential_id=?;";
 
     //salary postgres sql
     public static final String GET_SALARIES_LIST_BY_TEACHER_ID = "SELECT id, coins_amount, date, teacher_id " +

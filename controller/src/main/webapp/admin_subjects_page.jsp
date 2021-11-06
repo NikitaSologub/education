@@ -22,8 +22,7 @@
             <td>УДАЛИТЬ</td>
             <td>ИЗМЕНИТЬ</td>
         </tr>
-        //todo - ClassCastException
-        <c:forEach var="subject" items="${subjects}">//todo -? как передать?
+        <c:forEach var="subject" items="${requestScope.subjects}">
             <tr>
                 <td><c:out value="${subject.id}"/></td>
                 <td><c:out value="${subject.title}"/></td>
