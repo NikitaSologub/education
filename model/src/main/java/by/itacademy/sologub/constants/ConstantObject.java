@@ -12,6 +12,9 @@ public final class ConstantObject {
     public static final Credential LOGIN_NOT_EXISTS;
     public static final Credential PASSWORD_WRONG;
 
+    public static final Admin ADMIN_NOT_EXISTS;
+    public static final Admin ADMIN_PASSWORD_WRONG;
+
     public static final Teacher TEACHER_NOT_EXISTS;
     public static final Teacher TEACHER_PASSWORD_WRONG;
 
@@ -61,6 +64,14 @@ public final class ConstantObject {
         STUDENT_PASSWORD_WRONG = new Student();
         STUDENT_PASSWORD_WRONG.setId(-7);
         STUDENT_PASSWORD_WRONG.setCredential(PASSWORD_WRONG);
+
+        ADMIN_NOT_EXISTS = new Admin();
+        ADMIN_NOT_EXISTS.setId(-6);
+        ADMIN_NOT_EXISTS.setCredential(LOGIN_NOT_EXISTS);
+
+        ADMIN_PASSWORD_WRONG = new Admin();
+        ADMIN_PASSWORD_WRONG.setId(-7);
+        ADMIN_PASSWORD_WRONG.setCredential(PASSWORD_WRONG);
 
         SALARY_NOT_EXISTS = new Salary();
         SALARY_NOT_EXISTS.setId(-1);
