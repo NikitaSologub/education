@@ -3,9 +3,9 @@ package by.itacademy.sologub;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 
@@ -16,7 +16,7 @@ public class SubjectRepoHardcodedImpl implements SubjectRepo {
     private static volatile Map<Integer, Subject> subjects;
 
     private SubjectRepoHardcodedImpl() {
-        subjects = new HashMap<>();
+        subjects = new ConcurrentHashMap<>();
     }
 
     public static SubjectRepoHardcodedImpl getInstance() {

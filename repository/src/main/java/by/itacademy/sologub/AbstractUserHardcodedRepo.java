@@ -3,9 +3,9 @@ package by.itacademy.sologub;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static by.itacademy.sologub.constants.ConstantObject.LOGIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
@@ -17,7 +17,7 @@ public abstract class AbstractUserHardcodedRepo<T extends User> {
 
     protected AbstractUserHardcodedRepo(CredentialRepo credentialRepo) {
         this.credentialRepo = credentialRepo;
-        users = new HashMap<>();
+        users = new ConcurrentHashMap<>();
     }
 
     protected abstract int getCurrentMaxIdAndIncrement();

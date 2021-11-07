@@ -2,9 +2,9 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static by.itacademy.sologub.constants.Attributes.ID_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.LOGIN_NOT_EXISTS;
@@ -17,7 +17,7 @@ public class CredentialRepoHardcodeImpl implements CredentialRepo {
     private final Map<Integer, Credential> repo;
 
     private CredentialRepoHardcodeImpl() {
-        repo = new HashMap<>();
+        repo = new ConcurrentHashMap<>();
     }
 
     public static CredentialRepoHardcodeImpl getInstance() {

@@ -3,9 +3,9 @@ package by.itacademy.sologub;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
@@ -17,7 +17,7 @@ public class SalaryRepoHardcodedImpl implements SalaryRepo {
     private final Map<Integer, Salary> repo;
 
     private SalaryRepoHardcodedImpl() {
-        repo = new HashMap<>();
+        repo = new ConcurrentHashMap<>();
     }
 
     public static SalaryRepoHardcodedImpl getInstance() {
