@@ -9,11 +9,11 @@ public interface AdminRepo {
 
     Admin getAdminIfExistsOrGetSpecialValue(String login,String password);
 
-    boolean putAdminIfNotExists(Admin teacher);
+    boolean putAdminIfNotExists(Admin admin);
 
     boolean changeAdminParametersIfExists(Admin newAdmin);
 
     boolean deleteAdmin(String login);
 
-    boolean deleteAdmin(Admin Admin);
+    boolean deleteAdmin(Admin admin);
 }

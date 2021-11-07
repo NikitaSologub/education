@@ -54,6 +54,27 @@ public final class SqlQuery {
     public static final String DELETE_STUDENT_BY_CREDENTIAL_ID =
             "DELETE FROM person p USING role r WHERE p.role_id = r.id and r.\"name\"='STUDENT' and p.credential_id=?;";
 
+    //admin postgres sql
+    public static final String UPDATE_ADMIN_BY_CREDENTIAL_ID = "UPDATE person SET firstname=?,lastname=?,patronymic=?," +
+            "date_of_birth=? WHERE credential_id=? AND role_id=(SELECT id FROM \"role\" WHERE role.\"name\"='ADMIN');";
+    public static final String INSERT_ADMIN = "INSERT INTO  person (firstname, lastname, patronymic, date_of_birth," +
+            " credential_id, role_id) VALUES (?,?,?,?,?, (SELECT id FROM \"role\" WHERE role.\"name\" = 'ADMIN'))\n" +
+            "ON CONFLICT (credential_id) DO NOTHING;";
+    public static final String GET_ADMIN_BY_LOGIN = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
+            " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
+            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE c.login=? and r.\"name\"='ADMIN';";
+    public static final String GET_ADMIN_BY_CREDENTIAL_ID = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
+            " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
+            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE c.id=? and r.\"name\"='ADMIN';";
+    public static final String GET_ADMIN_BY_ID = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
+            " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
+            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE p.id=? and r.\"name\"='ADMIN';";
+    public static final String GET_ADMINS_LIST = "SELECT p.id, p.firstname, p.lastname, p.patronymic, p.date_of_birth," +
+            "p.credential_id, c.login, c.\"password\", r.\"name\" FROM person p JOIN credential c ON c.id = p.credential_id \n" +
+            "JOIN role r ON r.id = p.role_id WHERE r.\"name\" = 'ADMIN';";
+    public static final String DELETE_ADMIN_BY_CREDENTIAL_ID =
+            "DELETE FROM person p USING role r WHERE p.role_id = r.id and r.\"name\"='ADMIN' and p.credential_id=?;";
+
     //salary postgres sql
     public static final String GET_SALARIES_LIST_BY_TEACHER_ID = "SELECT id, coins_amount, date, teacher_id " +
             "FROM salary WHERE teacher_id=?;";
