@@ -1,6 +1,15 @@
 package by.itacademy.sologub.factory;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.CredentialRepo;
+import by.itacademy.sologub.CredentialRepoPostgresImpl;
+import by.itacademy.sologub.SalaryRepo;
+import by.itacademy.sologub.SalaryRepoPostgresImpl;
+import by.itacademy.sologub.StudentRepo;
+import by.itacademy.sologub.StudentRepoPostgresImpl;
+import by.itacademy.sologub.SubjectRepo;
+import by.itacademy.sologub.SubjectRepoPostgresImpl;
+import by.itacademy.sologub.TeacherRepo;
+import by.itacademy.sologub.TeacherRepoPostgresImpl;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {

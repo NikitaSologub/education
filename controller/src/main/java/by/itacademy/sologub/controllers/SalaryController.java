@@ -1,6 +1,9 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.Salary;
+import by.itacademy.sologub.SalaryRepo;
+import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.TeacherRepo;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -10,8 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.Attributes.COINS;
+import static by.itacademy.sologub.constants.Attributes.DATE;
+import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.Attributes.TEACHER;
+import static by.itacademy.sologub.constants.Constant.ACTION;
+import static by.itacademy.sologub.constants.Constant.ADMIN_SALARIES_PAGE;
+import static by.itacademy.sologub.constants.Constant.DELETE;
+import static by.itacademy.sologub.constants.Constant.PUT;
+import static by.itacademy.sologub.constants.Constant.SALARY_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.SALARY_REPO;
+import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
+import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
 
 @WebServlet(SALARY_CONTROLLER)
 @Slf4j

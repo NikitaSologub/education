@@ -3,14 +3,27 @@ package by.itacademy.sologub;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.Attributes.COINS_AMOUNT_DB_FIELD;
+import static by.itacademy.sologub.constants.Attributes.DATE;
+import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.Attributes.SALARY;
+import static by.itacademy.sologub.constants.Attributes.TEACHER_ID_DB_FIELD;
 import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
-import static by.itacademy.sologub.constants.SqlQuery.*;
+import static by.itacademy.sologub.constants.SqlQuery.DELETE_SALARY_BY_ID;
+import static by.itacademy.sologub.constants.SqlQuery.GET_SALARIES_LIST_AFTER_DATE_BY_TEACHER_ID;
+import static by.itacademy.sologub.constants.SqlQuery.GET_SALARIES_LIST_BY_TEACHER_ID;
+import static by.itacademy.sologub.constants.SqlQuery.GET_SALARY_BY_ID;
+import static by.itacademy.sologub.constants.SqlQuery.SET_SALARY_BY_TEACHER_ID;
+import static by.itacademy.sologub.constants.SqlQuery.UPDATE_SALARY_BY_ID;
 
 @Slf4j
 public class SalaryRepoPostgresImpl extends AbstractPostgresRepo implements SalaryRepo {

@@ -1,6 +1,12 @@
 package by.itacademy.sologub.constants;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.Admin;
+import by.itacademy.sologub.Credential;
+import by.itacademy.sologub.Mark;
+import by.itacademy.sologub.Salary;
+import by.itacademy.sologub.Student;
+import by.itacademy.sologub.Subject;
+import by.itacademy.sologub.Teacher;
 
 import java.time.LocalDate;
 import java.time.Month;

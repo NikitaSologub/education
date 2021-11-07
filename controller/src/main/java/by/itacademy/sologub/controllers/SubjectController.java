@@ -1,6 +1,7 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.Subject;
+import by.itacademy.sologub.SubjectRepo;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -10,20 +11,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static by.itacademy.sologub.constants.Attributes.*;
-import static by.itacademy.sologub.constants.Constant.*;
+import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.Attributes.SUBJECTS;
+import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.Constant.ACTION;
+import static by.itacademy.sologub.constants.Constant.ADMIN_SUBJECTS_PAGE;
+import static by.itacademy.sologub.constants.Constant.DELETE;
+import static by.itacademy.sologub.constants.Constant.PUT;
+import static by.itacademy.sologub.constants.Constant.SUBJECT_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
 
 @WebServlet(SUBJECT_CONTROLLER)
 @Slf4j
 public class SubjectController extends BaseController {
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String msg = "Вы на странице предметов";
         refreshSubjectsListAndForward(msg, req, resp);
     }
-
 
     private void refreshSubjectsListAndForward(String msg, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SubjectRepo subjectRepo = (SubjectRepo) getServletContext().getAttribute(SUBJECT_REPO);

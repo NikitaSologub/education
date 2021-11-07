@@ -1,6 +1,15 @@
 package by.itacademy.sologub.factory;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.CredentialRepo;
+import by.itacademy.sologub.CredentialRepoHardcodeImpl;
+import by.itacademy.sologub.SalaryRepo;
+import by.itacademy.sologub.SalaryRepoHardcodedImpl;
+import by.itacademy.sologub.StudentRepo;
+import by.itacademy.sologub.StudentRepoHardcodedImpl;
+import by.itacademy.sologub.SubjectRepo;
+import by.itacademy.sologub.SubjectRepoHardcodedImpl;
+import by.itacademy.sologub.TeacherRepo;
+import by.itacademy.sologub.TeacherRepoHardcodedImpl;
 
 public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     private static ModelRepoFactoryHardcodeImpl instance;

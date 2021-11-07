@@ -17,7 +17,7 @@
     Password: <label>
     <input type="password" name="password" required placeholder="ваш пароль"/>
 </label><br/>
-    <input type="submit" title="Отправить"/>
+    <input type="submit" title="Войти"/>
     <input type="reset" title="Очистить">
 </form>
 <h3 class="errorMessage">

@@ -3,11 +3,17 @@ package by.itacademy.sologub;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.ID_NOT_EXISTS;
-import static by.itacademy.sologub.constants.SqlQuery.*;
+import static by.itacademy.sologub.constants.SqlQuery.DELETE_CREDENTIAL_BY_ID;
+import static by.itacademy.sologub.constants.SqlQuery.SET_CREDENTIAL_AND_GET_ID;
+import static by.itacademy.sologub.constants.SqlQuery.UPDATE_CREDENTIAL_BY_ID;
 
 @Slf4j
 public abstract class AbstractUserPostgresRepo extends AbstractPostgresRepo {

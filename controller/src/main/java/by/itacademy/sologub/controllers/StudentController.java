@@ -1,19 +1,31 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.Credential;
+import by.itacademy.sologub.Student;
+import by.itacademy.sologub.StudentRepo;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Attributes.*;
-//import static by.itacademy.sologub.constants.Constants.CREDENTIAL_ID;
+import static by.itacademy.sologub.constants.Attributes.FIRSTNAME;
+import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.Attributes.LASTNAME;
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.Attributes.PASSWORD;
+import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
+import static by.itacademy.sologub.constants.Constant.ACTION;
+import static by.itacademy.sologub.constants.Constant.ADMIN_STUDENTS_PAGE;
+import static by.itacademy.sologub.constants.Constant.CREDENTIAL_ID;
+import static by.itacademy.sologub.constants.Constant.DATE_OF_BIRTH;
+import static by.itacademy.sologub.constants.Constant.DELETE;
+import static by.itacademy.sologub.constants.Constant.PUT;
+import static by.itacademy.sologub.constants.Constant.STUDENT_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
 
 @WebServlet(STUDENT_CONTROLLER)
 @Slf4j

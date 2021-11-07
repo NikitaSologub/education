@@ -1,6 +1,10 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.Student;
+import by.itacademy.sologub.StudentRepo;
+import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.TeacherRepo;
+import by.itacademy.sologub.User;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -10,9 +14,22 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.ConstantObject.*;
-import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.Attributes.PASSWORD;
+import static by.itacademy.sologub.constants.Constant.ADMIN_FRONT_PAGE;
+import static by.itacademy.sologub.constants.Constant.LOGIN_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.LOGIN_PAGE;
+import static by.itacademy.sologub.constants.Constant.SESSION_ENTITY;
+import static by.itacademy.sologub.constants.Constant.STUDENT_FRONT_PAGE;
+import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
+import static by.itacademy.sologub.constants.Constant.TEACHER_FRONT_PAGE;
+import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
+import static by.itacademy.sologub.constants.ConstantObject.ADMIN_CREDENTIAL;
+import static by.itacademy.sologub.constants.ConstantObject.ADMIN_USER;
+import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
+import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
+import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
+import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
 
 @WebServlet(LOGIN_CONTROLLER)
 @Slf4j

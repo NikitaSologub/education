@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import static by.itacademy.sologub.constants.Attributes.ID_NOT_EXISTS;
-import static by.itacademy.sologub.constants.ConstantObject.*;
+import static by.itacademy.sologub.constants.ConstantObject.LOGIN_NOT_EXISTS;
+import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
 
 @Slf4j
 public class CredentialRepoHardcodeImpl implements CredentialRepo {

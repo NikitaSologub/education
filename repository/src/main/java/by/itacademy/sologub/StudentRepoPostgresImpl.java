@@ -3,13 +3,28 @@ package by.itacademy.sologub;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static by.itacademy.sologub.constants.Attributes.*;
-import static by.itacademy.sologub.constants.ConstantObject.*;
-import static by.itacademy.sologub.constants.SqlQuery.*;
+import static by.itacademy.sologub.constants.Attributes.CREDENTIAL_ID_DB_FIELD;
+import static by.itacademy.sologub.constants.Attributes.DATE_OF_BIRTH_DB_FIELD;
+import static by.itacademy.sologub.constants.Attributes.FIRSTNAME;
+import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.Attributes.LASTNAME;
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.Attributes.PASSWORD;
+import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
+import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
+import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
+import static by.itacademy.sologub.constants.SqlQuery.DELETE_STUDENT_BY_CREDENTIAL_ID;
+import static by.itacademy.sologub.constants.SqlQuery.GET_STUDENTS_LIST;
+import static by.itacademy.sologub.constants.SqlQuery.GET_STUDENT_BY_LOGIN;
+import static by.itacademy.sologub.constants.SqlQuery.INSERT_STUDENT;
+import static by.itacademy.sologub.constants.SqlQuery.UPDATE_STUDENT_BY_CREDENTIAL_ID;
 
 @Slf4j
 public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo implements StudentRepo {

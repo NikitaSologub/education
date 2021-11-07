@@ -12,8 +12,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 
-import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.Attributes.FIRSTNAME;
+import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.Attributes.LASTNAME;
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.Attributes.PASSWORD;
+import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
+import static by.itacademy.sologub.constants.Constant.ACTION;
+import static by.itacademy.sologub.constants.Constant.ADMIN_TEACHERS_PAGE;
+import static by.itacademy.sologub.constants.Constant.CREDENTIAL_ID;
+import static by.itacademy.sologub.constants.Constant.DATE_OF_BIRTH;
+import static by.itacademy.sologub.constants.Constant.DELETE;
+import static by.itacademy.sologub.constants.Constant.PUT;
+import static by.itacademy.sologub.constants.Constant.TEACHER_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
 
 @WebServlet(TEACHER_CONTROLLER)
 @Slf4j

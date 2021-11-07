@@ -1,6 +1,15 @@
 package by.itacademy.sologub.filters;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.Credential;
+import by.itacademy.sologub.CredentialRepo;
+import by.itacademy.sologub.Salary;
+import by.itacademy.sologub.SalaryRepo;
+import by.itacademy.sologub.Student;
+import by.itacademy.sologub.StudentRepo;
+import by.itacademy.sologub.Subject;
+import by.itacademy.sologub.SubjectRepo;
+import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.TeacherRepo;
 import by.itacademy.sologub.factory.ModelRepoFactory;
 import by.itacademy.sologub.factory.ModelRepoFactoryHardcodeImpl;
 import by.itacademy.sologub.factory.ModelRepoFactoryPostgresDbImpl;
@@ -8,7 +17,13 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
@@ -18,7 +33,15 @@ import java.util.ResourceBundle;
 
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.PASSWORD;
-import static by.itacademy.sologub.constants.Constant.*;
+import static by.itacademy.sologub.constants.Constant.CREDENTIAL_REPO;
+import static by.itacademy.sologub.constants.Constant.DB_CONFIG_FILE;
+import static by.itacademy.sologub.constants.Constant.DRIVER;
+import static by.itacademy.sologub.constants.Constant.SALARY_REPO;
+import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
+import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
+import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
+import static by.itacademy.sologub.constants.Constant.TYPE;
+import static by.itacademy.sologub.constants.Constant.URL;
 
 @WebFilter
 @Slf4j
