@@ -1,5 +1,7 @@
 package by.itacademy.sologub.filters;
 
+import by.itacademy.sologub.Admin;
+import by.itacademy.sologub.AdminRepo;
 import by.itacademy.sologub.Credential;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.Salary;
@@ -33,6 +35,7 @@ import java.util.ResourceBundle;
 
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.PASSWORD;
+import static by.itacademy.sologub.constants.Constant.ADMIN_REPO;
 import static by.itacademy.sologub.constants.Constant.CREDENTIAL_REPO;
 import static by.itacademy.sologub.constants.Constant.DB_CONFIG_FILE;
 import static by.itacademy.sologub.constants.Constant.DRIVER;
@@ -76,6 +79,7 @@ public class InitContextFilter implements Filter {
         setStudents(factory.getStudentRepo());
         setTeachersAndSalaries(factory.getTeacherRepo(), factory.getSalariesRepo());
         setSubjects(factory.getSubjectRepo());
+        setAdmins(factory.getAdminRepo());
     }
 
     private void loadDatabasePostgres(FilterConfig conf) throws PropertyVetoException {
@@ -93,6 +97,7 @@ public class InitContextFilter implements Filter {
         CredentialRepo credentialRepo = factory.getCredentialRepo();
         TeacherRepo teacherRepo = factory.getTeacherRepo();
         StudentRepo studentRepo = factory.getStudentRepo();
+        AdminRepo adminRepo = factory.getAdminRepo();
         SalaryRepo salaryRepo = factory.getSalariesRepo();
         SubjectRepo subjectRepo = factory.getSubjectRepo();
 
@@ -100,6 +105,7 @@ public class InitContextFilter implements Filter {
         context.setAttribute(CREDENTIAL_REPO, credentialRepo);
         context.setAttribute(TEACHER_REPO, teacherRepo);
         context.setAttribute(STUDENT_REPO, studentRepo);
+        context.setAttribute(ADMIN_REPO, adminRepo);
         context.setAttribute(SALARY_REPO, salaryRepo);
         context.setAttribute(SUBJECT_REPO, subjectRepo);
     }
@@ -253,6 +259,19 @@ public class InitContextFilter implements Filter {
         salaryRepo.putSalary(s11);
         salaryRepo.putSalary(s12);
         salaryRepo.putSalary(s13);
+    }
+
+    void setAdmins(AdminRepo repo) {
+        repo.putAdminIfNotExists(new Admin()
+                .withId(323)
+                .withCredential(new Credential()
+                        .withId(0)
+                        .withLogin("ADMIN")
+                        .withPassword("234"))
+                .withFirstname("Никита")
+                .withLastname("Сологуб")
+                .withPatronymic("Олегович")
+                .withDateOfBirth(LocalDate.of(1992, Month.APRIL, 23)));
     }
 
     void setStudents(StudentRepo repo) {
