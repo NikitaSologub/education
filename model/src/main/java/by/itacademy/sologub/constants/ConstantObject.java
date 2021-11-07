@@ -9,12 +9,8 @@ import by.itacademy.sologub.Subject;
 import by.itacademy.sologub.Teacher;
 
 import java.time.LocalDate;
-import java.time.Month;
 
 public final class ConstantObject {
-    public static final Credential ADMIN_CREDENTIAL;
-    public static final Admin ADMIN_USER;
-
     public static final Credential LOGIN_NOT_EXISTS;
     public static final Credential PASSWORD_WRONG;
 
@@ -32,11 +28,6 @@ public final class ConstantObject {
     public static final Subject SUBJECT_NOT_EXISTS;
 
     static {
-        ADMIN_CREDENTIAL = new Credential();
-        ADMIN_CREDENTIAL.setId(0);
-        ADMIN_CREDENTIAL.setLogin("ADMIN");
-        ADMIN_CREDENTIAL.setPassword("234");
-
         LOGIN_NOT_EXISTS = new Credential();
         LOGIN_NOT_EXISTS.setId(-1);
         LOGIN_NOT_EXISTS.setLogin("LOGIN_NOT_EXISTS");
@@ -46,14 +37,6 @@ public final class ConstantObject {
         PASSWORD_WRONG.setId(-2);
         PASSWORD_WRONG.setLogin("PASSWORD_WRONG");
         PASSWORD_WRONG.setPassword("PASSWORD_WRONG");
-
-        ADMIN_USER = new Admin();
-        ADMIN_USER.setId(ADMIN_CREDENTIAL.getId());
-        ADMIN_USER.setCredential(ADMIN_CREDENTIAL);
-        ADMIN_USER.setFirstname("Никита");
-        ADMIN_USER.setLastname("Сологуб");
-        ADMIN_USER.setPatronymic("Олегович");
-        ADMIN_USER.setDateOfBirth(LocalDate.of(1992, Month.APRIL, 23));
 
         TEACHER_NOT_EXISTS = new Teacher();
         TEACHER_NOT_EXISTS.setId(-4);

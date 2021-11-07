@@ -1,5 +1,7 @@
 package by.itacademy.sologub.controllers;
 
+import by.itacademy.sologub.Admin;
+import by.itacademy.sologub.AdminRepo;
 import by.itacademy.sologub.Student;
 import by.itacademy.sologub.StudentRepo;
 import by.itacademy.sologub.Teacher;
@@ -17,6 +19,7 @@ import java.io.IOException;
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.Constant.ADMIN_FRONT_PAGE;
+import static by.itacademy.sologub.constants.Constant.ADMIN_REPO;
 import static by.itacademy.sologub.constants.Constant.LOGIN_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.LOGIN_PAGE;
 import static by.itacademy.sologub.constants.Constant.SESSION_ENTITY;
@@ -24,8 +27,8 @@ import static by.itacademy.sologub.constants.Constant.STUDENT_FRONT_PAGE;
 import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
 import static by.itacademy.sologub.constants.Constant.TEACHER_FRONT_PAGE;
 import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
-import static by.itacademy.sologub.constants.ConstantObject.ADMIN_CREDENTIAL;
-import static by.itacademy.sologub.constants.ConstantObject.ADMIN_USER;
+import static by.itacademy.sologub.constants.ConstantObject.ADMIN_NOT_EXISTS;
+import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
@@ -64,21 +67,21 @@ public class LoginController extends BaseController {
     }
 
     boolean checkAdminLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        String adminLogin = ADMIN_CREDENTIAL.getLogin();
-        String adminPassword = ADMIN_CREDENTIAL.getPassword();
+        AdminRepo repo = (AdminRepo) getServletContext().getAttribute(ADMIN_REPO);
+        Admin admin = repo.getAdminIfExistsOrGetSpecialValue(login, password);
 
-        if (adminLogin.equals(login)) {
-            if (adminPassword.equals(password)) {
-                createSessionAndSetAttribute(ADMIN_USER, req);
-                log.info("Логин и пароль администратора совпали. Админ входит в систему. Форвард на ADMIN_FRONT_PAGE");
+        if (admin != null && ADMIN_NOT_EXISTS != admin) {
+            if (ADMIN_PASSWORD_WRONG != admin) {
+                createSessionAndSetAttribute(admin, req);
+                log.info("Логин и пароль админа совпали. Админ входит в систему. Форвард на ADMIN_FRONT_PAGE");
                 forward(ADMIN_FRONT_PAGE, "добро пожаловать ADMIN", req, res);
                 return true;
             } else {
                 forwardError(LOGIN_PAGE, "Введён неверный пароль.", req, res);
-                log.info("Логин совпал а пароль не верен. АДМИН- в доступе отказано. Форвард на LOGIN_PAGE");
+                log.info("Логин совпал а пароль не верен. ADMIN- в доступе отказано. Форвард на LOGIN_PAGE");
             }
         }
-        log.info("администратора с логином={} не существует в системе", login);
+        log.info("админа с логином={} не существует в системе", login);
         return false;
     }
 
@@ -99,8 +102,8 @@ public class LoginController extends BaseController {
                 forward(TEACHER_FRONT_PAGE, "добро пожаловать TEACHER", req, res);
                 return true;
             } else {
-                forwardError(LOGIN_PAGE, "Введён неверный пароль.", req, res);
                 log.info("Логин совпал а пароль не верен. TEACHER- в доступе отказано. Форвард на LOGIN_PAGE");
+                forwardError(LOGIN_PAGE, "Введён неверный пароль.", req, res);
             }
         }
         log.info("учителя с логином={} не существует в системе", login);
@@ -114,12 +117,12 @@ public class LoginController extends BaseController {
         if (student != null && STUDENT_NOT_EXISTS != student) {
             if (STUDENT_PASSWORD_WRONG != student) {
                 createSessionAndSetAttribute(student, req);
-                log.info("Логин и пароль студента совпали. Студент входит в систему. Форвард на STUDENT_FRONT_PAGE");
                 forward(STUDENT_FRONT_PAGE, "добро пожаловать STUDENT", req, res);
+                log.info("Логин и пароль студента совпали. Студент входит в систему. Форвард на STUDENT_FRONT_PAGE");
                 return true;
             } else {
-                forwardError(LOGIN_PAGE, "Введён неверный пароль.", req, res);
                 log.info("Логин совпал а пароль не верен. STUDENT- в доступе отказано. Форвард на LOGIN_PAGE");
+                forwardError(LOGIN_PAGE, "Введён неверный пароль.", req, res);
             }
         }
         log.info("студента с логином={} не существует в системе", login);
