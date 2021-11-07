@@ -1,5 +1,7 @@
 package by.itacademy.sologub.factory;
 
+import by.itacademy.sologub.AdminRepo;
+import by.itacademy.sologub.AdminRepoHardcodedImpl;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.CredentialRepoHardcodeImpl;
 import by.itacademy.sologub.SalaryRepo;
@@ -16,6 +18,7 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     private static CredentialRepo credentialRepo;
     private static TeacherRepo teacherRepo;
     private static StudentRepo studentRepo;
+    private static AdminRepo adminRepo;
     private static SalaryRepo salaryRepo;
     private static SubjectRepo subjectRepo;
 
@@ -23,6 +26,7 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
         credentialRepo = CredentialRepoHardcodeImpl.getInstance();
         teacherRepo = TeacherRepoHardcodedImpl.getInstance(credentialRepo);
         studentRepo = StudentRepoHardcodedImpl.getInstance(credentialRepo);
+        adminRepo = AdminRepoHardcodedImpl.getInstance(credentialRepo);
         salaryRepo = SalaryRepoHardcodedImpl.getInstance();
         subjectRepo = SubjectRepoHardcodedImpl.getInstance();
     }
@@ -51,6 +55,11 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     @Override
     public StudentRepo getStudentRepo() {
         return studentRepo;
+    }
+
+    @Override
+    public AdminRepo getAdminRepo() {
+        return adminRepo;
     }
 
     @Override

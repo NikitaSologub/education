@@ -1,5 +1,7 @@
 package by.itacademy.sologub.factory;
 
+import by.itacademy.sologub.AdminRepo;
+import by.itacademy.sologub.AdminRepoPostgresImpl;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.CredentialRepoPostgresImpl;
 import by.itacademy.sologub.SalaryRepo;
@@ -17,6 +19,7 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
     private static CredentialRepoPostgresImpl credentialRepo;
     private static TeacherRepoPostgresImpl teacherRepo;
     private static StudentRepoPostgresImpl studentRepo;
+    private static AdminRepoPostgresImpl adminRepo;
     private static SalaryRepoPostgresImpl salaryRepo;
     private static SubjectRepoPostgresImpl subjectRepo;
 
@@ -24,6 +27,7 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
         credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
         teacherRepo = TeacherRepoPostgresImpl.getInstance(pool, credentialRepo);
         studentRepo = StudentRepoPostgresImpl.getInstance(pool, credentialRepo);
+        adminRepo = AdminRepoPostgresImpl.getInstance(pool, credentialRepo);
         salaryRepo = SalaryRepoPostgresImpl.getInstance(pool);
         subjectRepo = SubjectRepoPostgresImpl.getInstance(pool);
     }
@@ -52,6 +56,11 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
     @Override
     public StudentRepo getStudentRepo() {
         return studentRepo;
+    }
+
+    @Override
+    public AdminRepo getAdminRepo() {
+        return adminRepo;
     }
 
     @Override
