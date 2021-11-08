@@ -1,13 +1,11 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.role.Role;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static by.itacademy.sologub.constants.Attributes.CREDENTIAL_ID_DB_FIELD;
@@ -20,14 +18,9 @@ import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_TEACHER_BY_CREDENTIAL_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_TEACHERS_LIST;
-import static by.itacademy.sologub.constants.SqlQuery.GET_TEACHER_BY_LOGIN;
-import static by.itacademy.sologub.constants.SqlQuery.INSERT_TEACHER;
-import static by.itacademy.sologub.constants.SqlQuery.UPDATE_TEACHER_BY_CREDENTIAL_ID;
 
 @Slf4j
-public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo implements TeacherRepo {
+public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> implements TeacherRepo {
     private static volatile TeacherRepoPostgresImpl teacherRepo;
     private static volatile CredentialRepoPostgresImpl credentialRepo;
 
@@ -49,44 +42,17 @@ public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo implements
 
     @Override
     public Teacher getTeacherIfExistsOrGetSpecialValue(String login) {
-        ResultSet rs = null;
-        Teacher teacher = TEACHER_NOT_EXISTS;
-
-        try (Connection con = pool.getConnection(); PreparedStatement ps = con.prepareStatement(GET_TEACHER_BY_LOGIN)) {
-            ps.setString(1, login);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                teacher = extractObject(rs);
-            }
-        } catch (SQLException e) {
-            log.error("Не удалось извлечь учителя из базы данных", e);
-        } finally {
-            closeResource(rs);
-        }
-        return teacher;
+        return getUserIfExistsOrGetSpecialValue(login);
     }
 
     @Override
     public Teacher getTeacherIfExistsOrGetSpecialValue(String login, String password) {
-        Teacher teacher = getTeacherIfExistsOrGetSpecialValue(login);
-
-        if (TEACHER_NOT_EXISTS != teacher) {
-            String dbPassword = teacher.getCredential().getPassword();
-
-            if (password != null && password.equals(dbPassword)) {
-                log.debug("Возвращаем учителя {} пароль={} верный", login, password);
-
-            } else {
-                teacher = TEACHER_PASSWORD_WRONG;
-                log.debug("Не удалось взять учителя {} пароль={} не верный", login, password);
-            }
-        }
-        return teacher;
+        return getUserIfExistsOrGetSpecialValue(login, password);
     }
 
     @Override
     public boolean putTeacherIfNotExists(Teacher teacher) {
-        return putUserIfNotExists(teacher, INSERT_TEACHER);
+        return putUserIfNotExists(teacher);
     }
 
     @Override
@@ -97,42 +63,20 @@ public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo implements
 
     @Override
     public boolean deleteTeacher(Teacher teacher) {
-        return deleteUser(teacher, DELETE_TEACHER_BY_CREDENTIAL_ID, TEACHER_NOT_EXISTS);
+        return deleteUser(teacher);
     }
 
     @Override
     public boolean changeTeachersParametersIfExists(Teacher t) {
-        return changeUsersParametersIfExists(t, UPDATE_TEACHER_BY_CREDENTIAL_ID);
+        return changeUsersParametersIfExists(t);
     }
 
     @Override
     public List<Teacher> getTeachersList() {
-        List<Teacher> teachers = new ArrayList<>();
-
-        try (Connection con = pool.getConnection();
-             PreparedStatement ps = con.prepareStatement(GET_TEACHERS_LIST);
-             ResultSet rs = ps.executeQuery()) {
-
-            teachers = extractTeachers(rs);
-        } catch (SQLException e) {
-            log.error("Не удалось извлечь список учителей из базы данных", e);
-        }
-        return teachers;
+        return getUsersList();
     }
 
-    private List<Teacher> extractTeachers(ResultSet rs) throws SQLException {
-        List<Teacher> teachers = new ArrayList<>();
-        log.debug("Создали пустой лист и переходим к извлечению данных");
-        while (rs.next()) {
-            Teacher t = extractObject(rs);
-            log.debug("Извлекли обьект учителя {} добавляем его в список", t);
-            teachers.add(t);
-        }
-        log.debug("Возвращаем список учителей");
-        return teachers;
-    }
-
-    @Override
+    @Override//todo - вынести метод ниже
     protected Teacher extractObject(ResultSet rs) throws SQLException {
         return new Teacher()
                 .withId(rs.getInt(ID))
@@ -144,5 +88,20 @@ public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo implements
                 .withLastname(rs.getString(LASTNAME))
                 .withPatronymic(rs.getString(PATRONYMIC))
                 .withDateOfBirth(rs.getDate(DATE_OF_BIRTH_DB_FIELD).toLocalDate());
+    }
+
+    @Override
+    protected String getRole() {
+        return String.valueOf(Role.TEACHER);
+    }
+
+    @Override
+    protected Teacher getNotExists() {
+        return TEACHER_NOT_EXISTS;
+    }
+
+    @Override
+    protected Teacher getPasswordWrong() {
+        return TEACHER_PASSWORD_WRONG;
     }
 }

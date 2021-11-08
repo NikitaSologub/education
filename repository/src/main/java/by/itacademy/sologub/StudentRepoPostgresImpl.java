@@ -1,13 +1,11 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.role.Role;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static by.itacademy.sologub.constants.Attributes.CREDENTIAL_ID_DB_FIELD;
@@ -20,14 +18,9 @@ import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_STUDENT_BY_CREDENTIAL_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_STUDENTS_LIST;
-import static by.itacademy.sologub.constants.SqlQuery.GET_STUDENT_BY_LOGIN;
-import static by.itacademy.sologub.constants.SqlQuery.INSERT_STUDENT;
-import static by.itacademy.sologub.constants.SqlQuery.UPDATE_STUDENT_BY_CREDENTIAL_ID;
 
 @Slf4j
-public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo implements StudentRepo {
+public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo<Student> implements StudentRepo {
     private static volatile StudentRepoPostgresImpl studentRepo;
     private static volatile CredentialRepoPostgresImpl credentialRepo;
 
@@ -49,76 +42,27 @@ public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo implements
 
     @Override
     public List<Student> getStudentsList() {
-        List<Student> students = new ArrayList<>();
-
-        try (Connection con = pool.getConnection();
-             PreparedStatement ps = con.prepareStatement(GET_STUDENTS_LIST);
-             ResultSet rs = ps.executeQuery()) {
-
-            students = extractStudents(rs);
-        } catch (SQLException e) {
-            log.error("Не удалось извлечь список учителей из базы данных", e);
-        }
-        return students;
+        return getUsersList();
     }
 
     @Override
     public Student getStudentIfExistsOrGetSpecialValue(String login) {
-        ResultSet rs = null;
-        Student student = STUDENT_NOT_EXISTS;
-
-        try (Connection con = pool.getConnection(); PreparedStatement ps = con.prepareStatement(GET_STUDENT_BY_LOGIN)) {
-            ps.setString(1, login);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                student = extractObject(rs);
-            }
-        } catch (SQLException e) {
-            log.error("Не удалось извлечь учителя из базы данных", e);
-        } finally {
-            closeResource(rs);
-        }
-        return student;
+        return getUserIfExistsOrGetSpecialValue(login);
     }
 
     @Override
     public Student getStudentIfExistsOrGetSpecialValue(String login, String password) {
-        Student student = getStudentIfExistsOrGetSpecialValue(login);
-
-        if (STUDENT_NOT_EXISTS != student) {
-            String dbPassword = student.getCredential().getPassword();
-
-            if (password != null && password.equals(dbPassword)) {
-                log.debug("Возвращаем студента {} пароль={} верный", login, password);
-
-            } else {
-                student = STUDENT_PASSWORD_WRONG;
-                log.debug("Не удалось взять студента {} пароль={} не верный", login, password);
-            }
-        }
-        return student;
-    }
-
-    private List<Student> extractStudents(ResultSet rs) throws SQLException {
-        List<Student> students = new ArrayList<>();
-        log.debug("Создали пустой лист и переходим к извлечению данных");
-        while (rs.next()) {
-            Student s = extractObject(rs);
-            log.debug("Извлекли обьект студента {} добавляем его в список", s);
-            students.add(s);
-        }
-        log.debug("Возвращаем список студентов");
-        return students;
+        return getUserIfExistsOrGetSpecialValue(login,password);
     }
 
     @Override
     public boolean putStudentIfNotExists(Student s) {
-        return putUserIfNotExists(s, INSERT_STUDENT);
+        return putUserIfNotExists(s);
     }
 
     @Override
     public boolean changeStudentParametersIfExists(Student s) {
-        return changeUsersParametersIfExists(s, UPDATE_STUDENT_BY_CREDENTIAL_ID);
+        return changeUsersParametersIfExists(s);
     }
 
     @Override
@@ -129,10 +73,10 @@ public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo implements
 
     @Override
     public boolean deleteStudent(Student s) {
-        return deleteUser(s, DELETE_STUDENT_BY_CREDENTIAL_ID, STUDENT_NOT_EXISTS);
+        return deleteUser(s);
     }
 
-    @Override
+    @Override//todo - вынести метод ниже
     protected Student extractObject(ResultSet rs) throws SQLException {
         return new Student()
                 .withId(rs.getInt(ID))
@@ -144,5 +88,20 @@ public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo implements
                 .withLastname(rs.getString(LASTNAME))
                 .withPatronymic(rs.getString(PATRONYMIC))
                 .withDateOfBirth(rs.getDate(DATE_OF_BIRTH_DB_FIELD).toLocalDate());
+    }
+
+    @Override
+    protected String getRole() {
+        return String.valueOf(Role.STUDENT);
+    }
+
+    @Override
+    protected Student getNotExists() {
+        return STUDENT_NOT_EXISTS;
+    }
+
+    @Override
+    protected Student getPasswordWrong() {
+        return STUDENT_PASSWORD_WRONG;
     }
 }

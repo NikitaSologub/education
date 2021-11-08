@@ -26,7 +26,7 @@ import static by.itacademy.sologub.constants.SqlQuery.SET_SALARY_BY_TEACHER_ID;
 import static by.itacademy.sologub.constants.SqlQuery.UPDATE_SALARY_BY_ID;
 
 @Slf4j
-public class SalaryRepoPostgresImpl extends AbstractPostgresRepo implements SalaryRepo {
+public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> implements SalaryRepo {
     private static volatile SalaryRepoPostgresImpl instance;
 
     private SalaryRepoPostgresImpl(ComboPooledDataSource pool) {

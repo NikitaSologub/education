@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Slf4j
-public abstract class AbstractPostgresRepo {
+public abstract class AbstractPostgresRepo<T extends AbstractEntity> {
     protected volatile ComboPooledDataSource pool;
 
     public AbstractPostgresRepo(ComboPooledDataSource pool) {
@@ -79,5 +79,5 @@ public abstract class AbstractPostgresRepo {
         return obj;
     }
 
-    protected abstract Object extractObject(ResultSet set) throws SQLException;
+    protected abstract T extractObject(ResultSet set) throws SQLException;
 }

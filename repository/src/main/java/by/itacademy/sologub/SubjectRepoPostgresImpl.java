@@ -21,7 +21,7 @@ import static by.itacademy.sologub.constants.SqlQuery.SET_SUBJECT_BY_ID;
 import static by.itacademy.sologub.constants.SqlQuery.UPDATE_SUBJECT_BY_ID;
 
 @Slf4j
-public class SubjectRepoPostgresImpl extends AbstractPostgresRepo implements SubjectRepo {
+public class SubjectRepoPostgresImpl extends AbstractPostgresRepo<Subject> implements SubjectRepo {
     private static volatile SubjectRepoPostgresImpl instance;
 
     private SubjectRepoPostgresImpl(ComboPooledDataSource pool) {

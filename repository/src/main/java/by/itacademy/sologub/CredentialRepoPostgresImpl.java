@@ -22,7 +22,7 @@ import static by.itacademy.sologub.constants.SqlQuery.SET_CREDENTIAL_IF_NOT_EXIS
 import static by.itacademy.sologub.constants.SqlQuery.UPDATE_CREDENTIAL;
 
 @Slf4j
-public class CredentialRepoPostgresImpl extends AbstractPostgresRepo implements CredentialRepo {
+public class CredentialRepoPostgresImpl extends AbstractPostgresRepo<Credential> implements CredentialRepo {
     private static volatile CredentialRepoPostgresImpl instance;
 
     private CredentialRepoPostgresImpl(ComboPooledDataSource pool) {

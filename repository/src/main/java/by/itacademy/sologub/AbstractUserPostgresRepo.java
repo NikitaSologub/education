@@ -8,21 +8,100 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.ID_NOT_EXISTS;
 import static by.itacademy.sologub.constants.SqlQuery.DELETE_CREDENTIAL_BY_ID;
+import static by.itacademy.sologub.constants.SqlQuery.DELETE_USER_BY_CREDENTIAL_ID;
+import static by.itacademy.sologub.constants.SqlQuery.GET_USERS_LIST;
+import static by.itacademy.sologub.constants.SqlQuery.GET_USER_BY_LOGIN;
+import static by.itacademy.sologub.constants.SqlQuery.INSERT_USER;
 import static by.itacademy.sologub.constants.SqlQuery.SET_CREDENTIAL_AND_GET_ID;
 import static by.itacademy.sologub.constants.SqlQuery.UPDATE_CREDENTIAL_BY_ID;
+import static by.itacademy.sologub.constants.SqlQuery.UPDATE_USER_BY_CREDENTIAL_ID;
 
 @Slf4j
-public abstract class AbstractUserPostgresRepo extends AbstractPostgresRepo {
+public abstract class AbstractUserPostgresRepo<T extends User> extends AbstractPostgresRepo<T> {
 
     public AbstractUserPostgresRepo(ComboPooledDataSource pool) {
         super(pool);
     }
 
-    public boolean putUserIfNotExists(User user, String sql) {
+    protected abstract String getRole();
+
+    protected abstract T getNotExists();
+
+    protected abstract T getPasswordWrong();
+
+    public List<T> getUsersList() {
+        List<T> users = new ArrayList<>();
+        ResultSet rs = null;
+
+        try (Connection con = pool.getConnection();
+             PreparedStatement ps = con.prepareStatement(GET_USERS_LIST)) {
+            ps.setString(1, getRole());
+            rs = ps.executeQuery();
+
+            users = extractUsers(rs);
+        } catch (SQLException e) {
+            log.error("Не удалось извлечь список учителей из базы данных", e);
+        } finally {
+            closeResource(rs);
+        }
+        return users;
+    }
+
+    private List<T> extractUsers(ResultSet rs) throws SQLException {
+        List<T> users = new ArrayList<>();
+        log.debug("Создали пустой лист и переходим к извлечению данных");
+        while (rs.next()) {
+            T u = extractObject(rs);
+            log.debug("Извлекли обьект {} {} добавляем его в список", getRole(), u);
+            users.add(u);
+        }
+        log.debug("Возвращаем список обьектов {}", getRole());
+        return users;
+    }
+
+    protected T getUserIfExistsOrGetSpecialValue(String login) {
+        ResultSet rs = null;
+        T user = getNotExists();
+
+        try (Connection con = pool.getConnection(); PreparedStatement ps = con.prepareStatement(GET_USER_BY_LOGIN)) {
+            ps.setString(1, login);
+            ps.setString(2, getRole());
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = extractObject(rs);
+            }
+        } catch (SQLException e) {
+            log.error("Не удалось извлечь " + getRole() + " из базы данных", e);
+        } finally {
+            closeResource(rs);
+        }
+        return user;
+    }
+
+    protected T getUserIfExistsOrGetSpecialValue(String login, String password) {
+        T user = getUserIfExistsOrGetSpecialValue(login);
+
+        if (getNotExists() != user) {
+            String dbPassword = user.getCredential().getPassword();
+
+            if (password != null && password.equals(dbPassword)) {
+                log.debug("Возвращаем {} {} пароль={} верный", getRole(), login, password);
+
+            } else {
+                user = getPasswordWrong();
+                log.debug("Не удалось взять {} {} пароль={} не верный", getRole(), login, password);
+            }
+        }
+        return user;
+    }
+
+    protected boolean putUserIfNotExists(T user) {
         String entity = user.getClass().getSimpleName();
         Connection con = null;
         PreparedStatement firstSt = null;
@@ -35,7 +114,7 @@ public abstract class AbstractUserPostgresRepo extends AbstractPostgresRepo {
             int id = setCredAndGetId(user, firstSt);
 
             if (id != ID_NOT_EXISTS) {
-                secondSt = con.prepareStatement(sql);
+                secondSt = con.prepareStatement(INSERT_USER);
 
                 if (isInsert(id, user, secondSt)) {
                     log.info(entity + " {} добавлен бд", user);
@@ -58,7 +137,7 @@ public abstract class AbstractUserPostgresRepo extends AbstractPostgresRepo {
         return false;
     }
 
-    private int setCredAndGetId(User user, PreparedStatement st) throws SQLException {
+    private int setCredAndGetId(T user, PreparedStatement st) throws SQLException {
         st.setString(1, user.getCredential().getLogin());
         st.setString(2, user.getCredential().getPassword());
         ResultSet set = st.executeQuery();
@@ -68,28 +147,30 @@ public abstract class AbstractUserPostgresRepo extends AbstractPostgresRepo {
         return ID_NOT_EXISTS;
     }
 
-    private boolean isInsert(int id, User user, PreparedStatement st) throws SQLException {
+    private boolean isInsert(int id, T user, PreparedStatement st) throws SQLException {
         st.setString(1, user.getFirstname());
         st.setString(2, user.getLastname());
         st.setString(3, user.getPatronymic());
         st.setDate(4, Date.valueOf(user.getDateOfBirth()));
         st.setInt(5, id);
+        st.setString(6, getRole());
         return st.executeUpdate() > 0;
     }
 
-    public boolean changeUsersParametersIfExists(User user, String sql) {
+    protected boolean changeUsersParametersIfExists(T user) {
         String entity = user.getClass().getSimpleName();
         Connection con = null;
         PreparedStatement firstSt = null;
         PreparedStatement secondSt = null;
         try {
             con = pool.getConnection();
-            firstSt = con.prepareStatement(sql);
+            firstSt = con.prepareStatement(UPDATE_USER_BY_CREDENTIAL_ID);
             firstSt.setString(1, user.getFirstname());
             firstSt.setString(2, user.getLastname());
             firstSt.setString(3, user.getPatronymic());
             firstSt.setDate(4, Date.valueOf(user.getDateOfBirth()));
             firstSt.setInt(5, user.getCredential().getId());
+            firstSt.setString(6, getRole());
             secondSt = con.prepareStatement(UPDATE_CREDENTIAL_BY_ID);
             secondSt.setString(1, user.getCredential().getLogin());
             secondSt.setString(2, user.getCredential().getPassword());
@@ -113,17 +194,18 @@ public abstract class AbstractUserPostgresRepo extends AbstractPostgresRepo {
         return false;
     }
 
-    public boolean deleteUser(User user, String sql, User notExist) {
+    protected boolean deleteUser(T user) {
         String entity = user.getClass().getSimpleName();
         Connection con = null;
         PreparedStatement firstSt = null;
         PreparedStatement secondSt = null;
 
-        if (user != notExist) {
+        if (user != getNotExists()) {
             try {
                 con = pool.getConnection();
-                firstSt = con.prepareStatement(sql);
-                firstSt.setInt(1, user.getCredential().getId());
+                firstSt = con.prepareStatement(DELETE_USER_BY_CREDENTIAL_ID);
+                firstSt.setString(1, getRole());
+                firstSt.setInt(2, user.getCredential().getId());
                 secondSt = con.prepareStatement(DELETE_CREDENTIAL_BY_ID);
                 secondSt.setInt(1, user.getCredential().getId());
                 con.setAutoCommit(false);
@@ -147,4 +229,22 @@ public abstract class AbstractUserPostgresRepo extends AbstractPostgresRepo {
         }
         return false;
     }
+
+//    @Override
+//    protected T extractObject(ResultSet set) throws SQLException {
+//        try {
+//            return getClass().getDeclaredConstructor().newInstance()
+//                    .withId(set.getInt(ID))
+//                    .withCredential(new Credential()
+//                            .withId(set.getInt(CREDENTIAL_ID_DB_FIELD))
+//                            .withLogin(set.getString(LOGIN))
+//                            .withPassword(set.getString(PASSWORD)))
+//                    .withFirstname(set.getString(FIRSTNAME))
+//                    .withLastname(set.getString(LASTNAME))
+//                    .withPatronymic(set.getString(PATRONYMIC))
+//                    .withDateOfBirth(set.getDate(DATE_OF_BIRTH_DB_FIELD).toLocalDate());
+//        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
