@@ -18,12 +18,9 @@ import static by.itacademy.sologub.constants.Attributes.LASTNAME;
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
-import static by.itacademy.sologub.constants.Constant.ACTION;
 import static by.itacademy.sologub.constants.Constant.ADMIN_TEACHERS_PAGE;
 import static by.itacademy.sologub.constants.Constant.CREDENTIAL_ID;
 import static by.itacademy.sologub.constants.Constant.DATE_OF_BIRTH;
-import static by.itacademy.sologub.constants.Constant.DELETE;
-import static by.itacademy.sologub.constants.Constant.PUT;
 import static by.itacademy.sologub.constants.Constant.TEACHER_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
 
@@ -98,17 +95,5 @@ public class TeacherController extends BaseController {
             log.info("Не удалось удалить учителя {}", req.getParameter(LOGIN));
         }
         forward(ADMIN_TEACHERS_PAGE, msg, req, resp);
-    }
-
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (DELETE.equals(req.getParameter(ACTION))) {
-            doDelete(req, resp);
-            return;
-        } else if (PUT.equals(req.getParameter(ACTION))) {
-            doPut(req, resp);
-            return;
-        }
-        super.service(req, resp);
     }
 }

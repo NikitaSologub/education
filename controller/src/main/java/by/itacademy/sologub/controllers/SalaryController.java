@@ -18,10 +18,7 @@ import static by.itacademy.sologub.constants.Attributes.DATE;
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.TEACHER;
-import static by.itacademy.sologub.constants.Constant.ACTION;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SALARIES_PAGE;
-import static by.itacademy.sologub.constants.Constant.DELETE;
-import static by.itacademy.sologub.constants.Constant.PUT;
 import static by.itacademy.sologub.constants.Constant.SALARY_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.SALARY_REPO;
 import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
@@ -112,17 +109,5 @@ public class SalaryController extends BaseController {
             log.info("Не удалось удалить зарплату с id = {}", id);
         }
         refreshTeacherAndForward(msg, req, resp);
-    }
-
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (DELETE.equals(req.getParameter(ACTION))) {
-            doDelete(req, resp);
-            return;
-        } else if (PUT.equals(req.getParameter(ACTION))) {
-            doPut(req, resp);
-            return;
-        }
-        super.service(req, resp);
     }
 }

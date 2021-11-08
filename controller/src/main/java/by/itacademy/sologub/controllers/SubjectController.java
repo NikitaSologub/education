@@ -14,10 +14,7 @@ import java.util.List;
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.SUBJECTS;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
-import static by.itacademy.sologub.constants.Constant.ACTION;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SUBJECTS_PAGE;
-import static by.itacademy.sologub.constants.Constant.DELETE;
-import static by.itacademy.sologub.constants.Constant.PUT;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
 
@@ -97,17 +94,5 @@ public class SubjectController extends BaseController {
             log.info("Не удалось удалить Subject с id = {}", s.getId());
         }
         refreshSubjectsListAndForward(msg, req, resp);
-    }
-
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (DELETE.equals(req.getParameter(ACTION))) {
-            doDelete(req, resp);
-            return;
-        } else if (PUT.equals(req.getParameter(ACTION))) {
-            doPut(req, resp);
-            return;
-        }
-        super.service(req, resp);
     }
 }
