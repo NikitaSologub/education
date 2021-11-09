@@ -50,6 +50,7 @@ import static by.itacademy.sologub.constants.Constant.URL;
 @Slf4j
 public class InitContextFilter implements Filter {
     ResourceBundle resourceBundle = ResourceBundle.getBundle(DB_CONFIG_FILE);
+    ComboPooledDataSource pool = null;
 
     @SneakyThrows
     @Override        //Тут я буду инициализировать все что можно
@@ -84,7 +85,7 @@ public class InitContextFilter implements Filter {
 
     private void loadDatabasePostgres(FilterConfig conf) throws PropertyVetoException {
         if (loadDriverClass()) {
-            ComboPooledDataSource pool = initAndGetPoolConnection();
+            pool = initAndGetPoolConnection();
             ModelRepoFactory factory = ModelRepoFactoryPostgresDbImpl.getInstance(pool);
             setAppContext(conf, factory);
         } else {
@@ -346,5 +347,13 @@ public class InitContextFilter implements Filter {
     @Override
     public void doFilter(ServletRequest rq, ServletResponse rs, FilterChain c) throws ServletException, IOException {
         c.doFilter(rq, rs);
+    }
+
+    @Override
+    public void destroy() {
+        if (pool != null){
+            pool.close();
+            log.info("Закрываем pool connection");
+        }
     }
 }
