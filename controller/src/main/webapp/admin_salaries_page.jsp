@@ -9,11 +9,7 @@
 </head>
 <body>
 <h1>ADMIN SALARIES PAGE!</h1>
-<h3 class="message">
-    <c:if test="${not empty requestScope.message}">
-        <c:out value="${requestScope.message}"/>
-    </c:if>
-</h3>
+<jsp:include page="header.jsp"/>
 ${requestScope.teacher.credential.login} | ${requestScope.teacher.lastname} | ${requestScope.teacher.firstname} |
 ${requestScope.teacher.patronymic} | ${requestScope.teacher.dateOfBirth}
 
@@ -75,6 +71,6 @@ ${requestScope.teacher.patronymic} | ${requestScope.teacher.dateOfBirth}
     <input type="reset">
     <button type="submit">Создать зарплату и добавить учителю ${requestScope.teacher.credential.login}</button>
 </form>
-<h5><a href="${pageContext.request.contextPath}/admin_teachers_page.jsp">Go back to teachers page.</a></h5>
+<jsp:include page="admin_footer.jsp"/>
 </body>
 </html>

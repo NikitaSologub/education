@@ -10,11 +10,7 @@
 <body>
 <h1>ADMIN - STUDENTS MARKS PAGE!</h1>
 <h4>Студенты наших клубов по интересам</h4>
-<h3 class="message">
-    <c:if test="${not empty requestScope.message}">
-        <c:out value="${requestScope.message}"/>
-    </c:if>
-</h3>
+<jsp:include page="header.jsp"/>
 <h6>
     <table border="1" width="100%">
         <tr>
@@ -81,7 +77,6 @@
     <button type="submit">Создать студента</button>
     <input type="reset">
 </form>
-<h5> <a href="${pageContext.request.contextPath}/admin_front_page.jsp">Go back to admin home page.</a> </h5>
-<h5> <a href="${pageContext.request.contextPath}/LogoutController">Log out.</a> </h5>
+<jsp:include page="admin_footer.jsp"/>
 </body>
 </html>

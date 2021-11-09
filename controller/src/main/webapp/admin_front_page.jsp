@@ -9,16 +9,7 @@
 </head>
 <body>
 <h1>Welcome in ADMIN HOME PAGE!</h1>
-
-<h3 class="message">
-    <c:if test="${not empty requestScope.message}">
-        <c:out value="${requestScope.message}"/>
-    </c:if>
-</h3>
-
-<h5><a href="${pageContext.request.contextPath}/admin_teachers_page.jsp">Go to admin teachers page.</a></h5>
-<h5><a href="${pageContext.request.contextPath}/admin_students_page.jsp">Go to admin students page.</a></h5>
-<h5><a href="${pageContext.request.contextPath}/SubjectController">Go to admin subjects page.</a></h5>
-<h5><a href="${pageContext.request.contextPath}/LogoutController">Log out.</a></h5>
+<jsp:include page="header.jsp"/>
+<jsp:include page="admin_footer.jsp"/>
 </body>
 </html>
