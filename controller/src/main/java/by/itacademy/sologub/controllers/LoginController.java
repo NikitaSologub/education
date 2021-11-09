@@ -49,14 +49,14 @@ public class LoginController extends BaseController {
         String password = req.getParameter(PASSWORD);
 
         if (login != null) {
-            login = login.trim();
+            login = login.trim();//todo - убрать (переработать)
         }
         if (password != null) {
-            password = password.trim();
+            password = password.trim();//todo - убрать (переработать)
         }
         log.info("Пользователь {} пытается войти в систему. Пароль {}", login, password);
 
-        if (!checkAdminLogIn(login, password, req, res)) {
+        if (!checkAdminLogIn(login, password, req, res)) {//todo - убрать (переработать)
             if (!checkTeacherLogIn(login, password, req, res)) {
                 if (!checkStudentLogIn(login, password, req, res)) {
                     log.info("логина {} нет в системе в доступе отказано.", login);
@@ -66,6 +66,7 @@ public class LoginController extends BaseController {
         }
     }
 
+    //todo - убрать (сделать один универсальный метод)
     boolean checkAdminLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         AdminRepo repo = (AdminRepo) getServletContext().getAttribute(ADMIN_REPO);
         Admin admin = repo.getAdminIfExistsOrGetSpecialValue(login, password);
@@ -90,7 +91,7 @@ public class LoginController extends BaseController {
         session.setAttribute(SESSION_ENTITY, user);
         log.info("пользователь {} положен в сессию.", user);
     }
-
+    //todo - убрать (сделать один универсальный метод)
     boolean checkTeacherLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
         Teacher teacher = repo.getTeacherIfExistsOrGetSpecialValue(login, password);
@@ -109,7 +110,7 @@ public class LoginController extends BaseController {
         log.info("учителя с логином={} не существует в системе", login);
         return false;
     }
-
+    //todo - убрать (сделать один универсальный метод)
     boolean checkStudentLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
         Student student = repo.getStudentIfExistsOrGetSpecialValue(login, password);

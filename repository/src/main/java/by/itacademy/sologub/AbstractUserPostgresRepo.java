@@ -126,7 +126,7 @@ public abstract class AbstractUserPostgresRepo<T extends User> extends AbstractP
                 }
             } else {
                 log.info("Нельзя добавить " + entity + ", такой логин уже существует");
-                con.rollback();
+                rollback(con);
             }
         } catch (SQLException e) {
             rollback(con);
@@ -182,7 +182,7 @@ public abstract class AbstractUserPostgresRepo<T extends User> extends AbstractP
                 log.info(entity + " {} изменили в БД.", user);
                 return true;
             } else {
-                con.rollback();
+                rollback(con);
                 log.info("не удалось изменить " + entity + " {} в БД.", user);
             }
         } catch (SQLException e) {
@@ -216,7 +216,7 @@ public abstract class AbstractUserPostgresRepo<T extends User> extends AbstractP
                     return true;
                 } else {
                     log.info("Не удалось удалить " + entity + " {} из БД.", user);
-                    con.rollback();
+                    rollback(con);
                 }
             } catch (SQLException e) {
                 rollback(con);
@@ -229,22 +229,4 @@ public abstract class AbstractUserPostgresRepo<T extends User> extends AbstractP
         }
         return false;
     }
-
-//    @Override
-//    protected T extractObject(ResultSet set) throws SQLException {
-//        try {
-//            return getClass().getDeclaredConstructor().newInstance()
-//                    .withId(set.getInt(ID))
-//                    .withCredential(new Credential()
-//                            .withId(set.getInt(CREDENTIAL_ID_DB_FIELD))
-//                            .withLogin(set.getString(LOGIN))
-//                            .withPassword(set.getString(PASSWORD)))
-//                    .withFirstname(set.getString(FIRSTNAME))
-//                    .withLastname(set.getString(LASTNAME))
-//                    .withPatronymic(set.getString(PATRONYMIC))
-//                    .withDateOfBirth(set.getDate(DATE_OF_BIRTH_DB_FIELD).toLocalDate());
-//        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }
