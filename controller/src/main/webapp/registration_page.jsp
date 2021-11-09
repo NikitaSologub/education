@@ -4,7 +4,7 @@
 <head>
     <title>Title</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" type="text/css" href="<c:url value='/css/registration.css'/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/hallway_style.css'/>"/>
     <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
 </head>
 
