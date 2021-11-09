@@ -51,7 +51,7 @@
                         <input type="hidden" name="id" value=${teacher.id}>
                         <input type="hidden" name="credentialId" value=${teacher.credential.id}>
                         <input type="hidden" name="login" value="${teacher.credential.login}">
-                        Password: <input type="text" name="password" value="${teacher.credential.password}">
+                        Password: <input type="password" name="password" value="${teacher.credential.password}">
                         Firstname: <input type="text" name="firstname" value="${teacher.firstname}">
                         Lastname: <input type="text" name="lastname" value="${teacher.lastname}">
                         Patronymic: <input type="text" name="patronymic" value="${teacher.patronymic}">
@@ -72,7 +72,7 @@
 Добавить нового учителя
 <form action="<c:url value="TeacherController"/>" method="post">
     Username: <label> <input type="text" name="login"/> </label><br/>
-    Password: <label> <input type="text" name="password"/> </label><br/>
+    Password: <label> <input type="password" name="password"/> </label><br/>
     Firstname: <label> <input type="text" name="firstname"/> </label><br/>
     Lastname: <label> <input type="text" name="lastname"/> </label><br/>
     Patronymic: <label> <input type="text" name="patronymic"/> </label><br/>

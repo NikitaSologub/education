@@ -23,10 +23,10 @@
     <input type="text" name="firstname"/>
 </label><br/>
     Lastname: <label>
-    <input type="password" name="lastname"/>
+    <input type="text" name="lastname"/>
 </label><br/>
     Patronymic: <label>
-    <input type="password" name="patronymic"/>
+    <input type="text" name="patronymic"/>
 </label><br/>
     Date of birth: <label>
     <input type="date" name="dateOfBirth"/>

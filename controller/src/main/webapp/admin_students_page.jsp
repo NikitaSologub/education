@@ -51,7 +51,7 @@
                     <input type="hidden" name="id" value=${student.id}>
                     <input type="hidden" name="credentialId" value=${student.credential.id}>
                     Username: ${student.credential.login} <input type="hidden" name="login" value="${student.credential.login}">
-                    Password: <input type="text" name="password" value="${student.credential.password}">
+                    Password: <input type="password" name="password" value="${student.credential.password}">
                     Firstname: <input type="text" name="firstname" value="${student.firstname}">
                     Lastname: <input type="text" name="lastname" value="${student.lastname}">
                     Patronymic: <input type="text" name="patronymic" value="${student.patronymic}">
@@ -73,7 +73,7 @@
 Добавить нового студента
 <form action="<c:url value="StudentController"/>" method="post">
     Username: <label> <input type="text" name="login"/> </label><br/>
-    Password: <label> <input type="text" name="password"/> </label><br/>
+    Password: <label> <input type="password" name="password"/> </label><br/>
     Firstname: <label> <input type="text" name="firstname"/> </label><br/>
     Lastname: <label> <input type="text" name="lastname"/> </label><br/>
     Patronymic: <label> <input type="text" name="patronymic"/> </label><br/>

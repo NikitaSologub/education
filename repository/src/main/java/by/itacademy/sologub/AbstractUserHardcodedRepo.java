@@ -119,7 +119,6 @@ public abstract class AbstractUserHardcodedRepo<T extends User> {
                     .filter(user -> user.getCredential().getLogin().equals(cr.getLogin()))
                     .findAny().orElse(getNotExists());
             if (getNotExists() != u) {
-                u.setCredential(null);// help GC
                 users.remove(u.getId());
                 credentialRepo.deleteCredentialIfExists(login);
                 log.info("Объекты {} и Credentials удалены из репозиториев", getType());
