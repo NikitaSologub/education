@@ -15,7 +15,6 @@ public final class Attributes {
     public static final String ADMIN = "admin";
     public static final String SALARY = "salary";
     public static final String SUBJECT = "subject";
-    public static final String SUBJECTS = "subjects";
     public static final String COINS = "coins";
     public static final String TITLE = "title";
 

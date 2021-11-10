@@ -34,6 +34,7 @@ public final class Constant {
     public static final String ACTION = "action";
     public static final String MESSAGE = "message";
     public static final String ERROR_MESSAGE = "errorMessage";
+    public static final String OBJECTS_LIST = "objectsList";
     public static final String CREDENTIAL_REPO = "credentialRepo";
     public static final String SALARY_REPO = "salaryRepo";
     public static final String SUBJECT_REPO = "subjectRepo";

@@ -12,9 +12,9 @@ import java.io.IOException;
 import java.util.List;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
-import static by.itacademy.sologub.constants.Attributes.SUBJECTS;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SUBJECTS_PAGE;
+import static by.itacademy.sologub.constants.Constant.OBJECTS_LIST;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
 
@@ -32,7 +32,7 @@ public class SubjectController extends BaseController {
         List<Subject> list = subjectRepo.getSubjectsList();
 
         log.debug("Список предметов (добавляем к запросу){}", list);
-        req.setAttribute(SUBJECTS, list);
+        req.setAttribute(OBJECTS_LIST, list);
         forward(ADMIN_SUBJECTS_PAGE, msg, req, resp);
     }
 
@@ -53,12 +53,12 @@ public class SubjectController extends BaseController {
         refreshSubjectsListAndForward(msg, req, resp);
     }
 
-    Subject extractSubjectFromForm(HttpServletRequest req){
+    Subject extractSubjectFromForm(HttpServletRequest req) {
         return extractSubjectFromFormWithoutId(req)
                 .withId(Integer.parseInt(req.getParameter(ID)));
     }
 
-    Subject extractSubjectFromFormWithoutId(HttpServletRequest req){
+    Subject extractSubjectFromFormWithoutId(HttpServletRequest req) {
         return new Subject()
                 .withTitle(req.getParameter(TITLE));
     }

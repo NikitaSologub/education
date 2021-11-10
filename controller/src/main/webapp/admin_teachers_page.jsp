@@ -24,7 +24,7 @@
             <th>ИЗМЕНИТЬ</th>
             <th>К ЗАРПЛАТАМ</th>
         </tr>
-        <c:forEach var="teacher" items="${applicationScope.teacherRepo.teachersList}">
+        <c:forEach var="teacher" items="${requestScope.objectsList}">
             <tr>
                 <td><c:out value="${teacher.credential.login}"/></td>
                 <td><c:out value="${teacher.credential.password}"/></td>

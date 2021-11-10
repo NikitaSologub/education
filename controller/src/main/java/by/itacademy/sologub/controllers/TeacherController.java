@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.List;
 
 import static by.itacademy.sologub.constants.Attributes.FIRSTNAME;
 import static by.itacademy.sologub.constants.Attributes.ID;
@@ -33,6 +34,12 @@ public class TeacherController extends AbstractPersonController<Teacher> {
     @Override
     protected String getUrl() {
         return ADMIN_TEACHERS_PAGE;
+    }
+
+    @Override
+    protected List<Teacher> getList() {
+        TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
+        return repo.getTeachersList();
     }
 
     @Override
