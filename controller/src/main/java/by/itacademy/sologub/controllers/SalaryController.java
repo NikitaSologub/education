@@ -12,13 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 import static by.itacademy.sologub.constants.Attributes.COINS;
 import static by.itacademy.sologub.constants.Attributes.DATE;
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.TEACHER;
+import static by.itacademy.sologub.constants.Constant.ACTION;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SALARIES_PAGE;
+import static by.itacademy.sologub.constants.Constant.AVERAGE;
 import static by.itacademy.sologub.constants.Constant.SALARY_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.SALARY_REPO;
 import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
@@ -109,5 +112,29 @@ public class SalaryController extends BaseController {
             log.info("Не удалось удалить зарплату с id = {}", id);
         }
         refreshTeacherAndForward(msg, req, resp);
+    }
+
+    private void doSalariesParameters(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        SalaryRepo repo = (SalaryRepo) getServletContext().getAttribute(SALARY_REPO);
+        List<Salary> salaryList = repo.getAllSalariesByTeacherId(Integer.parseInt(req.getParameter(ID)));
+
+        double average = salaryList.stream()
+                .mapToInt(Salary::getCoins)
+                .average().orElse(0.0);
+        req.setAttribute(AVERAGE, round(average/100));
+        refreshTeacherAndForward("Средняя зарплата учителя по итогам всех месяцев работы ",req,res);
+    }
+
+    String round(double val) {
+        return String.format("%.2f", val);
+    }
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if (AVERAGE.equals(req.getParameter(ACTION))) {
+            doSalariesParameters(req, resp);
+            return;
+        }
+        super.service(req, resp);
     }
 }

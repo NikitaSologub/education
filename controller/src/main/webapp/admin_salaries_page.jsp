@@ -13,16 +13,18 @@
 ${requestScope.teacher.credential.login} | ${requestScope.teacher.lastname} | ${requestScope.teacher.firstname} |
 ${requestScope.teacher.patronymic} | ${requestScope.teacher.dateOfBirth}
 
-<c:set var="totalSalaryCoins" value="${0}"/>
-<c:set var="salaryCount" value="${0}"/>
-<c:forEach var="salary" items="${requestScope.teacher.salaries}">
-    <table>
-        <c:set var="totalSalaryCoins" value="${totalSalaryCoins + salary.coins}"/>
-        <c:set var="salaryCount" value="${salaryCount + 1}"/>
-    </table>
-</c:forEach>
-<br> Сумма заработанных денег ${totalSalaryCoins/100} (рублей)
-<br> Сумма средней заработной платы ${totalSalaryCoins/salaryCount/100} (рублей)
+<form action="SalaryController" method="post">
+    <input type="hidden" name="action" value="average">
+    <input type="hidden" name="id" value=${requestScope.teacher.id}>
+    <input type="hidden" name="login" value=${requestScope.teacher.credential.login}>
+    <button type="submit">Узнать среднюю зарплату</button>
+</form>
+<h3 class="average">
+    <c:if test="${not empty requestScope.average}">
+        <c:out value="Сумма средней заработной платы ${requestScope.average} белорусских рублей"/>
+    </c:if>
+</h3>
+
 <h6>
     <table border="1" width="100%">
         <tr>

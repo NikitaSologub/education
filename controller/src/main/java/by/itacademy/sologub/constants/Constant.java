@@ -28,6 +28,7 @@ public final class Constant {
     //methods
     public static final String DELETE = "delete";
     public static final String PUT = "put";
+    public static final String AVERAGE = "average";
 
     //attributes
     public static final String SESSION_ENTITY = "sessionEntity";
