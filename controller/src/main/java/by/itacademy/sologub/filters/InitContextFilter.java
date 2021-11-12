@@ -4,6 +4,8 @@ import by.itacademy.sologub.Admin;
 import by.itacademy.sologub.AdminRepo;
 import by.itacademy.sologub.Credential;
 import by.itacademy.sologub.CredentialRepo;
+import by.itacademy.sologub.Group;
+import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.Salary;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.Student;
@@ -39,6 +41,7 @@ import static by.itacademy.sologub.constants.Constant.ADMIN_REPO;
 import static by.itacademy.sologub.constants.Constant.CREDENTIAL_REPO;
 import static by.itacademy.sologub.constants.Constant.DB_CONFIG_FILE;
 import static by.itacademy.sologub.constants.Constant.DRIVER;
+import static by.itacademy.sologub.constants.Constant.GROUP_REPO;
 import static by.itacademy.sologub.constants.Constant.SALARY_REPO;
 import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
@@ -77,10 +80,11 @@ public class InitContextFilter implements Filter {
         ModelRepoFactory factory = ModelRepoFactoryHardcodeImpl.getInstance();
         setAppContext(conf, factory);
 
-        setStudents(factory.getStudentRepo());
-        setTeachersAndSalaries(factory.getTeacherRepo(), factory.getSalariesRepo());
-        setSubjects(factory.getSubjectRepo());
-        setAdmins(factory.getAdminRepo());
+        setContent(factory);
+//        setStudents(factory.getStudentRepo());
+//        setTeachersAndSalaries(factory.getTeacherRepo(), factory.getSalariesRepo());
+//        setSubjects(factory.getSubjectRepo());
+//        setAdmins(factory.getAdminRepo());
     }
 
     private void loadDatabasePostgres(FilterConfig conf) throws PropertyVetoException {
@@ -101,6 +105,7 @@ public class InitContextFilter implements Filter {
         AdminRepo adminRepo = factory.getAdminRepo();
         SalaryRepo salaryRepo = factory.getSalariesRepo();
         SubjectRepo subjectRepo = factory.getSubjectRepo();
+        GroupRepo groupRepo = factory.getGroupRepo();
 
         ServletContext context = filterConfig.getServletContext();
         context.setAttribute(CREDENTIAL_REPO, credentialRepo);
@@ -109,6 +114,7 @@ public class InitContextFilter implements Filter {
         context.setAttribute(ADMIN_REPO, adminRepo);
         context.setAttribute(SALARY_REPO, salaryRepo);
         context.setAttribute(SUBJECT_REPO, subjectRepo);
+        context.setAttribute(GROUP_REPO, groupRepo);
     }
 
     boolean loadDriverClass() {
@@ -138,7 +144,101 @@ public class InitContextFilter implements Filter {
         return pool;
     }
 
-    void setTeachersAndSalaries(TeacherRepo teacherRepo, SalaryRepo salaryRepo) {
+    private void setContent(ModelRepoFactory factory) {
+        SubjectRepo subjectRepo = factory.getSubjectRepo();
+
+        Subject sub1 = new Subject().withTitle("География");
+        Subject sub2 = new Subject().withTitle("Экономика");
+        Subject sub3 = new Subject().withTitle("Информатика");
+        Subject sub4 = new Subject().withTitle("Русский");
+        Subject sub5 = new Subject().withTitle("Белорусский");
+        Subject sub6 = new Subject().withTitle("Природоведение");
+
+        subjectRepo.putSubjectIfNotExists(sub1);
+        subjectRepo.putSubjectIfNotExists(sub2);
+        subjectRepo.putSubjectIfNotExists(sub3);
+        subjectRepo.putSubjectIfNotExists(sub4);
+        subjectRepo.putSubjectIfNotExists(sub5);
+        subjectRepo.putSubjectIfNotExists(sub6);
+
+        AdminRepo adminRepo = factory.getAdminRepo();
+
+        adminRepo.putAdminIfNotExists(new Admin()
+                .withId(323)
+                .withCredential(new Credential()
+                        .withId(0)
+                        .withLogin("ADMIN")
+                        .withPassword("234"))
+                .withFirstname("Никита")
+                .withLastname("Сологуб")
+                .withPatronymic("Олегович")
+                .withDateOfBirth(LocalDate.of(1992, Month.APRIL, 23)));
+
+        StudentRepo studentRepo = factory.getStudentRepo();
+
+        Student stud1 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("AXEL23")
+                        .withPassword("123"))
+                .withLastname("Ярец")
+                .withFirstname("Илья")
+                .withPatronymic("Викторович")
+                .withDateOfBirth(LocalDate.of(1995, Month.JULY, 22));
+
+        Student stud2 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("STOLYAR55")
+                        .withPassword("st678"))
+                .withLastname("Столярчук")
+                .withFirstname("Анастасия")
+                .withPatronymic("Ивановна")
+                .withDateOfBirth(LocalDate.of(1995, Month.AUGUST, 17));
+
+        Student stud3 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("BabkaVKedah")
+                        .withPassword("worldoftanks"))
+                .withLastname("Татур")
+                .withFirstname("Егор")
+                .withPatronymic("Евгеньевич")
+                .withDateOfBirth(LocalDate.of(1995, Month.NOVEMBER, 27));
+
+        Student stud4 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("Smartdyika")
+                        .withPassword("books34"))
+                .withLastname("Полошавец")
+                .withFirstname("Ксения")
+                .withPatronymic("Антоновна")
+                .withDateOfBirth(LocalDate.of(1995, Month.APRIL, 10));
+
+        Student stud5 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("azazello666")
+                        .withPassword("tech1"))
+                .withLastname("Анпилов")
+                .withFirstname("Андрей")
+                .withPatronymic("Сергеевич")
+                .withDateOfBirth(LocalDate.of(1991, Month.DECEMBER, 11));
+
+        Student stud6 = new Student()
+                .withCredential(new Credential()
+                        .withLogin("Shabalina_Anzhela")
+                        .withPassword("flower4"))
+                .withLastname("Шабалина")
+                .withFirstname("Анжелина")
+                .withPatronymic("Игоревна")
+                .withDateOfBirth(LocalDate.of(1995, Month.MARCH, 28));
+
+        studentRepo.putStudentIfNotExists(stud1);
+        studentRepo.putStudentIfNotExists(stud2);
+        studentRepo.putStudentIfNotExists(stud3);
+        studentRepo.putStudentIfNotExists(stud4);
+        studentRepo.putStudentIfNotExists(stud5);
+        studentRepo.putStudentIfNotExists(stud6);
+
+        TeacherRepo teacherRepo = factory.getTeacherRepo();
+
         Teacher t1 = new Teacher().
                 withCredential(new Credential()
                         .withLogin("DETSUK59")
@@ -189,6 +289,8 @@ public class InitContextFilter implements Filter {
         teacherRepo.putTeacherIfNotExists(t3);
         teacherRepo.putTeacherIfNotExists(t4);
         teacherRepo.putTeacherIfNotExists(t5);
+
+        SalaryRepo salaryRepo = factory.getSalariesRepo();
 
         Salary s1 = new Salary()
                 .withTeacherId(t1.getId())
@@ -260,88 +362,37 @@ public class InitContextFilter implements Filter {
         salaryRepo.putSalary(s11);
         salaryRepo.putSalary(s12);
         salaryRepo.putSalary(s13);
-    }
 
-    void setAdmins(AdminRepo repo) {
-        repo.putAdminIfNotExists(new Admin()
-                .withId(323)
-                .withCredential(new Credential()
-                        .withId(0)
-                        .withLogin("ADMIN")
-                        .withPassword("234"))
-                .withFirstname("Никита")
-                .withLastname("Сологуб")
-                .withPatronymic("Олегович")
-                .withDateOfBirth(LocalDate.of(1992, Month.APRIL, 23)));
-    }
+        GroupRepo groupRepo = factory.getGroupRepo();
 
-    void setStudents(StudentRepo repo) {
-        Student s1 = new Student()
-                .withCredential(new Credential()
-                        .withLogin("AXEL23")
-                        .withPassword("123"))
-                .withLastname("Ярец")
-                .withFirstname("Илья")
-                .withPatronymic("Викторович")
-                .withDateOfBirth(LocalDate.of(1995, Month.JULY, 22));
+        Group gr1 = new Group()
+                .withTitle("Смешарики")
+                .withTeacher(t1)
+                .withDescription("Группа для весёлого изучения любых дисциплин")
+                .withStudents(stud1, stud2, stud3, stud4, stud5, stud6)
+                .withSubjects(sub5, sub4);
 
-        Student s2 = new Student()
-                .withCredential(new Credential()
-                        .withLogin("STOLYAR55")
-                        .withPassword("st678"))
-                .withLastname("Столярчук")
-                .withFirstname("Анастасия")
-                .withPatronymic("Ивановна")
-                .withDateOfBirth(LocalDate.of(1995, Month.AUGUST, 17));
+        Group gr2 = new Group()
+                .withTitle("Болванчики")
+                .withTeacher(t2)
+                .withDescription("Группа для хулиганов (из СПТУ)")
+                .withStudents(stud4, stud5)
+                .withSubjects(sub5, sub4);
 
-        Student s3 = new Student()
-                .withCredential(new Credential()
-                        .withLogin("BabkaVKedah")
-                        .withPassword("worldoftanks"))
-                .withLastname("Татур")
-                .withFirstname("Егор")
-                .withPatronymic("Евгеньевич")
-                .withDateOfBirth(LocalDate.of(1995, Month.NOVEMBER, 27));
+        Group gr3 = new Group()
+                .withTitle("Умнаки")
+                .withTeacher(t3)
+                .withDescription("Группа для самых умных")
+                .withStudents(stud1, stud2, stud3, stud6)
+                .withSubjects(sub5, sub4);
 
-        Student s4 = new Student()
-                .withCredential(new Credential()
-                        .withLogin("Smartdyika")
-                        .withPassword("books34"))
-                .withLastname("Полошавец")
-                .withFirstname("Ксения")
-                .withPatronymic("Антоновна")
-                .withDateOfBirth(LocalDate.of(1995, Month.APRIL, 10));
+        Group gr4 = new Group()
+                .withTitle("Тяп Ляп");
 
-        Student s5 = new Student()
-                .withCredential(new Credential()
-                        .withLogin("azazello666")
-                        .withPassword("tech1"))
-                .withLastname("Анпилов")
-                .withFirstname("Андрей")
-                .withPatronymic("Сергеевич")
-                .withDateOfBirth(LocalDate.of(1991, Month.DECEMBER, 11));
-
-        Student s6 = new Student()
-                .withCredential(new Credential()
-                        .withLogin("Shabalina_Anzhela")
-                        .withPassword("flower4"))
-                .withLastname("Шабалина")
-                .withFirstname("Анжелина")
-                .withPatronymic("Игоревна")
-                .withDateOfBirth(LocalDate.of(1995, Month.MARCH, 28));
-
-        repo.putStudentIfNotExists(s1);
-        repo.putStudentIfNotExists(s2);
-        repo.putStudentIfNotExists(s3);
-        repo.putStudentIfNotExists(s4);
-        repo.putStudentIfNotExists(s5);
-        repo.putStudentIfNotExists(s6);
-    }
-
-    void setSubjects(SubjectRepo repo) {
-        repo.putSubjectIfNotExists(new Subject().withTitle("География"));
-        repo.putSubjectIfNotExists(new Subject().withTitle("Экономика"));
-        repo.putSubjectIfNotExists(new Subject().withTitle("Информатика"));
+        groupRepo.putGroupIfNotExists(gr1);
+        groupRepo.putGroupIfNotExists(gr2);
+        groupRepo.putGroupIfNotExists(gr3);
+        groupRepo.putGroupIfNotExists(gr4);
     }
 
     @Override
@@ -351,7 +402,7 @@ public class InitContextFilter implements Filter {
 
     @Override
     public void destroy() {
-        if (pool != null){
+        if (pool != null) {
             pool.close();
             log.info("Закрываем pool connection");
         }

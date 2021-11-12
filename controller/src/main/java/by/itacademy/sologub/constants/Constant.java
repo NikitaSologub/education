@@ -9,11 +9,19 @@ public final class Constant {
     public static final String TEACHER_CONTROLLER = "/TeacherController";
     public static final String STUDENT_CONTROLLER = "/StudentController";
     public static final String SALARY_CONTROLLER = "/SalaryController";
+    public static final String GROUP_CONTROLLER = "/GroupController";
+    public static final String GROUP_STUDENTS_CONTROLLER = "/GroupStudentsController";
+    public static final String GROUP_SUBJECTS_CONTROLLER = "/GroupSubjectsController";
+    public static final String GROUP_EDIT_CONTROLLER = "/GroupEditController";
     public static final String SUBJECT_CONTROLLER = "/SubjectController";
     public static final String ADMIN_FRONT_PAGE = "/admin_front_page.jsp";
     public static final String ADMIN_TEACHERS_PAGE = "/admin_teachers_page.jsp";
     public static final String ADMIN_STUDENTS_PAGE = "/admin_students_page.jsp";
     public static final String ADMIN_SALARIES_PAGE = "/admin_salaries_page.jsp";
+    public static final String ADMIN_GROUPS_PAGE = "/admin_groups_page.jsp";
+    public static final String ADMIN_GROUP_EDIT_PAGE = "/admin_group_edit_page.jsp";
+    public static final String ADMIN_GROUP_STUDENTS_PAGE = "/admin_groups_page.jsp";
+    public static final String ADMIN_GROUP_SUBJECTS_PAGE = "/admin_groups_page.jsp";
     public static final String ADMIN_SUBJECTS_PAGE = "/admin_subjects_page.jsp";
     public static final String STUDENT_FRONT_PAGE = "/student_front_page.jsp";
     public static final String TEACHER_FRONT_PAGE = "/teacher_front_page.jsp";
@@ -35,10 +43,10 @@ public final class Constant {
     public static final String ACTION = "action";
     public static final String MESSAGE = "message";
     public static final String ERROR_MESSAGE = "errorMessage";
-    public static final String OBJECTS_LIST = "objectsList";
     public static final String CREDENTIAL_REPO = "credentialRepo";
     public static final String SALARY_REPO = "salaryRepo";
     public static final String SUBJECT_REPO = "subjectRepo";
+    public static final String GROUP_REPO = "groupRepo";
     public static final String TEACHER_REPO = "teacherRepo";
     public static final String STUDENT_REPO = "studentRepo";
     public static final String ADMIN_REPO = "adminRepo";
@@ -47,6 +55,10 @@ public final class Constant {
     public static final String CONTENT_TYPE = "text/html;charset=UTF-8";
 
     //bean attributes
+    public static final String OBJECTS_LIST = "objectsList";
+    public static final String GROUP_LIST = "groupList";
+    public static final String GROUP_ID = "groupId";
+    public static final String TEACHER_LOGIN = "teacherLogin";
     public static final String TEACHER_ID = "teacherId";
     public static final String CREDENTIAL_ID = "credentialId";
     public static final String DATE_OF_BIRTH = "dateOfBirth";

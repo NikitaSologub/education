@@ -2,6 +2,7 @@ package by.itacademy.sologub.factory;
 
 import by.itacademy.sologub.AdminRepo;
 import by.itacademy.sologub.CredentialRepo;
+import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.StudentRepo;
 import by.itacademy.sologub.SubjectRepo;
@@ -19,4 +20,6 @@ public interface ModelRepoFactory {
     SalaryRepo getSalariesRepo();
 
     SubjectRepo getSubjectRepo();
+
+    GroupRepo getGroupRepo();
 }

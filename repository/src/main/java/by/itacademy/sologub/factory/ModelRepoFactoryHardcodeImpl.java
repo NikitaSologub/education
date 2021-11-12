@@ -4,6 +4,8 @@ import by.itacademy.sologub.AdminRepo;
 import by.itacademy.sologub.AdminRepoHardcodedImpl;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.CredentialRepoHardcodeImpl;
+import by.itacademy.sologub.GroupRepo;
+import by.itacademy.sologub.GroupRepoHardcodedImpl;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.SalaryRepoHardcodedImpl;
 import by.itacademy.sologub.StudentRepo;
@@ -15,12 +17,13 @@ import by.itacademy.sologub.TeacherRepoHardcodedImpl;
 
 public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     private static ModelRepoFactoryHardcodeImpl instance;
-    private static CredentialRepo credentialRepo;
-    private static TeacherRepo teacherRepo;
-    private static StudentRepo studentRepo;
-    private static AdminRepo adminRepo;
-    private static SalaryRepo salaryRepo;
-    private static SubjectRepo subjectRepo;
+    private static CredentialRepoHardcodeImpl credentialRepo;
+    private static TeacherRepoHardcodedImpl teacherRepo;
+    private static StudentRepoHardcodedImpl studentRepo;
+    private static AdminRepoHardcodedImpl adminRepo;
+    private static SalaryRepoHardcodedImpl salaryRepo;
+    private static SubjectRepoHardcodedImpl subjectRepo;
+    private static GroupRepoHardcodedImpl groupRepo;
 
     private ModelRepoFactoryHardcodeImpl() {
         credentialRepo = CredentialRepoHardcodeImpl.getInstance();
@@ -29,6 +32,7 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
         adminRepo = AdminRepoHardcodedImpl.getInstance(credentialRepo);
         salaryRepo = SalaryRepoHardcodedImpl.getInstance();
         subjectRepo = SubjectRepoHardcodedImpl.getInstance();
+        groupRepo = GroupRepoHardcodedImpl.getInstance(subjectRepo,teacherRepo,studentRepo);
     }
 
     public static ModelRepoFactoryHardcodeImpl getInstance() {
@@ -70,5 +74,10 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     @Override
     public SubjectRepo getSubjectRepo() {
         return subjectRepo;
+    }
+
+    @Override
+    public GroupRepo getGroupRepo() {
+        return groupRepo;
     }
 }

@@ -84,9 +84,10 @@ CREATE TABLE public."group"
 (
     id          int4    NOT NULL GENERATED ALWAYS AS IDENTITY,
     title       varchar NOT NULL,
-    teacher_id  int4    NOT NULL,
+    teacher_id  int4    NULL,
     description varchar NULL,
-    CONSTRAINT group_pk PRIMARY KEY (id)
+    CONSTRAINT group_pk PRIMARY KEY (id),
+    CONSTRAINT group_un UNIQUE (title)
 );
 
 DROP TABLE IF EXISTS public.group_student;
