@@ -63,6 +63,9 @@ public final class Constant {
     public static final String SUBJECT_ID = "subjectId";
     public static final String TEACHER_LOGIN = "teacherLogin";
     public static final String TEACHER_ID = "teacherId";
+    public static final String STUDENT_ID = "studentId";
+    public static final String STUDENT_LOGIN = "studentLogin";
+
     public static final String CREDENTIAL_ID = "credentialId";
     public static final String DATE_OF_BIRTH = "dateOfBirth";
 }

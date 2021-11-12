@@ -380,7 +380,7 @@ public class InitContextFilter implements Filter {
                 .withSubjects(sub5, sub4);
 
         Group gr3 = new Group()
-                .withTitle("Умнаки")
+                .withTitle("Умники")
                 .withTeacher(t3)
                 .withDescription("Группа для самых умных")
                 .withStudents(stud1, stud2, stud3, stud6)
