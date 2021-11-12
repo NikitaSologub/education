@@ -4,6 +4,7 @@ import by.itacademy.sologub.AdminRepo;
 import by.itacademy.sologub.AdminRepoPostgresImpl;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.CredentialRepoPostgresImpl;
+import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.SalaryRepoPostgresImpl;
 import by.itacademy.sologub.StudentRepo;
@@ -71,5 +72,10 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
     @Override
     public SubjectRepo getSubjectRepo() {
         return subjectRepo;
+    }
+
+    @Override
+    public GroupRepo getGroupRepo() {
+        return null;//todo - временная заглушка
     }
 }

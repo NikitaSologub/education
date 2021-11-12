@@ -32,20 +32,12 @@
                         <input type="hidden" name="id" value=${group.id}>
                         <button type="submit">Удалить</button>
                     </form>
-
                     <form action="<c:url value="GroupEditController"/>" method="get">
                         <input name="groupId" type="hidden" value="${group.id}">
                         <input name="teacherId" type="hidden" value="${group.teacher.id}">
                         <input name="teacherLogin" type="hidden" value="${group.teacher.credential.login}">
                         <button type="submit">Редактировать</button>
                     </form>
-<%--                    <form action="<c:url value="GroupController"/>" method="post">--%>
-<%--                        <input type="hidden" name="action" value="put">--%>
-<%--                        <input type="hidden" name="id" value=${group.id}>--%>
-<%--                        Введите новое название:<input type="text" name="title" value=${group.title}><br/>--%>
-<%--                        Введите новое описание:<input type="text" name="description" value=${group.description}><br/>--%>
-<%--                        <button type="submit">Изменить</button>--%>
-<%--                    </form>--%>
                     <form action="<c:url value="GroupSubjectsController"/>" method="get">
                         <input name="groupId" type="hidden" value="${group.id}">
                         <button type="submit">К предметам</button>

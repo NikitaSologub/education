@@ -20,8 +20,8 @@ public final class Constant {
     public static final String ADMIN_SALARIES_PAGE = "/admin_salaries_page.jsp";
     public static final String ADMIN_GROUPS_PAGE = "/admin_groups_page.jsp";
     public static final String ADMIN_GROUP_EDIT_PAGE = "/admin_group_edit_page.jsp";
-    public static final String ADMIN_GROUP_STUDENTS_PAGE = "/admin_groups_page.jsp";
-    public static final String ADMIN_GROUP_SUBJECTS_PAGE = "/admin_groups_page.jsp";
+    public static final String ADMIN_GROUP_STUDENTS_PAGE = "/admin_group_students_page.jsp";
+    public static final String ADMIN_GROUP_SUBJECTS_PAGE = "/admin_group_subjects_page.jsp";
     public static final String ADMIN_SUBJECTS_PAGE = "/admin_subjects_page.jsp";
     public static final String STUDENT_FRONT_PAGE = "/student_front_page.jsp";
     public static final String TEACHER_FRONT_PAGE = "/teacher_front_page.jsp";
@@ -56,8 +56,11 @@ public final class Constant {
 
     //bean attributes
     public static final String OBJECTS_LIST = "objectsList";
+    public static final String OBJECTS_SET = "objectsSet";
+    public static final String CURRENT_GROUP_OBJECTS_SET = "currentGroupObjectsSet";
     public static final String GROUP_LIST = "groupList";
     public static final String GROUP_ID = "groupId";
+    public static final String SUBJECT_ID = "subjectId";
     public static final String TEACHER_LOGIN = "teacherLogin";
     public static final String TEACHER_ID = "teacherId";
     public static final String CREDENTIAL_ID = "credentialId";
