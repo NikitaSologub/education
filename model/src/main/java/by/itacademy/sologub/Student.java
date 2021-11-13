@@ -1,0 +1,58 @@
+package by.itacademy.sologub;
+
+import lombok.*;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class Student extends User {
+    private List<Mark> marks = new ArrayList<>();
+
+    public Mark getMark(int id) {
+        return marks.stream()
+                .filter(mark -> mark.getId() == id)
+                .findAny().orElse(MARK_NOT_EXISTS);
+    }
+
+    public void setMark(Mark mark) {
+        marks.add(mark);
+    }
+
+    public Student withId(int id){
+        setId(id);
+        return this;
+    }
+
+    public Student withFirstname(String firstname) {
+        setFirstname(firstname);
+        return this;
+    }
+
+    public Student withLastname(String lastname) {
+        setLastname(lastname);
+        return this;
+    }
+
+    public Student withPatronymic(String patronymic) {
+        setPatronymic(patronymic);
+        return this;
+    }
+
+    public Student withDateOfBirth(LocalDate date) {
+        setDateOfBirth(date);
+        return this;
+    }
+
+    public Student withCredential(Credential credential) {
+        setCredential(credential);
+        return this;
+    }
+}

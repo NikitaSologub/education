@@ -1,0 +1,50 @@
+package by.itacademy.sologub.factory;
+
+import by.itacademy.sologub.*;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
+    private static ModelRepoFactoryPostgresDbImpl instance;
+    private static CredentialRepoPostgresImpl credentialRepo;
+    private static TeacherRepoPostgresImpl teacherRepo;
+    private static StudentRepoPostgresImpl studentRepo;
+    private static SalaryRepoPostgresImpl salaryRepo;
+
+    private ModelRepoFactoryPostgresDbImpl(ComboPooledDataSource pool) {
+        credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
+        teacherRepo = TeacherRepoPostgresImpl.getInstance(pool, credentialRepo);
+        studentRepo = StudentRepoPostgresImpl.getInstance(pool, credentialRepo);
+        salaryRepo = SalaryRepoPostgresImpl.getInstance(pool);
+    }
+
+    public static ModelRepoFactory getInstance(ComboPooledDataSource pool) {
+        if (instance == null) {
+            synchronized (ModelRepoFactoryPostgresDbImpl.class) {
+                if (instance == null) {
+                    instance = new ModelRepoFactoryPostgresDbImpl(pool);
+                }
+            }
+        }
+        return instance;
+    }
+
+    @Override
+    public CredentialRepo getCredentialRepo() {
+        return credentialRepo;
+    }
+
+    @Override
+    public TeacherRepo getTeacherRepo() {
+        return teacherRepo;
+    }
+
+    @Override
+    public StudentRepo getStudentRepo() {
+        return studentRepo;
+    }
+
+    @Override
+    public SalaryRepo getSalariesRepo() {
+        return salaryRepo;
+    }
+}
