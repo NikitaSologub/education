@@ -142,11 +142,6 @@ CREATE TABLE public.person
 );
 
 -- наполняем таблицы данными (часть тех таблиц, с которыми уже работает моя программа)
-INSERT INTO public."role" ("name")
-VALUES ('STUDENT'),
-       ('TEACHER'),
-       ('ADMIN');
-
 INSERT INTO public.credential (login, "password")
 VALUES ('RUTS', '123'),
        ('ADMIN', '234'),
