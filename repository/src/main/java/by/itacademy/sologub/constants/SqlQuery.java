@@ -14,24 +14,22 @@ public final class SqlQuery {
 
     //user postgres sql
     public static final String UPDATE_USER_BY_CREDENTIAL_ID = "UPDATE person SET firstname=?,lastname=?,patronymic=?," +
-            "date_of_birth=? WHERE credential_id=? AND role_id=(SELECT id FROM \"role\" WHERE role.\"name\"=?);";
+            "date_of_birth=? WHERE credential_id=? AND role=?;";
     public static final String INSERT_USER = "INSERT INTO  person (firstname, lastname, patronymic, date_of_birth," +
-            " credential_id, role_id) VALUES (?,?,?,?,?, (SELECT id FROM \"role\" WHERE role.\"name\" = ?))\n" +
-            "ON CONFLICT (credential_id) DO NOTHING;";
+            " credential_id, role) VALUES (?,?,?,?,?,?) ON CONFLICT (credential_id) DO NOTHING;";
     public static final String GET_USER_BY_LOGIN = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
             " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
-            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE c.login=? and r.\"name\"=?;";
+            "ON c.id = p.credential_id WHERE c.login=? and p.role=?;";
     public static final String GET_USER_BY_CREDENTIAL_ID = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
             " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
-            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE c.id=? and r.\"name\"=?;";
+            "ON c.id = p.credential_id WHERE c.id=? and p.role=?;";
     public static final String GET_USER_BY_ID = "SELECT p.id, p.firstname, p.lastname, p.patronymic," +
             " p.date_of_birth, p.credential_id, c.id, c.login, c.\"password\" FROM person p JOIN credential c " +
-            "ON c.id = p.credential_id JOIN role r ON r.id = p.role_id WHERE p.id=? and r.\"name\"=?;";
+            "ON c.id = p.credential_id WHERE p.id=? and p.role=?;";
     public static final String GET_USERS_LIST = "SELECT p.id, p.firstname, p.lastname, p.patronymic, p.date_of_birth," +
-            "p.credential_id, c.login, c.\"password\", r.\"name\" FROM person p JOIN credential c ON c.id = p.credential_id \n" +
-            "JOIN role r ON r.id = p.role_id WHERE r.\"name\" = ?;";
-    public static final String DELETE_USER_BY_CREDENTIAL_ID =
-            "DELETE FROM person p USING role r WHERE p.role_id = r.id and r.\"name\"=? and p.credential_id=?;";
+            "p.credential_id, c.login, c.\"password\", p.role FROM person p JOIN credential c ON c.id = p.credential_id " +
+            "WHERE p.role=?;";
+    public static final String DELETE_USER_BY_CREDENTIAL_ID = "DELETE FROM person p WHERE p.role=? AND p.credential_id=?;";
 
     //salary postgres sql
     public static final String GET_SALARIES_LIST_BY_TEACHER_ID = "SELECT id, coins_amount, date, teacher_id " +

@@ -32,15 +32,6 @@ CREATE SEQUENCE public.mark_id_seq
     CACHE 1
     NO CYCLE;
 
-DROP SEQUENCE IF EXISTS public.role_id_seq;
-CREATE SEQUENCE public.role_id_seq
-    INCREMENT BY 1
-    MINVALUE 1
-    MAXVALUE 2147483647
-    START 1
-    CACHE 1
-    NO CYCLE;
-
 DROP SEQUENCE IF EXISTS public.salary_id_seq;
 CREATE SEQUENCE public.salary_id_seq
     INCREMENT BY 1
@@ -116,15 +107,6 @@ CREATE TABLE public.mark
     CONSTRAINT mark_pk PRIMARY KEY (id)
 );
 
-DROP TABLE IF EXISTS public."role";
-CREATE TABLE public."role"
-(
-    id   serial4 NOT NULL,
-    name varchar NOT NULL,
-    CONSTRAINT role_pk PRIMARY KEY (id),
-    CONSTRAINT role_un UNIQUE (name)
-);
-
 DROP TABLE IF EXISTS public.salary;
 CREATE TABLE public.salary
 (
@@ -153,14 +135,13 @@ CREATE TABLE public.person
     patronymic    varchar NOT NULL,
     date_of_birth date    NOT NULL,
     credential_id int4    NOT NULL,
-    role_id       int4    NOT NULL,
+    role       varchar    NOT NULL,
     CONSTRAINT person_un_cred UNIQUE (credential_id),
     CONSTRAINT user_pk PRIMARY KEY (id),
-    CONSTRAINT user_cred_fk FOREIGN KEY (credential_id) REFERENCES public.credential (id),
-    CONSTRAINT user_role_fk FOREIGN KEY (role_id) REFERENCES public."role" (id)
+    CONSTRAINT user_cred_fk FOREIGN KEY (credential_id) REFERENCES public.credential (id)
 );
 
--- наполняем тадлицы данными (часть тех таблиц, с которыми уже работает моя программа)
+-- наполняем таблицы данными (часть тех таблиц, с которыми уже работает моя программа)
 INSERT INTO public."role" ("name")
 VALUES ('STUDENT'),
        ('TEACHER'),
@@ -176,15 +157,15 @@ VALUES ('RUTS', '123'),
        ('AXEL23', '123'),
        ('eki', '123');
 
-INSERT INTO public.person (firstname, lastname, patronymic, date_of_birth, credential_id, role_id)
-VALUES ('Анастасия', 'Столярчук', 'Ивановна', '1995-08-17', 4, 2),
-       ('Ярец', 'Илья', 'Викторович', '1995-06-22', 3, 2),
-       ('Галина', 'Ахраменко', 'Генадьевна', '1959-03-28', 1, 3),
-       ('Егор', 'Татур', 'Степанович', '1995-06-15', 38, 2),
-       ('Юрий', 'Екимов', 'Васильевич', '1971-07-16', 34, 3),
-       ('Любовь', 'Руцкая', 'Валерьевна', '1982-07-16', 35, 3),
-       ('Никита', 'Сологуб', 'Олегович', '1992-04-23', 57, 1),
-       ('Сергей', 'Брин', 'Петрович', '1997-12-11', 53, 2);
+INSERT INTO public.person (firstname, lastname, patronymic, date_of_birth, credential_id, role)
+VALUES ('Анастасия', 'Столярчук', 'Ивановна', '1995-08-17', 4, 'STUDENT'),
+       ('Ярец', 'Илья', 'Викторович', '1995-06-22', 3, 'STUDENT'),
+       ('Галина', 'Ахраменко', 'Генадьевна', '1959-03-28', 1, 'TEACHER'),
+       ('Егор', 'Татур', 'Степанович', '1995-06-15', 38, 'STUDENT'),
+       ('Юрий', 'Екимов', 'Васильевич', '1971-07-16', 34, 'TEACHER'),
+       ('Любовь', 'Руцкая', 'Валерьевна', '1982-07-16', 35, 'TEACHER'),
+       ('Никита', 'Сологуб', 'Олегович', '1992-04-23', 57, 'ADMIN'),
+       ('Сергей', 'Брин', 'Петрович', '1997-12-11', 53, 'STUDENT');
 
 INSERT INTO public.salary (coins_amount, "date", teacher_id)
 VALUES (64140, '2021-01-12', 1),
