@@ -16,7 +16,6 @@ import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.GROUP;
 import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_STUDENTS_PAGE;
-import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_SUBJECTS_PAGE;
 import static by.itacademy.sologub.constants.Constant.CURRENT_GROUP_OBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.GROUP_ID;
 import static by.itacademy.sologub.constants.Constant.GROUP_REPO;
@@ -79,7 +78,7 @@ public class GroupStudentsController extends BaseController {
 
     private Set<Student> getAllStudentsToRequest() {
         StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
-        return new HashSet<>(repo.getStudentsList());
+        return new HashSet<>(repo.getStudentsSet());
     }
 
     private Group getGroupById(HttpServletRequest req) {

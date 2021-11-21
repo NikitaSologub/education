@@ -1,9 +1,9 @@
 package by.itacademy.sologub;
 
-import java.util.List;
+import java.util.Set;
 
 public interface AdminRepo {
-    List<Admin> getAdminsList();
+    Set<Admin> getAdminsList();
 
     Admin getAdminIfExistsOrGetSpecialValue(String login);
 

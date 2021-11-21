@@ -7,10 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
-import static by.itacademy.sologub.constants.Constant.OBJECTS_LIST;
+import static by.itacademy.sologub.constants.Constant.PERSONS_SET;
 
 @Slf4j
 public abstract class AbstractPersonController<T extends User> extends BaseController {
@@ -19,7 +19,7 @@ public abstract class AbstractPersonController<T extends User> extends BaseContr
 
     protected abstract String getUrl();
 
-    protected abstract List<T> getList();
+    protected abstract Set<T> getSet();
 
     protected abstract boolean putInRepo(T user);
 
@@ -85,10 +85,10 @@ public abstract class AbstractPersonController<T extends User> extends BaseContr
     }
 
     private void refreshAndForward(String msg, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<T> list = getList();
+        Set<T> set = getSet();
 
-        log.debug("Список {} (добавляем к запросу){}", getRole(), list);
-        req.setAttribute(OBJECTS_LIST, list);
+        log.debug("Set {} (добавляем к запросу){}", getRole(), set);
+        req.setAttribute(PERSONS_SET, set);
         forward(getUrl(), msg, req, resp);
     }
 }

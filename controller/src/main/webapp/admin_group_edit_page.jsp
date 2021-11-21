@@ -22,7 +22,7 @@
             <td>ОТЧЕСТВО</td>
             <td>НАЗНАЧИТЬ РУКОВОДИТЕЛЕМ ГРУППЫ</td>
         </tr>
-        <c:forEach var="t" items="${requestScope.objectsList}">
+        <c:forEach var="t" items="${requestScope.personsSet}">
             <tr>
                 <td><c:out value="${t.id}"/></td>
                 <td><c:out value="${t.lastname}"/></td>

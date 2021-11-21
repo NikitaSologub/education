@@ -32,7 +32,7 @@ public class GroupController extends BaseController {
         List<Group> groups = groupRepo.getGroups();
 
         log.debug("Группы(добавляем к запросу){}", groups);
-        req.setAttribute(GROUP_LIST, groups);
+        req.setAttribute(GROUP_LIST, groups);//GROUP_LIST
 
         forward(ADMIN_GROUPS_PAGE, msg, req, res);
     }

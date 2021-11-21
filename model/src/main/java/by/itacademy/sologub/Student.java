@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
 
@@ -18,7 +18,7 @@ import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Student extends User {
-    private List<Mark> marks = new ArrayList<>();
+    private Set<Mark> marks = new HashSet<>();
 
     public Mark getMark(int id) {
         return marks.stream()

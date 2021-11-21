@@ -14,7 +14,7 @@ import java.util.List;
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SUBJECTS_PAGE;
-import static by.itacademy.sologub.constants.Constant.OBJECTS_LIST;
+import static by.itacademy.sologub.constants.Constant.SUBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
 
@@ -31,8 +31,8 @@ public class SubjectController extends BaseController {
         SubjectRepo subjectRepo = (SubjectRepo) getServletContext().getAttribute(SUBJECT_REPO);
         List<Subject> list = subjectRepo.getSubjectsList();
 
-        log.debug("Список предметов (добавляем к запросу){}", list);
-        req.setAttribute(OBJECTS_LIST, list);
+        log.debug("set предметов (добавляем к запросу){}", list);
+        req.setAttribute(SUBJECTS_SET, list);
         forward(ADMIN_SUBJECTS_PAGE, msg, req, resp);
     }
 
@@ -70,11 +70,11 @@ public class SubjectController extends BaseController {
         boolean result = repo.changeSubjectsParametersIfExists(s);
         String msg;
         if (result) {
-            msg = "Зарплата " + s + " успешно изменена";
-            log.info("Зарплата {} успешно изменена", s);
+            msg = "Subject " + s + " успешно изменён";
+            log.info("Subject {} успешно изменён", s);
         } else {
-            msg = "Не удалось изменить зарплату " + s;
-            log.info("Не удалось изменить зарплату {}", s);
+            msg = "Не удалось изменить Subject " + s;
+            log.info("Не удалось изменить Subject {}", s);
         }
         refreshSubjectsListAndForward(msg, req, resp);
     }

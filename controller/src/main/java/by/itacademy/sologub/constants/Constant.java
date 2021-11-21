@@ -55,10 +55,13 @@ public final class Constant {
     public static final String CONTENT_TYPE = "text/html;charset=UTF-8";
 
     //bean attributes
-    public static final String OBJECTS_LIST = "objectsList";
+//    public static final String OBJECTS_LIST = "objectsList";
     public static final String OBJECTS_SET = "objectsSet";
+    public static final String SUBJECTS_SET = "subjectsSet";
+    public static final String PERSONS_SET = "personsSet";
     public static final String CURRENT_GROUP_OBJECTS_SET = "currentGroupObjectsSet";
     public static final String GROUP_LIST = "groupList";
+    public static final String GROUP_SET = "groupSet";
     public static final String GROUP_ID = "groupId";
     public static final String SUBJECT_ID = "subjectId";
     public static final String TEACHER_LOGIN = "teacherLogin";

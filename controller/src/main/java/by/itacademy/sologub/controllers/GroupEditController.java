@@ -11,7 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.DESCRIPTION;
 import static by.itacademy.sologub.constants.Attributes.GROUP;
@@ -21,7 +21,7 @@ import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_EDIT_PAGE;
 import static by.itacademy.sologub.constants.Constant.GROUP_EDIT_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.GROUP_ID;
 import static by.itacademy.sologub.constants.Constant.GROUP_REPO;
-import static by.itacademy.sologub.constants.Constant.OBJECTS_LIST;
+import static by.itacademy.sologub.constants.Constant.PERSONS_SET;
 import static by.itacademy.sologub.constants.Constant.TEACHER_LOGIN;
 import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
 
@@ -35,15 +35,15 @@ public class GroupEditController extends BaseController {
 
     private void refreshGroupAndForward(String msg, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         TeacherRepo teacherRepo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        List<Teacher> teacherList = teacherRepo.getTeachersList();
+        Set<Teacher> teacherSet = teacherRepo.getTeachersList();
         Teacher t = getTeacherById(req);
         Group group = getGroupById(req);
 
         req.setAttribute(TEACHER, t);
-        req.setAttribute(OBJECTS_LIST, teacherList);
+        req.setAttribute(PERSONS_SET, teacherSet);
         req.setAttribute(GROUP, group);
 
-        log.debug("Группа {} текущий учитель {} и список всх учителей {}", group, t, teacherList);
+        log.debug("Группа {} текущий учитель {} и set всх учителей {}", group, t, teacherSet);
         forward(ADMIN_GROUP_EDIT_PAGE, msg, req, res);
     }
 

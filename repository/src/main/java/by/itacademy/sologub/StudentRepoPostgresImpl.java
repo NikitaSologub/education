@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.CREDENTIAL_ID_DB_FIELD;
 import static by.itacademy.sologub.constants.Attributes.DATE_OF_BIRTH_DB_FIELD;
@@ -41,8 +41,8 @@ public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo<Student> i
     }
 
     @Override
-    public List<Student> getStudentsList() {
-        return getUsersList();
+    public Set<Student> getStudentsSet() {
+        return getUsersSet();
     }
 
     @Override

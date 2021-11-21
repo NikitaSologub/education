@@ -2,7 +2,7 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.TEACHER;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
@@ -49,8 +49,8 @@ public class TeacherRepoHardcodedImpl extends AbstractUserHardcodedRepo<Teacher>
     }
 
     @Override
-    public List<Teacher> getTeachersList() {
-        return getUserList();
+    public Set<Teacher> getTeachersList() {
+        return getUserSet();
     }
 
     @Override

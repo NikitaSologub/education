@@ -2,7 +2,7 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.STUDENT;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
@@ -49,8 +49,8 @@ public class StudentRepoHardcodedImpl extends AbstractUserHardcodedRepo<Student>
     }
 
     @Override
-    public List<Student> getStudentsList() {
-        return getUserList();
+    public Set<Student> getStudentsSet() {
+        return getUserSet();
     }
 
     @Override

@@ -1,9 +1,9 @@
 package by.itacademy.sologub;
 
-import java.util.List;
+import java.util.Set;
 
 public interface StudentRepo {
-    List<Student> getStudentsList();
+    Set<Student> getStudentsSet();
 
     Student getStudentIfExistsOrGetSpecialValue(String login);
 

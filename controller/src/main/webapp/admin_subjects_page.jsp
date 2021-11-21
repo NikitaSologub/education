@@ -18,7 +18,7 @@
             <td>УДАЛИТЬ</td>
             <td>ИЗМЕНИТЬ</td>
         </tr>
-        <c:forEach var="subject" items="${requestScope.objectsList}">
+        <c:forEach var="subject" items="${requestScope.subjectsSet}">
             <tr>
                 <td><c:out value="${subject.id}"/></td>
                 <td><c:out value="${subject.title}"/></td>

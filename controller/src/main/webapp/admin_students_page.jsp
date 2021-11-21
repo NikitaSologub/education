@@ -24,7 +24,7 @@
             <th>ИЗМЕНИТЬ</th>
             <th>К ОЦЕНКАМ</th>
         </tr>
-        <c:forEach var="student" items="${requestScope.objectsList}">
+        <c:forEach var="student" items="${requestScope.personsSet}">
             <tr>
                 <td><c:out value="${student.credential.login}"/></td>
                 <td><c:out value="${student.credential.password}"/></td>

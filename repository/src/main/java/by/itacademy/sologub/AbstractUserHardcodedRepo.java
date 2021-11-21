@@ -2,9 +2,9 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static by.itacademy.sologub.constants.ConstantObject.LOGIN_NOT_EXISTS;
@@ -28,8 +28,8 @@ public abstract class AbstractUserHardcodedRepo<T extends User> {
 
     protected abstract String getType();
 
-    protected List<T> getUserList() {
-        return new ArrayList<>(users.values());
+    protected Set<T> getUserSet() {
+        return new HashSet<>(users.values());
     }
 
     protected T getUserIfExistsOrGetSpecialValue(String login) {

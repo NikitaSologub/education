@@ -8,8 +8,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.ID_NOT_EXISTS;
@@ -35,8 +35,8 @@ public abstract class AbstractUserPostgresRepo<T extends User> extends AbstractP
 
     protected abstract T getPasswordWrong();
 
-    public List<T> getUsersList() {
-        List<T> users = new ArrayList<>();
+    public Set<T> getUsersSet() {
+        Set<T> users = new HashSet<>();
         ResultSet rs = null;
 
         try (Connection con = pool.getConnection();
@@ -46,22 +46,22 @@ public abstract class AbstractUserPostgresRepo<T extends User> extends AbstractP
 
             users = extractUsers(rs);
         } catch (SQLException e) {
-            log.error("Не удалось извлечь список учителей из базы данных", e);
+            log.error("Не удалось извлечь set учителей из базы данных", e);
         } finally {
             closeResource(rs);
         }
         return users;
     }
 
-    private List<T> extractUsers(ResultSet rs) throws SQLException {
-        List<T> users = new ArrayList<>();
-        log.debug("Создали пустой лист и переходим к извлечению данных");
+    private Set<T> extractUsers(ResultSet rs) throws SQLException {
+        Set<T> users = new HashSet<>();
+        log.debug("Создали пустой set и переходим к извлечению данных");
         while (rs.next()) {
             T u = extractObject(rs);
-            log.debug("Извлекли обьект {} {} добавляем его в список", getRole(), u);
+            log.debug("Извлекли обьект {} {} добавляем его в set", getRole(), u);
             users.add(u);
         }
-        log.debug("Возвращаем список обьектов {}", getRole());
+        log.debug("Возвращаем set обьектов {}", getRole());
         return users;
     }
 
