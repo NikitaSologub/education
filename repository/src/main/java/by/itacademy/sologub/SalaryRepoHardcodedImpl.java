@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -32,14 +33,14 @@ public class SalaryRepoHardcodedImpl implements SalaryRepo {
     }
 
     @Override
-    public List<Salary> getAllSalariesByTeacherId(int teacherId) {
+    public Set<Salary> getAllSalariesByTeacherId(int teacherId) {
         return repo.values().stream()
                 .filter(salary -> salary.getTeacherId() == teacherId)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public List<Salary> getAllSalariesByTeacherIdAfterDate(int teacherId, LocalDate date) {
+    public Set<Salary> getAllSalariesByTeacherIdAfterDate(int teacherId, LocalDate date) {
         if (date == null) {
             log.info("дата = null, возвращаем все значения");
             return getAllSalariesByTeacherId(teacherId);
@@ -47,7 +48,7 @@ public class SalaryRepoHardcodedImpl implements SalaryRepo {
         return repo.values().stream()
                 .filter(salary -> salary.getTeacherId() == teacherId)
                 .filter(salary -> salary.getDate().isAfter(date))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @Override

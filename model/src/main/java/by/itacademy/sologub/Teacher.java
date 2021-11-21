@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 
@@ -18,7 +18,7 @@ import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Teacher extends User {
-    private List<Salary> salaries = new ArrayList<>();
+    private Set<Salary> salaries = new HashSet<>();
 
     public Salary getSalary(int id) {
         return salaries.stream()

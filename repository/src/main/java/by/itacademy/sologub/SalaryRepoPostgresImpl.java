@@ -10,7 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.COINS_AMOUNT_DB_FIELD;
 import static by.itacademy.sologub.constants.Attributes.DATE;
@@ -54,8 +56,8 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> impleme
     }
 
     @Override
-    public List<Salary> getAllSalariesByTeacherId(int teacherId) {
-        List<Salary> salaries = new ArrayList<>();
+    public Set<Salary> getAllSalariesByTeacherId(int teacherId) {
+        Set<Salary> salaries = new HashSet<>();
         ResultSet rs = null;
         try (Connection con = pool.getConnection();
              PreparedStatement st = con.prepareStatement(GET_SALARIES_LIST_BY_TEACHER_ID)) {
@@ -73,8 +75,8 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> impleme
     }
 
     @Override
-    public List<Salary> getAllSalariesByTeacherIdAfterDate(int teacherId, LocalDate date) {
-        List<Salary> salaries = new ArrayList<>();
+    public Set<Salary> getAllSalariesByTeacherIdAfterDate(int teacherId, LocalDate date) {
+        Set<Salary> salaries = new HashSet<>();
         ResultSet rs = null;
         try (Connection con = pool.getConnection();
              PreparedStatement st = con.prepareStatement(GET_SALARIES_LIST_AFTER_DATE_BY_TEACHER_ID)) {
@@ -93,8 +95,8 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> impleme
         return salaries;
     }
 
-    private List<Salary> extractSalaries(ResultSet rs) throws SQLException {
-        List<Salary> salaries = new ArrayList<>();
+    private Set<Salary> extractSalaries(ResultSet rs) throws SQLException {
+        Set<Salary> salaries = new HashSet<>();
         while (rs.next()) {
             salaries.add(extractObject(rs));
         }

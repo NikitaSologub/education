@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.COINS;
 import static by.itacademy.sologub.constants.Attributes.DATE;
@@ -116,7 +116,7 @@ public class SalaryController extends BaseController {
 
     private void doSalariesParameters(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         SalaryRepo repo = (SalaryRepo) getServletContext().getAttribute(SALARY_REPO);
-        List<Salary> salaryList = repo.getAllSalariesByTeacherId(Integer.parseInt(req.getParameter(ID)));
+        Set<Salary> salaryList = repo.getAllSalariesByTeacherId(Integer.parseInt(req.getParameter(ID)));
 
         double average = salaryList.stream()
                 .mapToInt(Salary::getCoins)
@@ -125,7 +125,7 @@ public class SalaryController extends BaseController {
         refreshTeacherAndForward("Средняя зарплата учителя по итогам всех месяцев работы ",req,res);
     }
 
-    String round(double val) {
+    private String round(double val) {
         return String.format("%.2f", val);
     }
 
