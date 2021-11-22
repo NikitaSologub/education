@@ -5,6 +5,7 @@ import by.itacademy.sologub.AdminRepoPostgresImpl;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.CredentialRepoPostgresImpl;
 import by.itacademy.sologub.GroupRepo;
+import by.itacademy.sologub.GroupRepoPostgresImpl;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.SalaryRepoPostgresImpl;
 import by.itacademy.sologub.StudentRepo;
@@ -23,6 +24,7 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
     private static AdminRepoPostgresImpl adminRepo;
     private static SalaryRepoPostgresImpl salaryRepo;
     private static SubjectRepoPostgresImpl subjectRepo;
+    private static GroupRepoPostgresImpl groupRepo;
 
     private ModelRepoFactoryPostgresDbImpl(ComboPooledDataSource pool) {
         credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
@@ -31,6 +33,7 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
         adminRepo = AdminRepoPostgresImpl.getInstance(pool, credentialRepo);
         salaryRepo = SalaryRepoPostgresImpl.getInstance(pool);
         subjectRepo = SubjectRepoPostgresImpl.getInstance(pool);
+        groupRepo = GroupRepoPostgresImpl.getInstance(pool,teacherRepo);
     }
 
     public static ModelRepoFactory getInstance(ComboPooledDataSource pool) {
@@ -76,6 +79,6 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
 
     @Override
     public GroupRepo getGroupRepo() {
-        return null;//todo - временная заглушка
+        return groupRepo;
     }
 }

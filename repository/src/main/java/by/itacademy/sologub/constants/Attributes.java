@@ -19,6 +19,7 @@ public final class Attributes {
     public static final String COINS = "coins";
     public static final String TITLE = "title";
     public static final String DESCRIPTION = "description";
+    public static final String TEACHER_ID = "teacher";
 
     // db fields
     public static final String DATE_OF_BIRTH_DB_FIELD = "date_of_birth";

@@ -17,7 +17,7 @@ import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.SqlQuery.DELETE_SUBJECT_BY_ID;
 import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECTS_LIST;
 import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECT_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.SET_SUBJECT_BY_ID;
+import static by.itacademy.sologub.constants.SqlQuery.SET_SUBJECT;
 import static by.itacademy.sologub.constants.SqlQuery.UPDATE_SUBJECT_BY_ID;
 
 @Slf4j
@@ -78,7 +78,7 @@ public class SubjectRepoPostgresImpl extends AbstractPostgresRepo<Subject> imple
 
     @Override
     public boolean putSubjectIfNotExists(Subject subject) {
-        try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(SET_SUBJECT_BY_ID)) {
+        try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(SET_SUBJECT)) {
             st.setString(1, subject.getTitle());
 
             if (st.executeUpdate() > 0) {
