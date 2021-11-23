@@ -49,8 +49,17 @@ public class GroupSubjectsController extends BaseController {
 
     private Group getGroupById(HttpServletRequest req) {
         GroupRepo groupRepo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
+        SubjectRepo subjectRepo = (SubjectRepo) getServletContext().getAttribute(SUBJECT_REPO);
+
         int groupId = Integer.parseInt(req.getParameter(GROUP_ID));
-        return groupRepo.getGroupById(groupId);
+        Group g = groupRepo.getGroupById(groupId);
+        log.debug("Вернули группу по groupId={} c параметрами {}", groupId, g);
+
+        Set<Subject> subjects = subjectRepo.getSubjectsByGroupId(groupId);
+        log.debug("Вернули Set subjects по groupId={} c параметрами {}", groupId, subjects);
+
+        g.setSubjects(subjects);
+        return g;
     }
 
     private Subject getSubjectById(HttpServletRequest req) {

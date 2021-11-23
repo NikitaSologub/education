@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.SUBJECT;
@@ -16,6 +18,7 @@ import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.SqlQuery.DELETE_SUBJECT_BY_ID;
 import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECTS_LIST;
+import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECTS_LIST_BY_GROUP_ID;
 import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECT_BY_ID;
 import static by.itacademy.sologub.constants.SqlQuery.SET_SUBJECT;
 import static by.itacademy.sologub.constants.SqlQuery.UPDATE_SUBJECT_BY_ID;
@@ -72,8 +75,27 @@ public class SubjectRepoPostgresImpl extends AbstractPostgresRepo<Subject> imple
     }
 
     @Override
+    public Set<Subject> getSubjectsByGroupId(int groupId) {
+        List<Subject> subjects = new ArrayList<>();
+        ResultSet set = null;
+        try (Connection con = pool.getConnection();
+             PreparedStatement st = con.prepareStatement(GET_SUBJECTS_LIST_BY_GROUP_ID)) {
+            st.setInt(1, groupId);
+            set = st.executeQuery();
+
+            subjects = extractObjects(set);
+            log.info("Извлекли все Subjects из БД по groupId={}", groupId);
+        } catch (SQLException e) {
+            log.error("Не удалось совершить операцию извлечения Subject set по groupId=" + groupId, e);
+        } finally {
+            closeResource(set);
+        }
+        return new HashSet<>(subjects);
+    }
+
+    @Override
     public Subject getSubjectIfExistsOrGetSpecialValue(int id) {
-        return (Subject) get(id, GET_SUBJECT_BY_ID, SUBJECT, SUBJECT_NOT_EXISTS);
+        return get(id, GET_SUBJECT_BY_ID, SUBJECT, SUBJECT_NOT_EXISTS);
     }
 
     @Override

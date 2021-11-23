@@ -83,8 +83,17 @@ public class GroupStudentsController extends BaseController {
 
     private Group getGroupById(HttpServletRequest req) {
         GroupRepo groupRepo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
+        StudentRepo studentRepo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
+
         int groupId = Integer.parseInt(req.getParameter(GROUP_ID));
-        return groupRepo.getGroupById(groupId);
+        Group g = groupRepo.getGroupById(groupId);
+        log.debug("Вернули группу по groupId={} c параметрами {}", groupId, g);
+
+        Set<Student> students = studentRepo.getStudentsByGroupId(groupId);
+        log.debug("Вернули Set students по groupId={} c параметрами {}", groupId, students);
+
+        g.setStudents(students);
+        return g;
     }
 
     private Student getStudentByLogin(HttpServletRequest req) {

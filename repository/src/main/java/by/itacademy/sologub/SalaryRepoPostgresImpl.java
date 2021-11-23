@@ -9,9 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.COINS_AMOUNT_DB_FIELD;
@@ -105,7 +103,7 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> impleme
 
     @Override
     public Salary getSalary(int id) {
-        return (Salary) get(id, GET_SALARY_BY_ID, SALARY, SALARY_NOT_EXISTS);
+        return get(id, GET_SALARY_BY_ID, SALARY, SALARY_NOT_EXISTS);
     }
 
     @Override

@@ -63,19 +63,22 @@ public class GroupEditController extends BaseController {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         GroupRepo groupRepo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
         String newTitle = req.getParameter(TITLE);
+        log.debug("Новое значение title={}", newTitle);
         String newDescription = req.getParameter(DESCRIPTION);
+        log.debug("Новое значение description={}", newDescription);
 
-        Group g = getGroupById(req);
-        g.setTitle(newTitle);
-        g.setDescription(newDescription);
+        Group newGr = getGroupById(req);
+        newGr.setTitle(newTitle);
+        newGr.setDescription(newDescription);
+        log.debug("Новое значение group={}", newGr);
 
         String msg;
-        if (groupRepo.changeGroupsParametersIfExists(g)) {
-            msg = "Параметры " + g.getTitle() + " и " + g.getDescription() + " заданы как новые для группы";
-            log.debug("Параметры группы {} изменены", g);
+        if (groupRepo.changeGroupsParametersIfExists(newGr)) {
+            msg = "Параметры " + newGr.getTitle() + " и " + newGr.getDescription() + " заданы как новые для группы";
+            log.debug("Параметры группы {} изменены", newGr);
         } else {
-            msg = "Новые параметры " + g.getTitle() + " и " + g.getDescription() + " не изменены";
-            log.debug("Параметры группы {} не изменены", g);
+            msg = "Новые параметры " + newGr.getTitle() + " и " + newGr.getDescription() + " не изменены";
+            log.debug("Параметры группы {} не изменены", newGr);
         }
         refreshGroupAndForward(msg, req, res);
 
@@ -111,7 +114,7 @@ public class GroupEditController extends BaseController {
         String login;
         try {
             login = oldT.getCredential().getLogin();
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             login = "ПУСТО";
         }
         group.setTeacher(null);
@@ -121,7 +124,7 @@ public class GroupEditController extends BaseController {
             msg = "Учитель " + login + " снят с должности руководителя группы";
             log.debug("Параметры группы изменены. Учитель {} снят с должности руководителя группы", oldT);
         } else {
-            msg = "Не получилось снять " + login + "новым руководителем";
+            msg = "Не получилось снять " + login + " с поста руководителя группы";
             log.debug("Параметры группы не изменены. Новый учитель {} не назначен руководителем", oldT);
         }
         refreshGroupAndForward(msg, req, res);

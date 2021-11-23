@@ -76,7 +76,7 @@ CREATE TABLE public."group"
     id          int4    NOT NULL GENERATED ALWAYS AS IDENTITY,
     title       varchar NOT NULL,
     teacher_id  int4    NULL,
-    description varchar NULL,
+    description varchar NOT NULL,
     CONSTRAINT group_pk PRIMARY KEY (id),
     CONSTRAINT group_un UNIQUE (title)
 );

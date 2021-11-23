@@ -1,9 +1,12 @@
 package by.itacademy.sologub;
 
 import java.util.List;
+import java.util.Set;
 
 public interface SubjectRepo {
     List<Subject> getSubjectsList();
+
+    Set<Subject> getSubjectsByGroupId(int groupId);
 
     Subject getSubjectIfExistsOrGetSpecialValue(int id);
 

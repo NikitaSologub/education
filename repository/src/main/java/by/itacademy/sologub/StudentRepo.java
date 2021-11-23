@@ -5,6 +5,8 @@ import java.util.Set;
 public interface StudentRepo {
     Set<Student> getStudentsSet();
 
+    Set<Student> getStudentsByGroupId(int groupId);
+
     Student getStudentIfExistsOrGetSpecialValue(String login);
 
     Student getStudentIfExistsOrGetSpecialValue(String login,String password);

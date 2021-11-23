@@ -27,4 +27,8 @@ public final class Attributes {
     public static final String STUDENT_ID_DB_FIELD = "student_id";
     public static final String CREDENTIAL_ID_DB_FIELD = "credential_id";
     public static final String COINS_AMOUNT_DB_FIELD = "coins_amount";
+
+    //repository actions
+    public static final String INCLUDE = "INCLUDE";
+    public static final String EXCLUDE = "EXCLUDE";
 }

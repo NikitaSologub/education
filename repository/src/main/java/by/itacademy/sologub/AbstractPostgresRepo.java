@@ -43,23 +43,32 @@ public abstract class AbstractPostgresRepo<T extends AbstractEntity> {
     }
 
     protected boolean delete(int id, String sql, String item) {
-        try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
+        boolean result = false;
+        Connection con = null;
+        PreparedStatement st;
+        try {
+            con = pool.getConnection();
+            st = con.prepareStatement(sql);
             st.setInt(1, id);
+            con.setAutoCommit(false);
 
             if (st.executeUpdate() > 0) {
-                log.info("Удалили " + item + " в БД по id={}", id);
-                return true;
+                result = true;
+                con.commit();
+                log.debug("удалили {} из БД по по id)", item);
             } else {
-                log.info("Не удалось удалить " + item + " в БД по id={}, такого id нет в базе", id);
+                con.rollback();
+                log.debug("Не удалось удалить {} из БД по по id", item);
             }
         } catch (SQLException e) {
-            log.error("Не удалось совершить операцию удаления " + item + " по id", e);
+            rollback(con);
+            log.error("Не удалось совершить операцию удаления {} из БД по id", item, e);
         }
-        return false;
+        return result;
     }
 
-    protected Object get(int id, String sql, String item, Object notExists) {
-        Object obj = notExists;
+    protected T get(int id, String sql, String item, T notExists) {
+        T obj = notExists;
         ResultSet rs = null;
         try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(sql)) {
             st.setInt(1, id);

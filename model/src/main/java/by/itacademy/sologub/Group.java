@@ -7,11 +7,12 @@ import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+//@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Group extends AbstractEntity {
     private String title;
@@ -48,5 +49,19 @@ public class Group extends AbstractEntity {
     public Group withSubjects(Subject ... arr){
         subjects.addAll(Arrays.asList(arr));
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Group)) return false;
+        if (!super.equals(o)) return false;
+        Group group = (Group) o;
+        return getTitle().equals(group.getTitle()) && Objects.equals(getTeacher(), group.getTeacher()) && getDescription().equals(group.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getTitle(), getTeacher(), getDescription());
     }
 }

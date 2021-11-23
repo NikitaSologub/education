@@ -4,8 +4,11 @@ import by.itacademy.sologub.role.Role;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.CREDENTIAL_ID_DB_FIELD;
@@ -18,6 +21,7 @@ import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
+import static by.itacademy.sologub.constants.SqlQuery.GET_STUDENT_SET_BY_GROUP_ID;
 
 @Slf4j
 public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo<Student> implements StudentRepo {
@@ -43,6 +47,27 @@ public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo<Student> i
     @Override
     public Set<Student> getStudentsSet() {
         return getUsersSet();
+    }
+
+    @Override
+    public Set<Student> getStudentsByGroupId(int groupId) {
+        Set<Student> students = new HashSet<>();
+        ResultSet set = null;
+        try (Connection con = pool.getConnection();
+             PreparedStatement st = con.prepareStatement(GET_STUDENT_SET_BY_GROUP_ID)) {
+            st.setInt(1, groupId);
+            set = st.executeQuery();
+
+            while (set.next()){
+                students.add(extractObject(set));
+            }
+            log.info("Извлекли все Subjects из БДпо groupId={}", groupId);
+        } catch (SQLException e) {
+            log.error("Не удалось совершить операцию извлечения Subject set по groupId=" + groupId, e);
+        } finally {
+            closeResource(set);
+        }
+        return students;
     }
 
     @Override

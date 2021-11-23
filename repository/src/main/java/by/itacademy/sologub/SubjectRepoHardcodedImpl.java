@@ -3,10 +3,13 @@ package by.itacademy.sologub;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 
 @Slf4j
@@ -14,16 +17,18 @@ public class SubjectRepoHardcodedImpl implements SubjectRepo {
     static int CURRENT_MAX_SUBJECT_ID = 263;
     private static volatile SubjectRepoHardcodedImpl instance;
     private static volatile Map<Integer, Subject> subjects;
+    private static volatile GroupRepoHardcodedImpl groupRepo;
 
-    private SubjectRepoHardcodedImpl() {
+    private SubjectRepoHardcodedImpl(GroupRepoHardcodedImpl groupRepo) {
         subjects = new ConcurrentHashMap<>();
+        SubjectRepoHardcodedImpl.groupRepo = groupRepo;
     }
 
-    public static SubjectRepoHardcodedImpl getInstance() {
+    public static SubjectRepoHardcodedImpl getInstance(GroupRepoHardcodedImpl groupRepo) {
         if (instance == null) {
             synchronized (SubjectRepoHardcodedImpl.class) {
                 if (instance == null) {
-                    instance = new SubjectRepoHardcodedImpl();
+                    instance = new SubjectRepoHardcodedImpl(groupRepo);
                 }
             }
         }
@@ -33,6 +38,18 @@ public class SubjectRepoHardcodedImpl implements SubjectRepo {
     @Override
     public List<Subject> getSubjectsList() {
         return new ArrayList<>(subjects.values());
+    }
+
+    @Override
+    public Set<Subject> getSubjectsByGroupId(int groupId) {
+        Group g = groupRepo.getGroupById(groupId);
+        if (GROUP_NOT_EXISTS == g) {
+            log.debug("группа не существует - возвращаем пустой SET");
+            return new HashSet<>();
+        } else {
+            log.debug("возвращаем Subject SET группы с groupId={}", groupId);
+            return g.getSubjects();
+        }
     }
 
     @Override
