@@ -234,10 +234,6 @@ public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implement
         return false;
     }
 
-//    private boolean isExistsInDb(AbstractEntity e) {
-//        return e != null && e.getId() > 0;
-//    }
-
     private boolean isNotExistsInDb(AbstractEntity e) {
         return (e == null || e.getId() <= 0);
     }

@@ -10,8 +10,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,16 +17,6 @@ import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
 @ToString(callSuper = true)
 public class Student extends User {
     private Set<Mark> marks = new HashSet<>();
-
-    public Mark getMark(int id) {
-        return marks.stream()
-                .filter(mark -> mark.getId() == id)
-                .findAny().orElse(MARK_NOT_EXISTS);
-    }
-
-    public void setMark(Mark mark) {
-        marks.add(mark);
-    }
 
     public Student withId(int id){
         setId(id);

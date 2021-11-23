@@ -56,7 +56,7 @@
                 </form>
                 </td>
                 <td>
-                    к оценкам
+                    к оценкам (или к группам, я еще не решил)
 <%--                    <form action="MarkController" method="get">--%>
 <%--                        <input name="login" type="hidden" value="${student.credential.login}">--%>
 <%--                        <button type="submit">На страницу оценок</button>--%>

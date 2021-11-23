@@ -65,9 +65,7 @@ public class GroupController extends BaseController {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        Group g = extractGroupOnlyTitleAndDescription(req);
-        //todo - я буду редактировать группу в другом месте ( этот метод как doGet() )
-        refreshGroupsAndForward("", req, resp);
+        refreshGroupsAndForward("", req, resp);//я буду редактировать группу в другом месте
     }
 
     @Override

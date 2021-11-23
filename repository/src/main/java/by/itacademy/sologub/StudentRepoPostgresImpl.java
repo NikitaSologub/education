@@ -58,7 +58,7 @@ public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo<Student> i
             st.setInt(1, groupId);
             set = st.executeQuery();
 
-            while (set.next()){
+            while (set.next()) {
                 students.add(extractObject(set));
             }
             log.info("Извлекли все Subjects из БДпо groupId={}", groupId);
@@ -77,7 +77,7 @@ public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo<Student> i
 
     @Override
     public Student getStudentIfExistsOrGetSpecialValue(String login, String password) {
-        return getUserIfExistsOrGetSpecialValue(login,password);
+        return getUserIfExistsOrGetSpecialValue(login, password);
     }
 
     @Override

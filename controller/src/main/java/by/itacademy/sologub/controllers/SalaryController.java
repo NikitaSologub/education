@@ -42,7 +42,6 @@ public class SalaryController extends BaseController {
         Salary salary = extractSalaryFromFormWithoutId(req);
         int teacherId = Integer.parseInt(req.getParameter(TEACHER_ID));
         boolean result = repo.putSalaryToTeacher(salary, teacherId);
-//        boolean result = repo.putSalary(salary);
 
         String msg;
         if (result) {
@@ -78,7 +77,6 @@ public class SalaryController extends BaseController {
         Salary salary = new Salary()
                 .withCoins(Integer.parseInt(req.getParameter(COINS)))
                 .withDate(LocalDate.parse(req.getParameter(DATE)));
-//                .withTeacherId(Integer.parseInt(req.getParameter(TEACHER_ID)));//todo просто убираем
         log.debug("Из запроса извлечён обьект зп (без id) {}", salary);
         return salary;
     }

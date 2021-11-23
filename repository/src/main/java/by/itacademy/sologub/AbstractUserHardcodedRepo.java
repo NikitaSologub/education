@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static by.itacademy.sologub.constants.ConstantObject.CREDENTIAL_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.LOGIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
 
@@ -34,16 +33,7 @@ public abstract class AbstractUserHardcodedRepo<T extends User> {
     }
 
     protected T getUserIfExistsOrGetSpecialValue(int id) {
-        return users.getOrDefault(id,getNotExists());//TODO - не уверен что это будет работать
-//        Credential cr = credentialRepo.getCredentialIfExistsOrGetSpecialValue(id);
-//        if (CREDENTIAL_NOT_EXISTS == cr) {
-//            log.info("Логина не существует, возвращаем специальный обьект {}", CREDENTIAL_NOT_EXISTS);
-//            return getNotExists();
-//        } else {
-//            log.info("Логин существует, патаемся вернуть " + getType());
-//            return users.values().stream()
-//                    .filter(s -> s.getCredential().getLogin().equals(login))
-//                    .findAny().orElse(getNotExists());
+        return users.getOrDefault(id,getNotExists());
     }
 
     protected T getUserIfExistsOrGetSpecialValue(String login) {

@@ -58,15 +58,6 @@ public class GroupRepoHardcodedImpl implements GroupRepo {
     public List<Group> getGroupsByStudent(Student student) {
         int studentId = student.getId();
         log.debug("Возвращаем все группы по studentId={}", studentId);
-//        List<Group> sg = new ArrayList<>();//todo - метод если лямбда не заработает
-//        for (Group g : getGroups()) {
-//            Set<Student> studentSet = g.getStudents();
-//            boolean isHere = studentSet.stream()
-//                    .anyMatch(s -> s.getId() == studentId);
-//            if (isHere) {
-//                sg.add(g);
-//            }
-//        }
         return groups.values().stream()
                 .filter(g -> g.getStudents().stream()
                         .anyMatch(st -> st.getId() == studentId))

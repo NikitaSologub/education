@@ -21,7 +21,6 @@ import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
 import static by.itacademy.sologub.constants.SqlQuery.DELETE_ALL_SALARIES_BY_TEACHER_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_USER_BY_LOGIN;
 
 @Slf4j
 public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> implements TeacherRepo {
@@ -90,7 +89,7 @@ public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> i
     }
 
     @Override
-    public Set<Teacher> getTeachersList() {
+    public Set<Teacher> getTeachersSet() {
         return getUsersSet();
     }
 

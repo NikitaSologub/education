@@ -49,7 +49,7 @@ public class TeacherRepoHardcodedImpl extends AbstractUserHardcodedRepo<Teacher>
     }
 
     @Override
-    public Set<Teacher> getTeachersList() {
+    public Set<Teacher> getTeachersSet() {
         return getUserSet();
     }
 

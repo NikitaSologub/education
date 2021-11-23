@@ -10,8 +10,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,16 +17,6 @@ import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 @ToString(callSuper = true)
 public class Teacher extends User {
     private Set<Salary> salaries = new HashSet<>();
-
-    public Salary getSalary(int id) {
-        return salaries.stream()
-                .filter(salary -> salary.getId() == id)
-                .findAny().orElse(SALARY_NOT_EXISTS);
-    }
-
-    public void setSalary(Salary salary) {
-        salaries.add(salary);
-    }
 
     public Teacher withId(int id){
         setId(id);

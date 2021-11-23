@@ -39,7 +39,7 @@ public class TeacherController extends AbstractPersonController<Teacher> {
     @Override
     protected Set<Teacher> getSet() {
         TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        return repo.getTeachersList();
+        return repo.getTeachersSet();
     }
 
     @Override

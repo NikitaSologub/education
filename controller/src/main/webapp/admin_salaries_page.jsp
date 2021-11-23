@@ -40,9 +40,6 @@ ${requestScope.teacher.patronymic} | ${requestScope.teacher.dateOfBirth}
                 <td><c:out value="${salary.id}"/></td>
                 <td><c:out value="${salary.coins}"/></td>
                 <td><c:out value="${salary.date}"/></td>
-<%--                эту строку будем посылать в контроллер на другой метод интерфейса --%>
-<%--                где будем делать все с зп по salary_id--%>
-<%--                а добавлять зп будем по teacher_id--%>
                 <td><c:out value="${requestScope.teacher.id}"/></td>
                 <td>
                     <form action="SalaryController" method="post">

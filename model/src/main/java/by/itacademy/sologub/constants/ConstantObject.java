@@ -81,12 +81,10 @@ public final class ConstantObject {
         SALARY_NOT_EXISTS.setId(-1);
         SALARY_NOT_EXISTS.setCoins(0);
         SALARY_NOT_EXISTS.setDate(LocalDate.now());
-//        SALARY_NOT_EXISTS.setTeacherId(-100);
 
         MARK_NOT_EXISTS = new Mark();
         MARK_NOT_EXISTS.setId(-1);
         MARK_NOT_EXISTS.setPoint(-100);
-        MARK_NOT_EXISTS.setStudentId(-100);
 
         SUBJECT_NOT_EXISTS = new Subject();
         SUBJECT_NOT_EXISTS.setId(-1);

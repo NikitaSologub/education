@@ -35,7 +35,7 @@ public class GroupEditController extends BaseController {
 
     private void refreshGroupAndForward(String msg, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         TeacherRepo teacherRepo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        Set<Teacher> teacherSet = teacherRepo.getTeachersList();
+        Set<Teacher> teacherSet = teacherRepo.getTeachersSet();
         Teacher t = getTeacherById(req);
         Group group = getGroupById(req);
 
@@ -81,16 +81,13 @@ public class GroupEditController extends BaseController {
             log.debug("Параметры группы {} не изменены", newGr);
         }
         refreshGroupAndForward(msg, req, res);
-
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         GroupRepo groupRepo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
-
         Group group = getGroupById(req);
         Teacher newT = getTeacherById(req);
-
         group.setTeacher(newT);
 
         String msg;
@@ -107,10 +104,8 @@ public class GroupEditController extends BaseController {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         GroupRepo groupRepo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
-
         Group group = getGroupById(req);
         Teacher oldT = group.getTeacher();
-
         String login;
         try {
             login = oldT.getCredential().getLogin();

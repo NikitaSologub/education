@@ -35,24 +35,18 @@ public final class SqlQuery {
     public static final String GET_STUDENT_SET_BY_GROUP_ID = "select p.id, p.firstname, p.lastname, p.patronymic, " +
             "p.date_of_birth, p.credential_id, c.login, c.password FROM person p JOIN credential c ON p.credential_id=c.id" +
             " JOIN group_student gs ON p.id=gs.student_id WHERE gs.group_id=?";
+
     //salary postgres sql
     public static final String GET_SALARIES_LIST_BY_TEACHER_ID = "SELECT id,coins_amount,date FROM salary WHERE teacher_id=?;";
-    public static final String GET_SALARIES_LIST_BY_TEACHER_ID_OLD = "SELECT id, coins_amount, date, teacher_id " +
-            "FROM salary WHERE teacher_id=?;";
     public static final String GET_SALARIES_LIST_AFTER_DATE_BY_TEACHER_ID =
             "SELECT id, coins_amount, date FROM salary WHERE teacher_id=? AND date>?;";
-    public static final String GET_SALARIES_LIST_AFTER_DATE_BY_TEACHER_ID_OLD = "SELECT id, coins_amount, date, teacher_id" +
-            " FROM salary WHERE teacher_id=? AND date>?;";
     public static final String GET_SALARY_BY_ID = "SELECT id, coins_amount, date FROM salary WHERE id=?;";
-    public static final String GET_SALARY_BY_ID_OLD = "SELECT id, coins_amount, date, teacher_id FROM salary WHERE id=?;";
     public static final String SET_SALARY_BY_TEACHER_ID_RETURNING_ID =
             "INSERT INTO salary (coins_amount,date,teacher_id) VALUES(?,?,?) WHERE teacher_id=? RETURNING id;";
-    public static final String SET_SALARY_BY_TEACHER_ID =
-            "INSERT INTO salary (coins_amount,date,teacher_id) VALUES(?,?,?);";
+    public static final String SET_SALARY_BY_TEACHER_ID = "INSERT INTO salary (coins_amount,date,teacher_id) VALUES(?,?,?);";
     public static final String DELETE_SALARY_BY_ID = "DELETE FROM salary WHERE id=?;";
     public static final String DELETE_ALL_SALARIES_BY_TEACHER_ID = "DELETE FROM salary WHERE teacher_id=?;";
     public static final String UPDATE_SALARY_BY_ID = "UPDATE salary SET coins_amount=?,date=? WHERE id=?;";
-    public static final String UPDATE_SALARY_BY_ID_OLD = "UPDATE salary SET coins_amount=?,date=?,teacher_id=? WHERE id=?;";
 
     //subject postgres sql
     public static final String DELETE_SUBJECT_BY_ID = "DELETE FROM subject WHERE id=?;";
