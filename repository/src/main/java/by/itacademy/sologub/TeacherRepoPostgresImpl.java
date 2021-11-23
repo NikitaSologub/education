@@ -4,6 +4,8 @@ import by.itacademy.sologub.role.Role;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
@@ -18,6 +20,8 @@ import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
+import static by.itacademy.sologub.constants.SqlQuery.DELETE_ALL_SALARIES_BY_TEACHER_ID;
+import static by.itacademy.sologub.constants.SqlQuery.GET_USER_BY_LOGIN;
 
 @Slf4j
 public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> implements TeacherRepo {
@@ -63,7 +67,21 @@ public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> i
 
     @Override
     public boolean deleteTeacher(Teacher teacher) {
-        return deleteUser(teacher);
+        boolean isDeleted = deleteUser(teacher);
+        if (isDeleted) {
+            log.debug("Учитель по id={} уделён. Теперь удалим все его зарплаты", teacher.getId());
+
+            try (Connection con = pool.getConnection();
+                 PreparedStatement ps = con.prepareStatement(DELETE_ALL_SALARIES_BY_TEACHER_ID)) {
+                ps.setInt(1, teacher.getId());
+
+                int num = ps.executeUpdate();
+                log.debug("По teacherId={} было удалено salary в кол-ве {}", teacher.getId(), num);
+            } catch (SQLException e) {
+                log.error("Не удалось извлечь " + getRole() + " из базы данных", e);
+            }
+        }
+        return isDeleted;
     }
 
     @Override
@@ -74,6 +92,11 @@ public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> i
     @Override
     public Set<Teacher> getTeachersList() {
         return getUsersSet();
+    }
+
+    @Override
+    public Teacher getTeacherIfExistsOrGetSpecialValue(int teacherId) {
+        return getUserIfExistsOrGetSpecialValue(teacherId);
     }
 
     @Override//todo - вынести метод ниже

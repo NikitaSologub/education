@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @ToString(callSuper = true)
 public class Salary extends AbstractEntity {
     private int coins;
-    private int teacherId;
+//    private int teacherId;
     private LocalDate date;
 
     public Salary withId(int id) {
@@ -28,10 +28,10 @@ public class Salary extends AbstractEntity {
         return this;
     }
 
-    public Salary withTeacherId(int teacherId) {
-        setTeacherId(teacherId);
-        return this;
-    }
+//    public Salary withTeacherId(int teacherId) {
+//        setTeacherId(teacherId);
+//        return this;
+//    }
 
     public Salary withDate(LocalDate date) {
         setDate(date);

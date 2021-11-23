@@ -16,6 +16,7 @@ import static by.itacademy.sologub.constants.Attributes.ID_NOT_EXISTS;
 import static by.itacademy.sologub.constants.SqlQuery.DELETE_CREDENTIAL_BY_ID;
 import static by.itacademy.sologub.constants.SqlQuery.DELETE_USER_BY_CREDENTIAL_ID;
 import static by.itacademy.sologub.constants.SqlQuery.GET_USERS_LIST;
+import static by.itacademy.sologub.constants.SqlQuery.GET_USER_BY_ID;
 import static by.itacademy.sologub.constants.SqlQuery.GET_USER_BY_LOGIN;
 import static by.itacademy.sologub.constants.SqlQuery.INSERT_USER;
 import static by.itacademy.sologub.constants.SqlQuery.SET_CREDENTIAL_AND_GET_ID;
@@ -71,6 +72,25 @@ public abstract class AbstractUserPostgresRepo<T extends User> extends AbstractP
 
         try (Connection con = pool.getConnection(); PreparedStatement ps = con.prepareStatement(GET_USER_BY_LOGIN)) {
             ps.setString(1, login);
+            ps.setString(2, getRole());
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = extractObject(rs);
+            }
+        } catch (SQLException e) {
+            log.error("Не удалось извлечь " + getRole() + " из базы данных", e);
+        } finally {
+            closeResource(rs);
+        }
+        return user;
+    }
+
+    protected T getUserIfExistsOrGetSpecialValue(int id) {
+        ResultSet rs = null;
+        T user = getNotExists();
+
+        try (Connection con = pool.getConnection(); PreparedStatement ps = con.prepareStatement(GET_USER_BY_ID)) {
+            ps.setInt(1, id);
             ps.setString(2, getRole());
             rs = ps.executeQuery();
             if (rs.next()) {

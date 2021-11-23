@@ -38,8 +38,8 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> impleme
         return new Salary()
                 .withId(rs.getInt(ID))
                 .withCoins(rs.getInt(COINS_AMOUNT_DB_FIELD))
-                .withDate(rs.getDate(DATE).toLocalDate())
-                .withTeacherId(rs.getInt(TEACHER_ID_DB_FIELD));
+                .withDate(rs.getDate(DATE).toLocalDate());
+//                .withTeacherId(rs.getInt(TEACHER_ID_DB_FIELD));//todo - убрал тут
     }
 
     public static SalaryRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
@@ -106,9 +106,29 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> impleme
         return get(id, GET_SALARY_BY_ID, SALARY, SALARY_NOT_EXISTS);
     }
 
+//    @Override
+//    public boolean putSalary(Salary salary) {//todo - менять метод интерфейса
+//        throw new IllegalStateException("Этот метод удалить потом вообще");
+//        int teacherId = salary.getTeacherId();
+//        try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(SET_SALARY_BY_TEACHER_ID)) {
+//            st.setInt(1, salary.getCoins());
+//            st.setDate(2, Date.valueOf(salary.getDate()));
+//            st.setInt(3, teacherId);
+//
+//            if (st.executeUpdate() > 0) {
+//                log.info("Добавили Salary в БД по teacher_id={}", teacherId);
+//                return true;
+//            } else {
+//                log.info("Не удалось добавить Salary в БД по teacher_id={}, такого id нет в базе", teacherId);
+//            }
+//        } catch (SQLException e) {
+//            log.error("Не удалось совершить операцию добавления зарплаты по id учителя", e);
+//        }
+//        return false;
+//    }
+
     @Override
-    public boolean putSalary(Salary salary) {
-        int teacherId = salary.getTeacherId();
+    public boolean putSalaryToTeacher(Salary salary, int teacherId) {
         try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(SET_SALARY_BY_TEACHER_ID)) {
             st.setInt(1, salary.getCoins());
             st.setDate(2, Date.valueOf(salary.getDate()));
@@ -131,8 +151,8 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> impleme
         try (Connection con = pool.getConnection(); PreparedStatement st = con.prepareStatement(UPDATE_SALARY_BY_ID)) {
             st.setInt(1, newS.getCoins());
             st.setDate(2, Date.valueOf(newS.getDate()));
-            st.setInt(3, newS.getTeacherId());
-            st.setInt(4, newS.getId());
+//            st.setInt(3, newS.getTeacherId());//todo - тут просто убираем поле и меняем sql UPDATE
+            st.setInt(3, newS.getId()); // поменяли, тут было 4 раньше
 
             if (st.executeUpdate() > 0) {
                 log.info("Обновили Salary в БД по id={}", newS.getId());

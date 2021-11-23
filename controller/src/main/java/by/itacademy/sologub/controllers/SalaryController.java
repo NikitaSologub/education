@@ -40,7 +40,9 @@ public class SalaryController extends BaseController {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SalaryRepo repo = (SalaryRepo) getServletContext().getAttribute(SALARY_REPO);
         Salary salary = extractSalaryFromFormWithoutId(req);
-        boolean result = repo.putSalary(salary);
+        int teacherId = Integer.parseInt(req.getParameter(TEACHER_ID));
+        boolean result = repo.putSalaryToTeacher(salary, teacherId);
+//        boolean result = repo.putSalary(salary);
 
         String msg;
         if (result) {
@@ -75,8 +77,8 @@ public class SalaryController extends BaseController {
     Salary extractSalaryFromFormWithoutId(HttpServletRequest req) {
         Salary salary = new Salary()
                 .withCoins(Integer.parseInt(req.getParameter(COINS)))
-                .withDate(LocalDate.parse(req.getParameter(DATE)))
-                .withTeacherId(Integer.parseInt(req.getParameter(TEACHER_ID)));
+                .withDate(LocalDate.parse(req.getParameter(DATE)));
+//                .withTeacherId(Integer.parseInt(req.getParameter(TEACHER_ID)));//todo просто убираем
         log.debug("Из запроса извлечён обьект зп (без id) {}", salary);
         return salary;
     }
@@ -121,8 +123,8 @@ public class SalaryController extends BaseController {
         double average = salaryList.stream()
                 .mapToInt(Salary::getCoins)
                 .average().orElse(0.0);
-        req.setAttribute(AVERAGE, round(average/100));
-        refreshTeacherAndForward("Средняя зарплата учителя по итогам всех месяцев работы ",req,res);
+        req.setAttribute(AVERAGE, round(average / 100));
+        refreshTeacherAndForward("Средняя зарплата учителя по итогам всех месяцев работы ", req, res);
     }
 
     private String round(double val) {

@@ -10,7 +10,9 @@ public interface SalaryRepo {
 
     Salary getSalary(int id);
 
-    boolean putSalary(Salary salary);
+//    boolean putSalary(Salary salary);//todo - менять метод интерфейса
+
+    boolean putSalaryToTeacher(Salary salary,int teacherId);//todo - менять метод интерфейса
 
     boolean changeSalary(Salary newValues);
 

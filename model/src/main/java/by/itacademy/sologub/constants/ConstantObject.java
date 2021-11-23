@@ -15,9 +15,11 @@ public final class ConstantObject {
     private static final String NO_TITLE = "NO_TITLE";
     private static final String NO_DESCRIPTION = "NO_DESCRIPTION";
     private static final String LOGIN_IS_NOT_EXISTS = "LOGIN_IS_NOT_EXISTS";
+    private static final String ID_IS_NOT_EXISTS = "ID_IS_NOT_EXISTS";
     private static final String PASSWORD_IS_WRONG = "PASSWORD_IS_WRONG";
     private static final String SUBJECT_IS_NOT_EXISTS = "SUBJECT_IS_NOT_EXISTS";
 
+    public static final Credential CREDENTIAL_NOT_EXISTS;
     public static final Credential LOGIN_NOT_EXISTS;
     public static final Credential PASSWORD_WRONG;
 
@@ -36,6 +38,11 @@ public final class ConstantObject {
     public static final Group GROUP_NOT_EXISTS;
 
     static {
+        CREDENTIAL_NOT_EXISTS = new Credential();
+        CREDENTIAL_NOT_EXISTS.setId(-1);
+        CREDENTIAL_NOT_EXISTS.setLogin(ID_IS_NOT_EXISTS);
+        CREDENTIAL_NOT_EXISTS.setPassword(ID_IS_NOT_EXISTS);
+
         LOGIN_NOT_EXISTS = new Credential();
         LOGIN_NOT_EXISTS.setId(-1);
         LOGIN_NOT_EXISTS.setLogin(LOGIN_IS_NOT_EXISTS);
@@ -74,7 +81,7 @@ public final class ConstantObject {
         SALARY_NOT_EXISTS.setId(-1);
         SALARY_NOT_EXISTS.setCoins(0);
         SALARY_NOT_EXISTS.setDate(LocalDate.now());
-        SALARY_NOT_EXISTS.setTeacherId(-100);
+//        SALARY_NOT_EXISTS.setTeacherId(-100);
 
         MARK_NOT_EXISTS = new Mark();
         MARK_NOT_EXISTS.setId(-1);

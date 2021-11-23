@@ -293,75 +293,88 @@ public class InitContextFilter implements Filter {
         SalaryRepo salaryRepo = factory.getSalariesRepo();
 
         Salary s1 = new Salary()
-                .withTeacherId(t1.getId())
+//                .withTeacherId(t1.getId())//todo -(это удаляем просто)
                 .withDate(LocalDate.parse("2021-01-12"))
                 .withCoins(64140);
         Salary s2 = new Salary()
-                .withTeacherId(t1.getId())
+//                .withTeacherId(t1.getId())//todo - вместо этого будем устанавливать зп по другому
                 .withDate(LocalDate.parse("2021-02-11"))
                 .withCoins(63716);
         Salary s3 = new Salary()
-                .withTeacherId(t1.getId())
+//                .withTeacherId(t1.getId())
                 .withDate(LocalDate.parse("2021-03-13"))
                 .withCoins(61898);
 
         Salary s4 = new Salary()
-                .withTeacherId(t2.getId())
+//                .withTeacherId(t2.getId())
                 .withDate(LocalDate.parse("2021-04-12"))
                 .withCoins(64140);
         Salary s5 = new Salary()
-                .withTeacherId(t2.getId())
+//                .withTeacherId(t2.getId())
                 .withDate(LocalDate.parse("2021-05-11"))
                 .withCoins(63716);
         Salary s6 = new Salary()
-                .withTeacherId(t2.getId())
+//                .withTeacherId(t2.getId())
                 .withDate(LocalDate.parse("2021-06-21"))
                 .withCoins(61898);
 
         Salary s7 = new Salary()
-                .withTeacherId(t3.getId())
+//                .withTeacherId(t3.getId())
                 .withDate(LocalDate.parse("2021-07-16"))
                 .withCoins(64140);
         Salary s8 = new Salary()
-                .withTeacherId(t3.getId())
+//                .withTeacherId(t3.getId())
                 .withDate(LocalDate.parse("2021-08-14"))
                 .withCoins(63716);
         Salary s9 = new Salary()
-                .withTeacherId(t3.getId())
+//                .withTeacherId(t3.getId())
                 .withDate(LocalDate.parse("2021-09-11"))
                 .withCoins(61898);
 
         Salary s10 = new Salary()
-                .withTeacherId(t4.getId())
+//                .withTeacherId(t4.getId())
                 .withDate(LocalDate.parse("2021-10-14"))
                 .withCoins(64140);
         Salary s11 = new Salary()
-                .withTeacherId(t4.getId())
+//                .withTeacherId(t4.getId())
                 .withDate(LocalDate.parse("2021-11-16"))
                 .withCoins(63716);
         Salary s12 = new Salary()
-                .withTeacherId(t4.getId())
+//                .withTeacherId(t4.getId())
                 .withDate(LocalDate.parse("2021-12-15"))
                 .withCoins(61898);
 
         Salary s13 = new Salary()
-                .withTeacherId(t5.getId())
+//                .withTeacherId(t5.getId())
                 .withDate(LocalDate.parse("2022-01-17"))
                 .withCoins(65085);
 
-        salaryRepo.putSalary(s1);
-        salaryRepo.putSalary(s2);
-        salaryRepo.putSalary(s3);
-        salaryRepo.putSalary(s4);
-        salaryRepo.putSalary(s5);
-        salaryRepo.putSalary(s6);
-        salaryRepo.putSalary(s7);
-        salaryRepo.putSalary(s8);
-        salaryRepo.putSalary(s9);
-        salaryRepo.putSalary(s10);
-        salaryRepo.putSalary(s11);
-        salaryRepo.putSalary(s12);
-        salaryRepo.putSalary(s13);
+//        salaryRepo.putSalary(s1);//todo -вместо этого метода будет putSalary(s2,Teacher teacher);
+//        salaryRepo.putSalary(s2);
+//        salaryRepo.putSalary(s3);
+//        salaryRepo.putSalary(s4);
+//        salaryRepo.putSalary(s5);
+//        salaryRepo.putSalary(s6);
+//        salaryRepo.putSalary(s7);
+//        salaryRepo.putSalary(s8);
+//        salaryRepo.putSalary(s9);
+//        salaryRepo.putSalary(s10);
+//        salaryRepo.putSalary(s11);
+//        salaryRepo.putSalary(s12);
+//        salaryRepo.putSalary(s13);
+        salaryRepo.putSalaryToTeacher(s1,t1.getId());
+        salaryRepo.putSalaryToTeacher(s2,t1.getId());
+        salaryRepo.putSalaryToTeacher(s3,t1.getId());
+        salaryRepo.putSalaryToTeacher(s4,t2.getId());
+        salaryRepo.putSalaryToTeacher(s5,t2.getId());
+        salaryRepo.putSalaryToTeacher(s6,t2.getId());
+        salaryRepo.putSalaryToTeacher(s7,t3.getId());
+        salaryRepo.putSalaryToTeacher(s8,t3.getId());
+        salaryRepo.putSalaryToTeacher(s9,t3.getId());
+        salaryRepo.putSalaryToTeacher(s10,t4.getId());
+        salaryRepo.putSalaryToTeacher(s11,t4.getId());
+        salaryRepo.putSalaryToTeacher(s12,t4.getId());
+        salaryRepo.putSalaryToTeacher(s13,t5.getId());
 
         GroupRepo groupRepo = factory.getGroupRepo();
 

@@ -40,7 +40,10 @@ ${requestScope.teacher.patronymic} | ${requestScope.teacher.dateOfBirth}
                 <td><c:out value="${salary.id}"/></td>
                 <td><c:out value="${salary.coins}"/></td>
                 <td><c:out value="${salary.date}"/></td>
-                <td><c:out value="${salary.teacherId}"/></td>
+<%--                эту строку будем посылать в контроллер на другой метод интерфейса --%>
+<%--                где будем делать все с зп по salary_id--%>
+<%--                а добавлять зп будем по teacher_id--%>
+                <td><c:out value="${requestScope.teacher.id}"/></td>
                 <td>
                     <form action="SalaryController" method="post">
                         <input type="hidden" name="action" value="delete">
@@ -53,7 +56,7 @@ ${requestScope.teacher.patronymic} | ${requestScope.teacher.dateOfBirth}
                     <form action="SalaryController" method="post">
                         <input type="hidden" name="action" value="put">
                         <input type="hidden" name="id" value=${salary.id}>
-                        <input type="hidden" name="teacherId" value=${salary.teacherId}>
+                        <input type="hidden" name="teacherId" value=${requestScope.teacher.id}>
                         <input name="login" type="hidden" value="${requestScope.teacher.credential.login}">
                         Salary amount in coins:<input type="text" name="coins" value=${salary.coins}><br/>
                         Salary date:<input type="date" name="date" value=${salary.date}><br/>
