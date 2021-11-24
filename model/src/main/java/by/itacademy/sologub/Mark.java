@@ -13,13 +13,18 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Mark extends AbstractEntity {//TODO - продумать бизнес логику
-//TODO добавить поле? -  private int subjectId;
+public class Mark extends AbstractEntity {
+    private Subject subject;
     private int point;
     private LocalDate date;
 
     public Mark withId(int id) {
         setId(id);
+        return this;
+    }
+
+    public Mark withSubject(Subject subject){
+        setSubject(subject);
         return this;
     }
 
