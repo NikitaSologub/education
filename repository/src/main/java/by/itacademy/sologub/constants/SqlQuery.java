@@ -60,6 +60,7 @@ public final class SqlQuery {
     public static final String GET_SUBJECTS_LIST = "SELECT id, title FROM subject;";
     public static final String GET_SUBJECTS_LIST_BY_GROUP_ID =
             "select s.id, s.title from subject s join group_subject gs on gs.subject_id=s.id where gs.group_id=?;";
+    public static final String EXCLUDE_SUBJECT_FROM_ALL_GROUPS_BY_SUBJECT_ID = "DELETE FROM group_subject WHERE subject_id=?;";
 
     //groups postgres sql
     public static final String GET_GROUPS_LIST_WITH_TEACHERS = "SELECT g.id, g.title, g.teacher_id, g.description, p.id," +

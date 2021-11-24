@@ -17,6 +17,7 @@ import static by.itacademy.sologub.constants.Attributes.SUBJECT;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.SqlQuery.DELETE_SUBJECT_BY_ID;
+import static by.itacademy.sologub.constants.SqlQuery.EXCLUDE_SUBJECT_FROM_ALL_GROUPS_BY_SUBJECT_ID;
 import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECTS_LIST;
 import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECTS_LIST_BY_GROUP_ID;
 import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECT_BY_ID;
@@ -135,6 +136,23 @@ public class SubjectRepoPostgresImpl extends AbstractPostgresRepo<Subject> imple
 
     @Override
     public boolean deleteSubject(Subject subject) {
-        return delete(subject.getId(), DELETE_SUBJECT_BY_ID, SUBJECT);
+        int id = subject.getId();
+        if (delete(subject.getId(), DELETE_SUBJECT_BY_ID, SUBJECT)) {
+            Connection con = null;
+            PreparedStatement st;
+            try {
+                con = pool.getConnection();
+                st = con.prepareStatement(EXCLUDE_SUBJECT_FROM_ALL_GROUPS_BY_SUBJECT_ID);
+                st.setInt(1, id);
+
+                int num = st.executeUpdate();
+                log.debug("исключили предмет по subject_id={} из {} групп)", id, num);
+            } catch (SQLException e) {
+                rollback(con);
+                log.error("Не удалось исключитьпредмет из групп по его id={}", id, e);
+            }
+            return true;
+        }
+        return false;
     }
 }
