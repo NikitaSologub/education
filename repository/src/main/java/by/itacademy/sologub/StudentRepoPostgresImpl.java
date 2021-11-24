@@ -69,6 +69,11 @@ public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo<Student> i
     }
 
     @Override
+    public Student getStudentIfExistsOrGetSpecialValue(int id) {
+        return getUserIfExistsOrGetSpecialValue(id);
+    }
+
+    @Override
     public Student getStudentIfExistsOrGetSpecialValue(String login) {
         return getUserIfExistsOrGetSpecialValue(login);
     }

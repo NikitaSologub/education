@@ -7,6 +7,8 @@ public interface StudentRepo {
 
     Set<Student> getStudentsByGroupId(int groupId);
 
+    Student getStudentIfExistsOrGetSpecialValue(int id);
+
     Student getStudentIfExistsOrGetSpecialValue(String login);
 
     Student getStudentIfExistsOrGetSpecialValue(String login,String password);
