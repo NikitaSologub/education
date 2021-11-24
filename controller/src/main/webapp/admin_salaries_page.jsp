@@ -55,7 +55,7 @@ ${requestScope.teacher.patronymic} | ${requestScope.teacher.dateOfBirth}
                         <input type="hidden" name="id" value=${salary.id}>
                         <input type="hidden" name="teacherId" value=${requestScope.teacher.id}>
                         <input name="login" type="hidden" value="${requestScope.teacher.credential.login}">
-                        Salary amount in coins:<input type="text" name="coins" value=${salary.coins}><br/>
+                        Salary amount in coins:<input type="number" min="0" name="coins" value=${salary.coins}><br/>
                         Salary date:<input type="date" name="date" value=${salary.date}><br/>
                         <button type="submit">Изменить зарплату учителю</button>
                     </form>
@@ -68,7 +68,7 @@ ${requestScope.teacher.patronymic} | ${requestScope.teacher.dateOfBirth}
 <form action="<c:url value="SalaryController"/>" method="post">
     <input name="teacherId" type="hidden" value="${requestScope.teacher.id}">
     <input name="login" type="hidden" value="${requestScope.teacher.credential.login}">
-    Введите зарплату в копейках: <label> <input type="number" name="coins" value="0"/> </label><br/>
+    Введите зарплату в копейках: <label> <input type="number" min="0" name="coins" value="0"/> </label><br/>
     Введите дату начисления: <label> <input type="date" name="date" value="2021-01-01"/> </label><br/>
     <input type="reset">
     <button type="submit">Создать зарплату и добавить учителю ${requestScope.teacher.credential.login}</button>
