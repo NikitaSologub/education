@@ -7,6 +7,7 @@ import by.itacademy.sologub.CredentialRepoHardcodeImpl;
 import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.GroupRepoHardcodedImpl;
 import by.itacademy.sologub.MarkRepo;
+import by.itacademy.sologub.MarkRepoHardcodedImpl;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.SalaryRepoHardcodedImpl;
 import by.itacademy.sologub.StudentRepo;
@@ -25,15 +26,18 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     private static SalaryRepoHardcodedImpl salaryRepo;
     private static SubjectRepoHardcodedImpl subjectRepo;
     private static GroupRepoHardcodedImpl groupRepo;
+    private static MarkRepoHardcodedImpl markRepo;
 
     private ModelRepoFactoryHardcodeImpl() {
         credentialRepo = CredentialRepoHardcodeImpl.getInstance();
         teacherRepo = TeacherRepoHardcodedImpl.getInstance(credentialRepo);
-        studentRepo = StudentRepoHardcodedImpl.getInstance(credentialRepo,GroupRepoHardcodedImpl.getInstance());
+        studentRepo = StudentRepoHardcodedImpl.getInstance(credentialRepo, GroupRepoHardcodedImpl.getInstance());
         adminRepo = AdminRepoHardcodedImpl.getInstance(credentialRepo);
         salaryRepo = SalaryRepoHardcodedImpl.getInstance(TeacherRepoHardcodedImpl.getInstance(credentialRepo));
         subjectRepo = SubjectRepoHardcodedImpl.getInstance(GroupRepoHardcodedImpl.getInstance());
         groupRepo = GroupRepoHardcodedImpl.getInstance();
+        markRepo = MarkRepoHardcodedImpl.getInstance(StudentRepoHardcodedImpl.getInstance(credentialRepo,
+                GroupRepoHardcodedImpl.getInstance()), subjectRepo);
     }
 
     public static ModelRepoFactoryHardcodeImpl getInstance() {
@@ -84,6 +88,6 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
 
     @Override
     public MarkRepo getMarkRepo() {
-        return null;//TODO- temporal
+        return markRepo;
     }
 }
