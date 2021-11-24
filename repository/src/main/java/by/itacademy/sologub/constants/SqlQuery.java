@@ -36,6 +36,10 @@ public final class SqlQuery {
             "p.date_of_birth, p.credential_id, c.login, c.password FROM person p JOIN credential c ON p.credential_id=c.id" +
             " JOIN group_student gs ON p.id=gs.student_id WHERE gs.group_id=?";
 
+    //teacher postgres sql
+    public static final String EXCLUDE_TEACHER_FROM_ALL_GROUPS_BY_TEACHER_ID =
+            "UPDATE public.group SET teacher_id=NULL WHERE teacher_id=?;";
+
     //salary postgres sql
     public static final String GET_SALARIES_LIST_BY_TEACHER_ID = "SELECT id,coins_amount,date FROM salary WHERE teacher_id=?;";
     public static final String GET_SALARIES_LIST_AFTER_DATE_BY_TEACHER_ID =

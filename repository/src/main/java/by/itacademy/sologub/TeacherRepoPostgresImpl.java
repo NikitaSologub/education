@@ -21,6 +21,7 @@ import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
 import static by.itacademy.sologub.constants.SqlQuery.DELETE_ALL_SALARIES_BY_TEACHER_ID;
+import static by.itacademy.sologub.constants.SqlQuery.EXCLUDE_TEACHER_FROM_ALL_GROUPS_BY_TEACHER_ID;
 
 @Slf4j
 public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> implements TeacherRepo {
@@ -71,11 +72,15 @@ public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> i
             log.debug("Учитель по id={} уделён. Теперь удалим все его зарплаты", teacher.getId());
 
             try (Connection con = pool.getConnection();
-                 PreparedStatement ps = con.prepareStatement(DELETE_ALL_SALARIES_BY_TEACHER_ID)) {
-                ps.setInt(1, teacher.getId());
+                 PreparedStatement first = con.prepareStatement(DELETE_ALL_SALARIES_BY_TEACHER_ID);
+                 PreparedStatement second = con.prepareStatement(EXCLUDE_TEACHER_FROM_ALL_GROUPS_BY_TEACHER_ID)) {
+                first.setInt(1, teacher.getId());
+                second.setInt(1, teacher.getId());
 
-                int num = ps.executeUpdate();
-                log.debug("По teacherId={} было удалено salary в кол-ве {}", teacher.getId(), num);
+                int salaryNum = first.executeUpdate();
+                log.debug("По teacherId={} было удалено salary в кол-ве {}", teacher.getId(), salaryNum);
+                int groupNum = second.executeUpdate();
+                log.debug("По teacherId={} учитель был отстранён из групп в кол-ве {}", teacher.getId(), groupNum);
             } catch (SQLException e) {
                 log.error("Не удалось извлечь " + getRole() + " из базы данных", e);
             }
