@@ -6,6 +6,7 @@ import by.itacademy.sologub.Credential;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.Group;
 import by.itacademy.sologub.GroupRepo;
+import by.itacademy.sologub.Mark;
 import by.itacademy.sologub.MarkRepo;
 import by.itacademy.sologub.Salary;
 import by.itacademy.sologub.SalaryRepo;
@@ -333,19 +334,83 @@ public class InitContextFilter implements Filter {
                 .withDate(LocalDate.parse("2022-01-17"))
                 .withCoins(65085);
 
-        salaryRepo.putSalaryToTeacher(s1,t1.getId());
-        salaryRepo.putSalaryToTeacher(s2,t1.getId());
-        salaryRepo.putSalaryToTeacher(s3,t1.getId());
-        salaryRepo.putSalaryToTeacher(s4,t2.getId());
-        salaryRepo.putSalaryToTeacher(s5,t2.getId());
-        salaryRepo.putSalaryToTeacher(s6,t2.getId());
-        salaryRepo.putSalaryToTeacher(s7,t3.getId());
-        salaryRepo.putSalaryToTeacher(s8,t3.getId());
-        salaryRepo.putSalaryToTeacher(s9,t3.getId());
-        salaryRepo.putSalaryToTeacher(s10,t4.getId());
-        salaryRepo.putSalaryToTeacher(s11,t4.getId());
-        salaryRepo.putSalaryToTeacher(s12,t4.getId());
-        salaryRepo.putSalaryToTeacher(s13,t5.getId());
+        salaryRepo.putSalaryToTeacher(s1, t1.getId());
+        salaryRepo.putSalaryToTeacher(s2, t1.getId());
+        salaryRepo.putSalaryToTeacher(s3, t1.getId());
+        salaryRepo.putSalaryToTeacher(s4, t2.getId());
+        salaryRepo.putSalaryToTeacher(s5, t2.getId());
+        salaryRepo.putSalaryToTeacher(s6, t2.getId());
+        salaryRepo.putSalaryToTeacher(s7, t3.getId());
+        salaryRepo.putSalaryToTeacher(s8, t3.getId());
+        salaryRepo.putSalaryToTeacher(s9, t3.getId());
+        salaryRepo.putSalaryToTeacher(s10, t4.getId());
+        salaryRepo.putSalaryToTeacher(s11, t4.getId());
+        salaryRepo.putSalaryToTeacher(s12, t4.getId());
+        salaryRepo.putSalaryToTeacher(s13, t5.getId());
+
+        MarkRepo markRepo = factory.getMarkRepo();
+
+        Mark m1 = new Mark()
+                .withSubject(sub1)
+                .withPoint(90)
+                .withDate(LocalDate.parse("2021-09-11"));
+        Mark m2 = new Mark()
+                .withSubject(sub2)
+                .withPoint(55)
+                .withDate(LocalDate.parse("2021-10-21"));
+        Mark m3 = new Mark()
+                .withSubject(sub3)
+                .withPoint(80)
+                .withDate(LocalDate.parse("2021-11-04"));
+        Mark m4 = new Mark()
+                .withSubject(sub4)
+                .withPoint(98)
+                .withDate(LocalDate.parse("2021-12-07"));
+        Mark m5 = new Mark()
+                .withSubject(sub5)
+                .withPoint(12)
+                .withDate(LocalDate.parse("2021-05-16"));
+        Mark m6 = new Mark()
+                .withSubject(sub6)
+                .withPoint(43)
+                .withDate(LocalDate.parse("2021-06-18"));
+        Mark m7 = new Mark()
+                .withSubject(sub1)
+                .withPoint(56)
+                .withDate(LocalDate.parse("2021-07-12"));
+        Mark m8 = new Mark()
+                .withSubject(sub2)
+                .withPoint(57)
+                .withDate(LocalDate.parse("2021-04-14"));
+        Mark m9 = new Mark()
+                .withSubject(sub3)
+                .withPoint(14)
+                .withDate(LocalDate.parse("2021-03-13"));
+        Mark m10 = new Mark()
+                .withSubject(sub4)
+                .withPoint(51)
+                .withDate(LocalDate.parse("2021-06-18"));
+        Mark m11 = new Mark()
+                .withSubject(sub5)
+                .withPoint(76)
+                .withDate(LocalDate.parse("2021-08-28"));
+        Mark m12 = new Mark()
+                .withSubject(sub6)
+                .withPoint(22)
+                .withDate(LocalDate.parse("2021-02-26"));
+
+        markRepo.putMarkToStudent(m1, stud1.getId());
+        markRepo.putMarkToStudent(m2, stud1.getId());
+        markRepo.putMarkToStudent(m3, stud2.getId());
+        markRepo.putMarkToStudent(m4, stud2.getId());
+        markRepo.putMarkToStudent(m5, stud3.getId());
+        markRepo.putMarkToStudent(m6, stud3.getId());
+        markRepo.putMarkToStudent(m7, stud4.getId());
+        markRepo.putMarkToStudent(m8, stud4.getId());
+        markRepo.putMarkToStudent(m9, stud5.getId());
+        markRepo.putMarkToStudent(m10, stud5.getId());
+        markRepo.putMarkToStudent(m11, stud6.getId());
+        markRepo.putMarkToStudent(m12, stud6.getId());
 
         GroupRepo groupRepo = factory.getGroupRepo();
 
