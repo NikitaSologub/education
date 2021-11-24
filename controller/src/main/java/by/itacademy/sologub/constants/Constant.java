@@ -47,6 +47,7 @@ public final class Constant {
     public static final String SALARY_REPO = "salaryRepo";
     public static final String SUBJECT_REPO = "subjectRepo";
     public static final String GROUP_REPO = "groupRepo";
+    public static final String MARK_REPO = "markRepo";
     public static final String TEACHER_REPO = "teacherRepo";
     public static final String STUDENT_REPO = "studentRepo";
     public static final String ADMIN_REPO = "adminRepo";

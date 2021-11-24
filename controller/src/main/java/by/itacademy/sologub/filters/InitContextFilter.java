@@ -6,6 +6,7 @@ import by.itacademy.sologub.Credential;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.Group;
 import by.itacademy.sologub.GroupRepo;
+import by.itacademy.sologub.MarkRepo;
 import by.itacademy.sologub.Salary;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.Student;
@@ -42,6 +43,7 @@ import static by.itacademy.sologub.constants.Constant.CREDENTIAL_REPO;
 import static by.itacademy.sologub.constants.Constant.DB_CONFIG_FILE;
 import static by.itacademy.sologub.constants.Constant.DRIVER;
 import static by.itacademy.sologub.constants.Constant.GROUP_REPO;
+import static by.itacademy.sologub.constants.Constant.MARK_REPO;
 import static by.itacademy.sologub.constants.Constant.SALARY_REPO;
 import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
@@ -101,6 +103,7 @@ public class InitContextFilter implements Filter {
         SalaryRepo salaryRepo = factory.getSalariesRepo();
         SubjectRepo subjectRepo = factory.getSubjectRepo();
         GroupRepo groupRepo = factory.getGroupRepo();
+        MarkRepo markRepo = factory.getMarkRepo();
 
         ServletContext context = filterConfig.getServletContext();
         context.setAttribute(CREDENTIAL_REPO, credentialRepo);
@@ -110,6 +113,7 @@ public class InitContextFilter implements Filter {
         context.setAttribute(SALARY_REPO, salaryRepo);
         context.setAttribute(SUBJECT_REPO, subjectRepo);
         context.setAttribute(GROUP_REPO, groupRepo);
+        context.setAttribute(MARK_REPO, markRepo);
     }
 
     boolean loadDriverClass() {
