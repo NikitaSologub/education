@@ -6,6 +6,7 @@ import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.CredentialRepoHardcodeImpl;
 import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.GroupRepoHardcodedImpl;
+import by.itacademy.sologub.MarkRepo;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.SalaryRepoHardcodedImpl;
 import by.itacademy.sologub.StudentRepo;
@@ -79,5 +80,10 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     @Override
     public GroupRepo getGroupRepo() {
         return groupRepo;
+    }
+
+    @Override
+    public MarkRepo getMarkRepo() {
+        return null;//TODO- temporal
     }
 }

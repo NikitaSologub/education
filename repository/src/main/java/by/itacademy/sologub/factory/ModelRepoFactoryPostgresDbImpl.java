@@ -6,6 +6,7 @@ import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.CredentialRepoPostgresImpl;
 import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.GroupRepoPostgresImpl;
+import by.itacademy.sologub.MarkRepo;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.SalaryRepoPostgresImpl;
 import by.itacademy.sologub.StudentRepo;
@@ -80,5 +81,10 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
     @Override
     public GroupRepo getGroupRepo() {
         return groupRepo;
+    }
+
+    @Override
+    public MarkRepo getMarkRepo() {
+        return null;//TODO - temporal
     }
 }
