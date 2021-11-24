@@ -14,10 +14,12 @@ import java.io.IOException;
 
 import static by.itacademy.sologub.constants.Constant.ADMIN_FRONT_PAGE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SALARIES_PAGE;
+import static by.itacademy.sologub.constants.Constant.ADMIN_STUDENTS_MARKS_PAGE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_STUDENTS_PAGE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SUBJECTS_PAGE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_TEACHERS_PAGE;
 import static by.itacademy.sologub.constants.Constant.LOGIN_PAGE;
+import static by.itacademy.sologub.constants.Constant.MARK_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.SALARY_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.SESSION_ENTITY;
 import static by.itacademy.sologub.constants.Constant.STUDENT_FRONT_PAGE;
@@ -37,7 +39,7 @@ import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_SUBJECTS_PAGE;
 @WebFilter(urlPatterns = {ADMIN_FRONT_PAGE, STUDENT_FRONT_PAGE, TEACHER_FRONT_PAGE, ADMIN_TEACHERS_PAGE, ADMIN_SALARIES_PAGE,
         ADMIN_STUDENTS_PAGE, SALARY_CONTROLLER, TEACHER_CONTROLLER, ADMIN_SUBJECTS_PAGE, STUDENT_CONTROLLER, GROUP_CONTROLLER,
         GROUP_STUDENTS_CONTROLLER, GROUP_SUBJECTS_CONTROLLER, GROUP_EDIT_CONTROLLER, SUBJECT_CONTROLLER, ADMIN_GROUPS_PAGE,
-        ADMIN_GROUP_EDIT_PAGE, ADMIN_GROUP_STUDENTS_PAGE, ADMIN_GROUP_SUBJECTS_PAGE})
+        ADMIN_GROUP_EDIT_PAGE, ADMIN_GROUP_STUDENTS_PAGE, ADMIN_GROUP_SUBJECTS_PAGE, MARK_CONTROLLER, ADMIN_STUDENTS_MARKS_PAGE})
 @Slf4j
 public class AuthorisationFilter extends BaseFilter implements Filter {
     @Override
