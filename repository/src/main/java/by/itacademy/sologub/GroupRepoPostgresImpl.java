@@ -46,18 +46,16 @@ import static by.itacademy.sologub.constants.SqlQuery.SET_GROUP_RETURNING;
 @Slf4j
 public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implements GroupRepo {
     private static volatile GroupRepoPostgresImpl instance;
-    private final TeacherRepo teacherRepo;//todo - возможно вооще убрать отсюда
 
-    private GroupRepoPostgresImpl(ComboPooledDataSource pool, TeacherRepoPostgresImpl teacherRepo) {
+    private GroupRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
-        this.teacherRepo = teacherRepo;
     }
 
-    public static GroupRepoPostgresImpl getInstance(ComboPooledDataSource pool, TeacherRepoPostgresImpl teacherRepo) {
+    public static GroupRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
         if (instance == null) {
             synchronized (GroupRepoPostgresImpl.class) {
                 if (instance == null) {
-                    instance = new GroupRepoPostgresImpl(pool, teacherRepo);
+                    instance = new GroupRepoPostgresImpl(pool);
                 }
             }
         }

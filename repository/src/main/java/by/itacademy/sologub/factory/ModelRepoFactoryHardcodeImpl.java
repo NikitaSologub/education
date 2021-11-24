@@ -28,11 +28,11 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     private ModelRepoFactoryHardcodeImpl() {
         credentialRepo = CredentialRepoHardcodeImpl.getInstance();
         teacherRepo = TeacherRepoHardcodedImpl.getInstance(credentialRepo);
-        studentRepo = StudentRepoHardcodedImpl.getInstance(credentialRepo,GroupRepoHardcodedImpl.getInstance(subjectRepo,teacherRepo,studentRepo));
+        studentRepo = StudentRepoHardcodedImpl.getInstance(credentialRepo,GroupRepoHardcodedImpl.getInstance());
         adminRepo = AdminRepoHardcodedImpl.getInstance(credentialRepo);
         salaryRepo = SalaryRepoHardcodedImpl.getInstance(TeacherRepoHardcodedImpl.getInstance(credentialRepo));
-        subjectRepo = SubjectRepoHardcodedImpl.getInstance(GroupRepoHardcodedImpl.getInstance(subjectRepo,teacherRepo,studentRepo));
-        groupRepo = GroupRepoHardcodedImpl.getInstance(subjectRepo,teacherRepo,studentRepo);
+        subjectRepo = SubjectRepoHardcodedImpl.getInstance(GroupRepoHardcodedImpl.getInstance());
+        groupRepo = GroupRepoHardcodedImpl.getInstance();
     }
 
     public static ModelRepoFactoryHardcodeImpl getInstance() {

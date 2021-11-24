@@ -22,18 +22,16 @@ import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG
 @Slf4j
 public class AdminRepoPostgresImpl extends AbstractUserPostgresRepo<Admin> implements AdminRepo {
     private static volatile AdminRepoPostgresImpl adminRepo;
-    private static volatile CredentialRepoPostgresImpl credentialRepo;
 
-    private AdminRepoPostgresImpl(ComboPooledDataSource pool, CredentialRepoPostgresImpl repo) {
+    private AdminRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
-        credentialRepo = repo;
     }
 
-    public static AdminRepoPostgresImpl getInstance(ComboPooledDataSource pool, CredentialRepoPostgresImpl credRepo) {
+    public static AdminRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
         if (adminRepo == null) {
             synchronized (CredentialRepoHardcodeImpl.class) {
                 if (adminRepo == null) {
-                    adminRepo = new AdminRepoPostgresImpl(pool, credRepo);
+                    adminRepo = new AdminRepoPostgresImpl(pool);
                 }
             }
         }

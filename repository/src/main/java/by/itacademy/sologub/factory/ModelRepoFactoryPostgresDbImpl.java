@@ -28,12 +28,12 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
 
     private ModelRepoFactoryPostgresDbImpl(ComboPooledDataSource pool) {
         credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
-        teacherRepo = TeacherRepoPostgresImpl.getInstance(pool, credentialRepo);
-        studentRepo = StudentRepoPostgresImpl.getInstance(pool, credentialRepo);
-        adminRepo = AdminRepoPostgresImpl.getInstance(pool, credentialRepo);
+        teacherRepo = TeacherRepoPostgresImpl.getInstance(pool);
+        studentRepo = StudentRepoPostgresImpl.getInstance(pool);
+        adminRepo = AdminRepoPostgresImpl.getInstance(pool);
         salaryRepo = SalaryRepoPostgresImpl.getInstance(pool);
         subjectRepo = SubjectRepoPostgresImpl.getInstance(pool);
-        groupRepo = GroupRepoPostgresImpl.getInstance(pool,teacherRepo);
+        groupRepo = GroupRepoPostgresImpl.getInstance(pool);
     }
 
     public static ModelRepoFactory getInstance(ComboPooledDataSource pool) {

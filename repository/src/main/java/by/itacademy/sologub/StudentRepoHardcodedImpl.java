@@ -16,12 +16,12 @@ public class StudentRepoHardcodedImpl extends AbstractUserHardcodedRepo<Student>
     private static volatile StudentRepoHardcodedImpl instance;
     private static volatile GroupRepoHardcodedImpl groupRepo;
 
-    private StudentRepoHardcodedImpl(CredentialRepo credentialRepo,GroupRepoHardcodedImpl groupRepo) {
+    private StudentRepoHardcodedImpl(CredentialRepoHardcodeImpl credentialRepo,GroupRepoHardcodedImpl groupRepo) {
         super(credentialRepo);
         StudentRepoHardcodedImpl.groupRepo = groupRepo;
     }
 
-    public static StudentRepoHardcodedImpl getInstance(CredentialRepo credentialRepo,GroupRepoHardcodedImpl groupRepo) {
+    public static StudentRepoHardcodedImpl getInstance(CredentialRepoHardcodeImpl credentialRepo,GroupRepoHardcodedImpl groupRepo) {
         if (instance == null) {
             synchronized (StudentRepoHardcodedImpl.class) {
                 if (instance == null) {

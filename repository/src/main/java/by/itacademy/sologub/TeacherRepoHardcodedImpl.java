@@ -13,11 +13,11 @@ public class TeacherRepoHardcodedImpl extends AbstractUserHardcodedRepo<Teacher>
     static int CURRENT_MAX_TEACHER_ID = 19051;
     private static volatile TeacherRepoHardcodedImpl instance;
 
-    private TeacherRepoHardcodedImpl(CredentialRepo credentialRepo) {
+    private TeacherRepoHardcodedImpl(CredentialRepoHardcodeImpl credentialRepo) {
         super(credentialRepo);
     }
 
-    public static TeacherRepoHardcodedImpl getInstance(CredentialRepo credentialRepo) {
+    public static TeacherRepoHardcodedImpl getInstance(CredentialRepoHardcodeImpl credentialRepo) {
         if (instance == null) {
             synchronized (CredentialRepoHardcodeImpl.class) {
                 if (instance == null) {

@@ -15,24 +15,16 @@ public class GroupRepoHardcodedImpl implements GroupRepo {
     private static int CURRENT_MAX_GROUP_ID = 17;
     public static volatile GroupRepoHardcodedImpl instance;
     private static volatile Map<Integer, Group> groups;
-    private static volatile SubjectRepoHardcodedImpl subjectRepo;
-    private static volatile TeacherRepoHardcodedImpl teacherRepo;
-    private static volatile StudentRepoHardcodedImpl studentRepo;
 
-    private GroupRepoHardcodedImpl(SubjectRepoHardcodedImpl subjectRepo, TeacherRepoHardcodedImpl teacherRepo
-            , StudentRepoHardcodedImpl studentRepo) {
+    private GroupRepoHardcodedImpl() {
         groups = new ConcurrentHashMap<>();
-        GroupRepoHardcodedImpl.subjectRepo = subjectRepo;
-        GroupRepoHardcodedImpl.teacherRepo = teacherRepo;
-        GroupRepoHardcodedImpl.studentRepo = studentRepo;
     }
 
-    public static GroupRepoHardcodedImpl getInstance(SubjectRepoHardcodedImpl subjectRepo, TeacherRepoHardcodedImpl teacherRepo,
-                                                     StudentRepoHardcodedImpl studentRepo) {
+    public static GroupRepoHardcodedImpl getInstance() {
         if (instance == null) {
             synchronized (CredentialRepoHardcodeImpl.class) {
                 if (instance == null) {
-                    instance = new GroupRepoHardcodedImpl(subjectRepo, teacherRepo, studentRepo);
+                    instance = new GroupRepoHardcodedImpl();
                 }
             }
         }

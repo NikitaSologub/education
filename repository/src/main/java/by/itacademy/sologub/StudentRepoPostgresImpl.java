@@ -26,18 +26,16 @@ import static by.itacademy.sologub.constants.SqlQuery.GET_STUDENT_SET_BY_GROUP_I
 @Slf4j
 public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo<Student> implements StudentRepo {
     private static volatile StudentRepoPostgresImpl studentRepo;
-    private static volatile CredentialRepoPostgresImpl credentialRepo;
 
-    private StudentRepoPostgresImpl(ComboPooledDataSource pool, CredentialRepoPostgresImpl repo) {
+    private StudentRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
-        credentialRepo = repo;
     }
 
-    public static StudentRepoPostgresImpl getInstance(ComboPooledDataSource pool, CredentialRepoPostgresImpl credRepo) {
+    public static StudentRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
         if (studentRepo == null) {
             synchronized (CredentialRepoHardcodeImpl.class) {
                 if (studentRepo == null) {
-                    studentRepo = new StudentRepoPostgresImpl(pool, credRepo);
+                    studentRepo = new StudentRepoPostgresImpl(pool);
                 }
             }
         }

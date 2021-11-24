@@ -26,18 +26,16 @@ import static by.itacademy.sologub.constants.SqlQuery.EXCLUDE_TEACHER_FROM_ALL_G
 @Slf4j
 public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> implements TeacherRepo {
     private static volatile TeacherRepoPostgresImpl teacherRepo;
-    private static volatile CredentialRepoPostgresImpl credentialRepo;
 
-    private TeacherRepoPostgresImpl(ComboPooledDataSource pool, CredentialRepoPostgresImpl repo) {
+    private TeacherRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
-        credentialRepo = repo;
     }
 
-    public static TeacherRepoPostgresImpl getInstance(ComboPooledDataSource pool, CredentialRepoPostgresImpl credRepo) {
+    public static TeacherRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
         if (teacherRepo == null) {
             synchronized (CredentialRepoHardcodeImpl.class) {
                 if (teacherRepo == null) {
-                    teacherRepo = new TeacherRepoPostgresImpl(pool, credRepo);
+                    teacherRepo = new TeacherRepoPostgresImpl(pool);
                 }
             }
         }

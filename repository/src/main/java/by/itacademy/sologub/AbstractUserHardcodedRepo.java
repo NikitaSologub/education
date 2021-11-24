@@ -12,10 +12,10 @@ import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
 
 @Slf4j
 public abstract class AbstractUserHardcodedRepo<T extends User> {
-    private final CredentialRepo credentialRepo;
+    private final CredentialRepoHardcodeImpl credentialRepo;
     private final Map<Integer, T> users;
 
-    protected AbstractUserHardcodedRepo(CredentialRepo credentialRepo) {
+    protected AbstractUserHardcodedRepo(CredentialRepoHardcodeImpl credentialRepo) {
         this.credentialRepo = credentialRepo;
         users = new ConcurrentHashMap<>();
     }

@@ -13,11 +13,11 @@ public class AdminRepoHardcodedImpl extends AbstractUserHardcodedRepo<Admin> imp
     static int CURRENT_MAX_ADMIN_ID = 139051;
     private static volatile AdminRepoHardcodedImpl instance;
 
-    private AdminRepoHardcodedImpl(CredentialRepo credentialRepo) {
+    private AdminRepoHardcodedImpl(CredentialRepoHardcodeImpl credentialRepo) {
         super(credentialRepo);
     }
 
-    public static AdminRepoHardcodedImpl getInstance(CredentialRepo credentialRepo) {
+    public static AdminRepoHardcodedImpl getInstance(CredentialRepoHardcodeImpl credentialRepo) {
         if (instance == null) {
             synchronized (CredentialRepoHardcodeImpl.class) {
                 if (instance == null) {
