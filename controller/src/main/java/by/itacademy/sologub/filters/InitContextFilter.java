@@ -18,10 +18,14 @@ import by.itacademy.sologub.Teacher;
 import by.itacademy.sologub.TeacherRepo;
 import by.itacademy.sologub.factory.ModelRepoFactory;
 import by.itacademy.sologub.factory.ModelRepoFactoryHardcodeImpl;
+import by.itacademy.sologub.factory.ModelRepoFactoryHibernateImpl;
 import by.itacademy.sologub.factory.ModelRepoFactoryPostgresDbImpl;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -44,7 +48,10 @@ import static by.itacademy.sologub.constants.Constant.CREDENTIAL_REPO;
 import static by.itacademy.sologub.constants.Constant.DB_CONFIG_FILE;
 import static by.itacademy.sologub.constants.Constant.DRIVER;
 import static by.itacademy.sologub.constants.Constant.GROUP_REPO;
+import static by.itacademy.sologub.constants.Constant.HIBERNATE;
 import static by.itacademy.sologub.constants.Constant.MARK_REPO;
+import static by.itacademy.sologub.constants.Constant.MEMORY;
+import static by.itacademy.sologub.constants.Constant.POSTGRES;
 import static by.itacademy.sologub.constants.Constant.SALARY_REPO;
 import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
@@ -69,10 +76,13 @@ public class InitContextFilter implements Filter {
     private void initRepositoryAndSetContext(String databaseType, FilterConfig filterConfig) throws PropertyVetoException {
         log.info("Приложение должно загружать {} тип баз данных", databaseType);
         switch (databaseType) {
-            case ("postgres"):
+            case (POSTGRES):
                 loadDatabasePostgres(filterConfig);
                 break;
-            case ("memory"):
+            case (HIBERNATE):
+                loadDatabaseHibernateApproach(filterConfig);
+                break;
+            case (MEMORY):
             default:
                 loadDatabaseInMemory(filterConfig);
                 break;
@@ -83,6 +93,20 @@ public class InitContextFilter implements Filter {
         ModelRepoFactory factory = ModelRepoFactoryHardcodeImpl.getInstance();
         setAppContext(conf, factory);
         setContent(factory);
+        log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
+    }
+
+    private void loadDatabaseHibernateApproach(FilterConfig conf){
+        log.info("Пытаемся загружать hibernate configuration");//TODO если нет - переход на memory type
+        Configuration cfg = new Configuration().configure();
+        try{
+            SessionFactory sf = cfg.buildSessionFactory();
+            ModelRepoFactory factory = ModelRepoFactoryHibernateImpl.getInstance(sf);
+            setAppContext(conf, factory);
+        } catch (HibernateException e){
+            log.info("Не получилось сконфигурировать hibernate. Переходим на HardcoreMemoryImpl Database");
+            loadDatabaseInMemory(conf);
+        }
     }
 
     private void loadDatabasePostgres(FilterConfig conf) throws PropertyVetoException {
@@ -91,8 +115,8 @@ public class InitContextFilter implements Filter {
             ModelRepoFactory factory = ModelRepoFactoryPostgresDbImpl.getInstance(pool);
             setAppContext(conf, factory);
         } else {
-            loadDatabaseInMemory(conf);
             log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
+            loadDatabaseInMemory(conf);
         }
     }
 
