@@ -34,6 +34,9 @@ public final class Constant {
     public static final String DRIVER = "driver";
     public static final String URL = "url";
     public static final String TYPE = "type";
+    public static final String POSTGRES = "postgres";
+    public static final String HIBERNATE = "hibernate";
+    public static final String MEMORY = "memory";
 
     //methods
     public static final String DELETE = "delete";
