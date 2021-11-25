@@ -41,7 +41,7 @@ import static by.itacademy.sologub.constants.SqlQuery.GET_GROUPS_LIST_WITH_TEACH
 import static by.itacademy.sologub.constants.SqlQuery.GET_GROUP_BY_ID;
 import static by.itacademy.sologub.constants.SqlQuery.INCLUDE_STUDENT_IN_GROUP_BY_IDS;
 import static by.itacademy.sologub.constants.SqlQuery.INCLUDE_SUBJECT_IN_GROUP_BY_IDS;
-import static by.itacademy.sologub.constants.SqlQuery.SET_GROUP_RETURNING;
+import static by.itacademy.sologub.constants.SqlQuery.SET_GROUP_RETURNING_GROUP_ID;
 
 @Slf4j
 public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implements GroupRepo {
@@ -60,14 +60,6 @@ public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implement
             }
         }
         return instance;
-    }
-
-    private List<Group> extractObjects(ResultSet set) throws SQLException {
-        List<Group> groups = new ArrayList<>();
-        while (set.next()) {
-            groups.add(extractObject(set));
-        }
-        return groups;
     }
 
     @Override
@@ -105,7 +97,7 @@ public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implement
              PreparedStatement st = con.prepareStatement(GET_GROUPS_LIST_WITH_TEACHERS);
              ResultSet set = st.executeQuery()) {
 
-            groups = extractObjects(set);
+            groups.addAll(extractObjects(set));
             log.debug("Получили из БД group list with teachers");
         } catch (SQLException e) {
             log.error("Не удалось совершить операцию извлечения group list with teachers", e);
@@ -134,7 +126,7 @@ public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implement
             st.setInt(1, entity.getId());
             set = st.executeQuery();
 
-            groups = extractObjects(set);
+            groups.addAll(extractObjects(set));
             log.debug("Получили из БД group list with {}Id={}", item, entity.getId());
         } catch (SQLException e) {
             log.error("Не удалось извлечь список groups по " + item + "Id=" + entity.getId(), e);
@@ -158,7 +150,7 @@ public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implement
         ResultSet set = null;
         try {
             con = pool.getConnection();
-            st = con.prepareStatement(SET_GROUP_RETURNING);
+            st = con.prepareStatement(SET_GROUP_RETURNING_GROUP_ID);
             st.setString(1, group.getTitle());
             st.setString(2, group.getDescription());
             con.setAutoCommit(false);

@@ -43,14 +43,6 @@ public class SubjectRepoPostgresImpl extends AbstractPostgresRepo<Subject> imple
         return instance;
     }
 
-    private List<Subject> extractObjects(ResultSet set) throws SQLException {
-        List<Subject> subjects = new ArrayList<>();
-        while (set.next()) {
-            subjects.add(extractObject(set));
-        }
-        return subjects;
-    }
-
     @Override
     protected Subject extractObject(ResultSet rs) throws SQLException {
         return new Subject()
@@ -65,7 +57,7 @@ public class SubjectRepoPostgresImpl extends AbstractPostgresRepo<Subject> imple
         try (Connection con = pool.getConnection();
              PreparedStatement st = con.prepareStatement(GET_SUBJECTS_LIST)) {
             rs = st.executeQuery();
-            subjects = extractObjects(rs);
+            subjects.addAll(extractObjects(rs));
             log.info("Извлекли все Subjects из БД");
         } catch (SQLException e) {
             log.error("Не удалось совершить операцию извлечения Subject list", e);
@@ -84,7 +76,7 @@ public class SubjectRepoPostgresImpl extends AbstractPostgresRepo<Subject> imple
             st.setInt(1, groupId);
             set = st.executeQuery();
 
-            subjects = extractObjects(set);
+            subjects.addAll(extractObjects(set));
             log.info("Извлекли все Subjects из БД по groupId={}", groupId);
         } catch (SQLException e) {
             log.error("Не удалось совершить операцию извлечения Subject set по groupId=" + groupId, e);

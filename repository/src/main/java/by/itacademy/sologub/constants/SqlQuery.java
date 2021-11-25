@@ -52,6 +52,20 @@ public final class SqlQuery {
     public static final String DELETE_ALL_SALARIES_BY_TEACHER_ID = "DELETE FROM salary WHERE teacher_id=?;";
     public static final String UPDATE_SALARY_BY_ID = "UPDATE salary SET coins_amount=?,date=? WHERE id=?;";
 
+    //mark postgres sql
+    public static final String GET_MARK_BY_ID = "select m.id,m.date,m.point,m.subject_id,s.title from mark m " +
+            "join subject s on m.subject_id=s.id where m.id=?;";
+    public static final String GET_MARKS_BY_STUDENT_ID = "select m.id,m.date,m.point,m.subject_id,s.title " +
+            "from mark m join subject s on m.subject_id=s.id where m.student_id=?;";
+    public static final String GET_MARKS_BY_STUDENT_ID_AND_SUBJECT_ID = "select m.id,m.date,m.point,m.subject_id,s.title " +
+            "from mark m join subject s on m.subject_id=s.id where m.student_id=? AND m.subject_id=?;";
+    public static final String GET_MARKS_BY_SUBJECT_ID = "select m.id,m.date,m.point,m.subject_id,s.title " +
+            "from mark m join subject s on m.subject_id=s.id where m.subject_id=?;";
+    public static final String SET_MARK = "INSERT INTO mark (student_id,subject_id,date,point)  values ((select id from" +
+            " person p  where p.id=? and p.role='STUDENT'), (select id from subject s where s.id=?), ?, ?);";
+    public static final String UPDATE_MARK = "UPDATE mark SET date=?,point=? WHERE id=? AND subject_id=?;";
+    public static final String DELETE_MARK = "DELETE FROM mark WHERE id=?;";
+
     //subject postgres sql
     public static final String DELETE_SUBJECT_BY_ID = "DELETE FROM subject WHERE id=?;";
     public static final String GET_SUBJECT_BY_ID = "SELECT id, title FROM subject WHERE id=?;";
@@ -78,7 +92,7 @@ public final class SqlQuery {
             " p.patronymic, p.date_of_birth, p.credential_id, c.login, c.password FROM public.group g left outer JOIN " +
             "person p ON g.teacher_id=p.id left outer JOIN credential c ON c.id=p.credential_id where g.id=? and " +
             "(g.teacher_id is not null or g.teacher_id is null);";
-    public static final String SET_GROUP_RETURNING =
+    public static final String SET_GROUP_RETURNING_GROUP_ID =
             "INSERT INTO public.group(title, description) VALUES(?,?) ON CONFLICT (title) DO NOTHING RETURNING id";
     public static final String DELETE_GROUP_BY_ID = "DELETE FROM public.group WHERE id=?;";
     public static final String CHANGE_GROUP_BY_ID = "UPDATE public.group SET title=?,teacher_id=?,description=? WHERE id=?;";

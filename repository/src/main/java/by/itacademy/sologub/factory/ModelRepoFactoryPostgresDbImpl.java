@@ -7,6 +7,7 @@ import by.itacademy.sologub.CredentialRepoPostgresImpl;
 import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.GroupRepoPostgresImpl;
 import by.itacademy.sologub.MarkRepo;
+import by.itacademy.sologub.MarkRepoPostgresImpl;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.SalaryRepoPostgresImpl;
 import by.itacademy.sologub.StudentRepo;
@@ -26,6 +27,7 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
     private static SalaryRepoPostgresImpl salaryRepo;
     private static SubjectRepoPostgresImpl subjectRepo;
     private static GroupRepoPostgresImpl groupRepo;
+    private static MarkRepoPostgresImpl markRepo;
 
     private ModelRepoFactoryPostgresDbImpl(ComboPooledDataSource pool) {
         credentialRepo = CredentialRepoPostgresImpl.getInstance(pool);
@@ -35,6 +37,7 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
         salaryRepo = SalaryRepoPostgresImpl.getInstance(pool);
         subjectRepo = SubjectRepoPostgresImpl.getInstance(pool);
         groupRepo = GroupRepoPostgresImpl.getInstance(pool);
+        markRepo = MarkRepoPostgresImpl.getInstance(pool);
     }
 
     public static ModelRepoFactory getInstance(ComboPooledDataSource pool) {
@@ -85,6 +88,6 @@ public final class ModelRepoFactoryPostgresDbImpl implements ModelRepoFactory {
 
     @Override
     public MarkRepo getMarkRepo() {
-        return null;//TODO - temporal
+        return markRepo;
     }
 }
