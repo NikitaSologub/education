@@ -100,7 +100,6 @@ CREATE TABLE public.mark
 (
     id         int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
     student_id int4 NOT NULL,
-    group_id   int4 NOT NULL,
     subject_id int4 NOT NULL,
     "date"     date NOT NULL,
     point      int4 NOT NULL,
