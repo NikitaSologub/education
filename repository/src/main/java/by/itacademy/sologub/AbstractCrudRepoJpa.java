@@ -20,8 +20,9 @@ public abstract class AbstractCrudRepoJpa<T extends AbstractEntity> {
         this.sessionFactory = sf;
     }
 
+    protected abstract T getEmptyObj();
+
     protected EntityManager getEntityManager() {
-        //todo - (не знаю есть в ли в этом смысл но пусть живёт)
         return sessionFactory.createEntityManager();
     }
 
@@ -37,7 +38,7 @@ public abstract class AbstractCrudRepoJpa<T extends AbstractEntity> {
             transaction.commit();
         } catch (PersistenceException e) {
             log.error("Не удалось достать List " + objClass.getSimpleName() + " из БД", e);
-            throw e;
+//            throw e;//TODO - убрать позже
         } finally {
             manager.close();
         }
@@ -47,7 +48,7 @@ public abstract class AbstractCrudRepoJpa<T extends AbstractEntity> {
     protected T get(int id) {
         EntityManager manager = getEntityManager();
         EntityTransaction transaction = manager.getTransaction();
-        T result = null;
+        T result = getEmptyObj();
         try {
             transaction.begin();
             result = manager.find(objClass, id);
@@ -55,29 +56,28 @@ public abstract class AbstractCrudRepoJpa<T extends AbstractEntity> {
             transaction.commit();
         } catch (PersistenceException e) {
             log.error("Не удалось достать" + objClass.getSimpleName() + " из бд по id=" + id, e);
-            throw e;
+//            throw e;//TODO - убрать позже
         } finally {
             manager.close();
         }
         return result;
     }
 
-    protected T getByNamedQueryStringArgument(String queryName, String arg) {
-        T result = null;
+    protected T getByNamedQueryStringArgument(String queryName, String arg, String columnName) {
+        T result = getEmptyObj();
         EntityManager manager = getEntityManager();
         EntityTransaction transaction = manager.getTransaction();
         try {
             transaction.begin();
-            @SuppressWarnings("JpaQlInspection")
             TypedQuery<T> typedQuery = manager
                     .createNamedQuery(queryName, objClass)
-                    .setParameter(1, arg);
+                    .setParameter(columnName, arg);
             result = typedQuery.getSingleResult();
             log.debug("Достали {} из бд", result);
             transaction.commit();
         } catch (PersistenceException e) {
             log.error("Не удалось достать информацию по запросу", e);
-            throw e;
+//            throw e;//TODO - убрать позже
         } finally {
             manager.close();
         }
@@ -85,7 +85,7 @@ public abstract class AbstractCrudRepoJpa<T extends AbstractEntity> {
     }
 
     protected boolean input(T obj) {
-        if (obj == null) return false;
+        if (obj == null || obj.getId() != 0) return false;
         EntityManager manager = getEntityManager();
         EntityTransaction transaction = manager.getTransaction();
         boolean result = false;
@@ -98,7 +98,7 @@ public abstract class AbstractCrudRepoJpa<T extends AbstractEntity> {
         } catch (PersistenceException e) {
             log.error("Не получилось добавить " + obj + ". Он имеет поля, которые уже есть у объекта в БД", e);
             transaction.rollback();
-            throw e;
+//            throw e;//TODO - убрать позже
         } finally {
             manager.close();
         }
@@ -106,20 +106,41 @@ public abstract class AbstractCrudRepoJpa<T extends AbstractEntity> {
     }
 
     protected boolean change(T obj) {
-        if (obj == null || obj.getId() == 0) return false;
+        if (obj == null || obj.getId() <= 0) return false;
         EntityManager manager = getEntityManager();
         EntityTransaction transaction = manager.getTransaction();
         boolean result = false;
         try {
             transaction.begin();
-            manager.merge(obj);
+            obj = manager.merge(obj);
             result = manager.contains(obj);
             log.debug("Результат изменения{} = {} ", obj, result);
             transaction.commit();
         } catch (PersistenceException e) {
             log.error("Не получилось изменить" + obj + "Он имеет поля, которые уже есть у объекта в БД", e);
             transaction.rollback();
-            throw e;
+//            throw e;//TODO - убрать позже
+        } finally {
+            manager.close();
+        }
+        return result;
+    }
+
+    protected boolean executeByOneStringParameter(String param, String paramName, String queryName) {
+        if (param == null) return false;
+        EntityManager manager = getEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        boolean result = false;
+        try {
+            transaction.begin();
+            result = manager.createQuery(queryName)
+                    .setParameter(paramName, param)
+                    .executeUpdate() != 0;
+            log.debug("Результат выполнения запроса с параметром {}={} будет {}", paramName, param, result);
+        } catch (PersistenceException e) {
+            log.error("Не получилось удалить объект по полю " + paramName + "=" + param, e);
+            transaction.rollback();
+//            throw e;//TODO - убрать позже
         } finally {
             manager.close();
         }
@@ -127,7 +148,7 @@ public abstract class AbstractCrudRepoJpa<T extends AbstractEntity> {
     }
 
     protected boolean remove(T obj) {
-        if (obj == null || obj.getId() == 0) return false;
+        if (obj == null || obj.getId() <= 0) return false;
         EntityManager manager = getEntityManager();
         EntityTransaction transaction = manager.getTransaction();
         boolean result = false;
@@ -140,7 +161,7 @@ public abstract class AbstractCrudRepoJpa<T extends AbstractEntity> {
         } catch (PersistenceException e) {
             log.error("Не получилось удалить " + obj + " в БД", e);
             transaction.rollback();
-            throw e;
+//            throw e;//TODO - убрать позже
         } finally {
             manager.close();
         }
