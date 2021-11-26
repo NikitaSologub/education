@@ -6,26 +6,40 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Credential extends AbstractEntity{
+@NamedQueries({
+        @NamedQuery(name = "getCredentialByLogin",
+                query = "select c from Credential c where c.login=:login"),
+        @NamedQuery(name = "deleteCredentialByLogin",
+                query = "delete from Credential c where c.login=:login"),
+        @NamedQuery(name = "deleteCredentialById",
+                query = "delete from Credential c where c.id=:id")})
+@Entity
+@Table(name = "credential")
+public class Credential extends AbstractEntity {
     private String login;
     private String password;
 
-    public Credential withId(int id){
+    public Credential withId(int id) {
         setId(id);
         return this;
     }
 
-    public Credential withLogin(String login){
+    public Credential withLogin(String login) {
         setLogin(login);
         return this;
     }
 
-    public Credential withPassword(String password){
+    public Credential withPassword(String password) {
         setPassword(password);
         return this;
     }
