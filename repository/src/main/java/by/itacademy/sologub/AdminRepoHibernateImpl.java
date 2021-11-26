@@ -1,9 +1,16 @@
 package by.itacademy.sologub;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 
+import java.util.HashSet;
 import java.util.Set;
 
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.ConstantObject.ADMIN_NOT_EXISTS;
+import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG;
+
+@Slf4j
 public class AdminRepoHibernateImpl extends AbstractCrudRepoJpa<Admin> implements AdminRepo {
     private static volatile AdminRepoHibernateImpl instance;
 
@@ -22,40 +29,62 @@ public class AdminRepoHibernateImpl extends AbstractCrudRepoJpa<Admin> implement
         return instance;
     }
 
-    //todo - getEntityManager(); - будем вызывать из BaseCrudRepoJpa
-
     @Override
     public Set<Admin> getAdminsList() {
-        return null;//todo - ЗАГЛУШКА
+        return new HashSet<>(getAll());
     }
 
     @Override
     public Admin getAdminIfExistsOrGetSpecialValue(String login) {
-        return null;//todo - ЗАГЛУШКА
+        Admin a = getByNamedQueryStringArgument("getAdminByLogin", login, LOGIN);
+        if (a == null) {
+            log.debug("Не получилось получить обьект Admin по {}={}", LOGIN, login);
+            return ADMIN_NOT_EXISTS;
+        }
+        return a;
     }
 
     @Override
     public Admin getAdminIfExistsOrGetSpecialValue(String login, String password) {
-        return null;//todo - ЗАГЛУШКА
+        Admin a = getAdminIfExistsOrGetSpecialValue(login);
+        if (ADMIN_NOT_EXISTS != a) {
+            if (a.getCredential().getPassword().equals(password)) {
+                return a;
+            } else {
+                log.debug("Не получилось получить обьект Admin по {}={}. Пароль не верен", LOGIN, login);
+                return ADMIN_PASSWORD_WRONG;
+            }
+        }
+        return a;
     }
 
     @Override
     public boolean putAdminIfNotExists(Admin admin) {
-        return false;//todo - ЗАГЛУШКА
+        return input(admin);
     }
 
     @Override
     public boolean changeAdminParametersIfExists(Admin newAdmin) {
-        return false;//todo - ЗАГЛУШКА
+        return change(newAdmin);
     }
 
     @Override
     public boolean deleteAdmin(String login) {
-        return false;//todo - ЗАГЛУШКА
+        Admin a = getByNamedQueryStringArgument("getAdminByLogin", login, LOGIN);
+        if (ADMIN_NOT_EXISTS == a) {
+            log.debug("Не получилось удалить обьект Admin по {}={}", LOGIN, login);
+            return false;
+        }
+        return deleteAdmin(a);
     }
 
     @Override
     public boolean deleteAdmin(Admin admin) {
-        return false;//todo - ЗАГЛУШКА
+        return remove(admin);
+    }
+
+    @Override
+    protected Admin getEmptyObj() {
+        return ADMIN_NOT_EXISTS;
     }
 }
