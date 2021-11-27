@@ -70,7 +70,7 @@ public class AdminRepoHibernateImpl extends AbstractCrudRepoJpa<Admin> implement
 
     @Override
     public boolean deleteAdmin(String login) {
-        Admin a = getByNamedQueryStringArgument("getAdminByLogin", login, LOGIN);
+        Admin a = getAdminIfExistsOrGetSpecialValue(login);
         if (ADMIN_NOT_EXISTS == a) {
             log.debug("Не получилось удалить обьект Admin по {}={}", LOGIN, login);
             return false;
