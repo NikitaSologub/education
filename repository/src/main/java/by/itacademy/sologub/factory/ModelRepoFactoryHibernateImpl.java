@@ -7,20 +7,26 @@ import by.itacademy.sologub.CredentialRepoHibernateImpl;
 import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.MarkRepo;
 import by.itacademy.sologub.SalaryRepo;
+import by.itacademy.sologub.SalaryRepoHibernateImpl;
 import by.itacademy.sologub.StudentRepo;
 import by.itacademy.sologub.SubjectRepo;
 import by.itacademy.sologub.TeacherRepo;
+import by.itacademy.sologub.TeacherRepoHibernateImpl;
 import org.hibernate.SessionFactory;
 
 public final class ModelRepoFactoryHibernateImpl implements ModelRepoFactory {
     private static ModelRepoFactoryHibernateImpl instance;
     private static AdminRepoHibernateImpl adminRepo;
+    private static TeacherRepoHibernateImpl teacherRepo;
+    private static SalaryRepoHibernateImpl salaryRepo;
     private static CredentialRepoHibernateImpl credentialRepo;
     //тут будем добавлять ссылки на репозитории по типу private static xxxRepo;
 
     private ModelRepoFactoryHibernateImpl(SessionFactory sf) {
-        adminRepo = AdminRepoHibernateImpl.getInstance(sf);
         credentialRepo = CredentialRepoHibernateImpl.getInstance(sf);
+        adminRepo = AdminRepoHibernateImpl.getInstance(sf);
+        teacherRepo = TeacherRepoHibernateImpl.getInstance(sf);
+        salaryRepo = SalaryRepoHibernateImpl.getInstance(sf,teacherRepo);
         //тут будем добавлять инициализацию репозиториев через XxxRepoHibernateImpl.getInstance(sf);
     }
 
@@ -42,7 +48,7 @@ public final class ModelRepoFactoryHibernateImpl implements ModelRepoFactory {
 
     @Override
     public TeacherRepo getTeacherRepo() {
-        return null;//todo - временная заглушка
+        return teacherRepo;
     }
 
     @Override
@@ -57,7 +63,7 @@ public final class ModelRepoFactoryHibernateImpl implements ModelRepoFactory {
 
     @Override
     public SalaryRepo getSalariesRepo() {
-        return null;//todo - временная заглушка
+        return salaryRepo;
     }
 
     @Override

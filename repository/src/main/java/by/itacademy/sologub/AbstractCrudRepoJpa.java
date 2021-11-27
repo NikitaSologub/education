@@ -84,6 +84,27 @@ public abstract class AbstractCrudRepoJpa<T extends AbstractEntity> {
         return result;
     }
 
+    protected T getByNamedQueryIntArgument(String queryName, int arg, String columnName) {
+        T result = getEmptyObj();
+        EntityManager manager = getEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        try {
+            transaction.begin();
+            TypedQuery<T> typedQuery = manager
+                    .createNamedQuery(queryName, objClass)
+                    .setParameter(columnName, arg);
+            result = typedQuery.getSingleResult();
+            log.debug("Достали {} из бд", result);
+            transaction.commit();
+        } catch (PersistenceException e) {
+            log.error("Не удалось достать информацию по запросу", e);
+//            throw e;//TODO - убрать позже
+        } finally {
+            manager.close();
+        }
+        return result;
+    }
+
     protected boolean input(T obj) {
         if (obj == null || obj.getId() != 0) return false;
         EntityManager manager = getEntityManager();
