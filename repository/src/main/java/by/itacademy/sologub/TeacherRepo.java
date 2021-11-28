@@ -5,7 +5,7 @@ import java.util.Set;
 public interface TeacherRepo {
     Set<Teacher> getTeachersSet();
 
-    Teacher getTeacherIfExistsOrGetSpecialValue(int teacherId);
+    Teacher getTeacherIfExistsOrGetSpecialValue(int id);
 
     Teacher getTeacherIfExistsOrGetSpecialValue(String login);
 

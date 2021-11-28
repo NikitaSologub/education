@@ -97,8 +97,8 @@ public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> i
     }
 
     @Override
-    public Teacher getTeacherIfExistsOrGetSpecialValue(int teacherId) {
-        return getUserIfExistsOrGetSpecialValue(teacherId);
+    public Teacher getTeacherIfExistsOrGetSpecialValue(int id) {
+        return getUserIfExistsOrGetSpecialValue(id);
     }
 
     @Override//todo - вынести метод ниже

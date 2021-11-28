@@ -54,8 +54,8 @@ public class TeacherRepoHardcodedImpl extends AbstractUserHardcodedRepo<Teacher>
     }
 
     @Override
-    public Teacher getTeacherIfExistsOrGetSpecialValue(int teacherId) {
-        return getUserIfExistsOrGetSpecialValue(teacherId);
+    public Teacher getTeacherIfExistsOrGetSpecialValue(int id) {
+        return getUserIfExistsOrGetSpecialValue(id);
     }
 
     @Override
