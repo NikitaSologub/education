@@ -1,6 +1,9 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.Salary;
+import by.itacademy.sologub.SalaryRepo;
+import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.TeacherRepo;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -9,9 +12,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Set;
 
-import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.Attributes.COINS;
+import static by.itacademy.sologub.constants.Attributes.DATE;
+import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.Attributes.TEACHER;
+import static by.itacademy.sologub.constants.Constant.ACTION;
+import static by.itacademy.sologub.constants.Constant.ADMIN_SALARIES_PAGE;
+import static by.itacademy.sologub.constants.Constant.AVERAGE;
+import static by.itacademy.sologub.constants.Constant.SALARY_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.SALARY_REPO;
+import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
+import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
 
 @WebServlet(SALARY_CONTROLLER)
 @Slf4j
@@ -26,7 +40,8 @@ public class SalaryController extends BaseController {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         SalaryRepo repo = (SalaryRepo) getServletContext().getAttribute(SALARY_REPO);
         Salary salary = extractSalaryFromFormWithoutId(req);
-        boolean result = repo.putSalary(salary);
+        int teacherId = Integer.parseInt(req.getParameter(TEACHER_ID));
+        boolean result = repo.putSalaryToTeacher(salary, teacherId);
 
         String msg;
         if (result) {
@@ -61,8 +76,7 @@ public class SalaryController extends BaseController {
     Salary extractSalaryFromFormWithoutId(HttpServletRequest req) {
         Salary salary = new Salary()
                 .withCoins(Integer.parseInt(req.getParameter(COINS)))
-                .withDate(LocalDate.parse(req.getParameter(DATE)))
-                .withTeacherId(Integer.parseInt(req.getParameter(TEACHER_ID)));
+                .withDate(LocalDate.parse(req.getParameter(DATE)));
         log.debug("Из запроса извлечён обьект зп (без id) {}", salary);
         return salary;
     }
@@ -100,13 +114,25 @@ public class SalaryController extends BaseController {
         refreshTeacherAndForward(msg, req, resp);
     }
 
+    private void doSalariesParameters(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        SalaryRepo repo = (SalaryRepo) getServletContext().getAttribute(SALARY_REPO);
+        Set<Salary> salaryList = repo.getAllSalariesByTeacherId(Integer.parseInt(req.getParameter(ID)));
+
+        double average = salaryList.stream()
+                .mapToInt(Salary::getCoins)
+                .average().orElse(0.0);
+        req.setAttribute(AVERAGE, round(average / 100));
+        refreshTeacherAndForward("Средняя зарплата учителя по итогам всех месяцев работы ", req, res);
+    }
+
+    private String round(double val) {
+        return String.format("%.2f", val);
+    }
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (DELETE.equals(req.getParameter(ACTION))) {
-            doDelete(req, resp);
-            return;
-        } else if (PUT.equals(req.getParameter(ACTION))) {
-            doPut(req, resp);
+        if (AVERAGE.equals(req.getParameter(ACTION))) {
+            doSalariesParameters(req, resp);
             return;
         }
         super.service(req, resp);

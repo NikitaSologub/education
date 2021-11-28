@@ -1,41 +1,73 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.Credential;
+import by.itacademy.sologub.Student;
+import by.itacademy.sologub.StudentRepo;
+import by.itacademy.sologub.role.Role;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Set;
 
-import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Attributes.*;
-//import static by.itacademy.sologub.constants.Constants.CREDENTIAL_ID;
+import static by.itacademy.sologub.constants.Attributes.FIRSTNAME;
+import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.Attributes.LASTNAME;
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.Attributes.PASSWORD;
+import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
+import static by.itacademy.sologub.constants.Constant.ADMIN_STUDENTS_PAGE;
+import static by.itacademy.sologub.constants.Constant.CREDENTIAL_ID;
+import static by.itacademy.sologub.constants.Constant.DATE_OF_BIRTH;
+import static by.itacademy.sologub.constants.Constant.STUDENT_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
 
 @WebServlet(STUDENT_CONTROLLER)
 @Slf4j
-public class StudentController extends BaseController{
+public class StudentController extends AbstractPersonController<Student> {
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
-        Student student = extractStudentFromForm(req);
-        boolean result = repo.putStudentIfNotExists(student);
-
-        String msg;
-        if (result) {
-            msg = "Студент " + req.getParameter(LOGIN) + " успешно добавлен";
-            log.info("Студент {} успешно добавлен", req.getParameter(LOGIN));
-        } else {
-            msg = "Не удалось добавить Студента " + req.getParameter(LOGIN);
-            log.info("Не удалось добавить Студента {}", req.getParameter(LOGIN));
-        }
-        forward(ADMIN_STUDENTS_PAGE, msg, req, resp);
+    protected String getRole() {
+        return String.valueOf(Role.STUDENT);
     }
 
-    Student extractStudentFromForm(HttpServletRequest req) {
+    @Override
+    protected String getUrl() {
+        return ADMIN_STUDENTS_PAGE;
+    }
+
+    @Override
+    protected Set<Student> getSet() {
+        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
+        return repo.getStudentsSet();
+    }
+
+    @Override
+    protected boolean putInRepo(Student user) {
+        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
+        return repo.putStudentIfNotExists(user);
+    }
+
+    @Override
+    protected boolean changeInRepo(Student user) {
+        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
+        return repo.changeStudentParametersIfExists(user);
+    }
+
+    @Override
+    protected boolean deleteInRepo(Student user) {
+        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
+        return repo.deleteStudent(user);
+    }
+
+    @Override
+    protected boolean deleteInRepo(String userLogin) {
+        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
+        return repo.deleteStudent(userLogin);
+    }
+
+    @Override
+    protected Student extractUserFromForm(HttpServletRequest req) {
         Student teacher = new Student()
                 .withCredential(new Credential()
                         .withLogin(req.getParameter(LOGIN))
@@ -49,54 +81,12 @@ public class StudentController extends BaseController{
         return teacher;
     }
 
-    Student extractStudentFromFormWithIds(HttpServletRequest req){
-        Student student = extractStudentFromForm(req);
+    @Override
+    protected Student extractUserFromFormWithIds(HttpServletRequest req) {
+        Student student = extractUserFromForm(req);
         student.setId(Integer.parseInt(req.getParameter(ID)));
         student.getCredential().setId(Integer.parseInt(req.getParameter(CREDENTIAL_ID)));
         log.debug("Из запроса извлечён обьект студента {}", student);
         return student;
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
-        Student newTeacherValues = extractStudentFromFormWithIds(req);
-        boolean result = repo.changeStudentParametersIfExists(newTeacherValues);
-        String msg;
-        if (result) {
-            msg = "Студент " + req.getParameter(LOGIN) + " успешно изменён";
-            log.info("Студент {} успешно изменён", req.getParameter(LOGIN));
-        } else {
-            msg = "Не удалось изменить Студента " + req.getParameter(LOGIN);
-            log.info("Не удалось изменить Студента {}", req.getParameter(LOGIN));
-        }
-        forward(ADMIN_STUDENTS_PAGE, msg, req, resp);
-    }
-
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
-        boolean result = repo.deleteStudent(req.getParameter(LOGIN));
-        String msg;
-        if (result) {
-            msg = "Студент " + req.getParameter(LOGIN) + " успешно удалён";
-            log.info("Студент {} успешно удалён", req.getParameter(LOGIN));
-        } else {
-            msg = "Не удалось удалить Студента " + req.getParameter(LOGIN);
-            log.info("Не удалось удалить Студента {}", req.getParameter(LOGIN));
-        }
-        forward(ADMIN_STUDENTS_PAGE, msg, req, resp);
-    }
-
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (DELETE.equals(req.getParameter(ACTION))) {
-            doDelete(req, resp);
-            return;
-        } else if (PUT.equals(req.getParameter(ACTION))) {
-            doPut(req, resp);
-            return;
-        }
-        super.service(req, resp);
     }
 }

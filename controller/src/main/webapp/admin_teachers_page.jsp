@@ -4,17 +4,13 @@
 <head>
     <title>Admin teachers page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" type="text/css" href="<c:url value='/css/admin_front_page.css'/>"/>
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/general_style.css'/>"/>
     <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
 </head>
 <body>
 <h1>ADMIN - TEACHER SALARIES PAGE!</h1>
 <h4>Учителя нашего клуба по интересам</h4>
-<h3 class="message">
-    <c:if test="${not empty requestScope.message}">
-        <c:out value="${requestScope.message}"/>
-    </c:if>
-</h3>
+<jsp:include page="header.jsp"/>
 <h6>
     <table border="1" width="100%">
         <tr>
@@ -28,7 +24,7 @@
             <th>ИЗМЕНИТЬ</th>
             <th>К ЗАРПЛАТАМ</th>
         </tr>
-        <c:forEach var="teacher" items="${applicationScope.teacherRepo.teachersList}">
+        <c:forEach var="teacher" items="${requestScope.personsSet}">
             <tr>
                 <td><c:out value="${teacher.credential.login}"/></td>
                 <td><c:out value="${teacher.credential.password}"/></td>
@@ -51,7 +47,7 @@
                         <input type="hidden" name="id" value=${teacher.id}>
                         <input type="hidden" name="credentialId" value=${teacher.credential.id}>
                         <input type="hidden" name="login" value="${teacher.credential.login}">
-                        Password: <input type="text" name="password" value="${teacher.credential.password}">
+                        Password: <input type="password" name="password" value="${teacher.credential.password}">
                         Firstname: <input type="text" name="firstname" value="${teacher.firstname}">
                         Lastname: <input type="text" name="lastname" value="${teacher.lastname}">
                         Patronymic: <input type="text" name="patronymic" value="${teacher.patronymic}">
@@ -72,7 +68,7 @@
 Добавить нового учителя
 <form action="<c:url value="TeacherController"/>" method="post">
     Username: <label> <input type="text" name="login"/> </label><br/>
-    Password: <label> <input type="text" name="password"/> </label><br/>
+    Password: <label> <input type="password" name="password"/> </label><br/>
     Firstname: <label> <input type="text" name="firstname"/> </label><br/>
     Lastname: <label> <input type="text" name="lastname"/> </label><br/>
     Patronymic: <label> <input type="text" name="patronymic"/> </label><br/>
@@ -80,7 +76,6 @@
     <button type="submit">Создать учителя</button>
     <input type="reset">
 </form>
-<h5> <a href="${pageContext.request.contextPath}/admin_front_page.jsp">Go back to admin home page.</a> </h5>
-<h5> <a href="${pageContext.request.contextPath}/LogoutController">Log out.</a> </h5>
+<jsp:include page="admin_footer.jsp"/>
 </body>
 </html>

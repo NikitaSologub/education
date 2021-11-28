@@ -7,12 +7,7 @@
 </head>
 <body>
 <h1>Welcome in Teacher front page</h1>
-
-<h3 class="message">
-    <c:if test="${not empty requestScope.message}">
-        <c:out value="${requestScope.message}"/>
-    </c:if>
-</h3>
+<jsp:include page="header.jsp"/>
 <a href="${pageContext.request.contextPath}/LogoutController">Log out.</a>
 </body>
 </html>

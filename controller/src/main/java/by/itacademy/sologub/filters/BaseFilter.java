@@ -6,7 +6,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
 
-import static by.itacademy.sologub.constants.Constant.*;
+import static by.itacademy.sologub.constants.Constant.ERROR_MESSAGE;
+import static by.itacademy.sologub.constants.Constant.LOGIN_PAGE;
+import static by.itacademy.sologub.constants.Constant.MESSAGE;
 
 public abstract class BaseFilter {
     void forwardLoginPage(String msg, ServletRequest req, ServletResponse res) throws ServletException, IOException {

@@ -1,19 +1,43 @@
 package by.itacademy.sologub.factory;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.AdminRepo;
+import by.itacademy.sologub.AdminRepoHardcodedImpl;
+import by.itacademy.sologub.CredentialRepo;
+import by.itacademy.sologub.CredentialRepoHardcodeImpl;
+import by.itacademy.sologub.GroupRepo;
+import by.itacademy.sologub.GroupRepoHardcodedImpl;
+import by.itacademy.sologub.MarkRepo;
+import by.itacademy.sologub.MarkRepoHardcodedImpl;
+import by.itacademy.sologub.SalaryRepo;
+import by.itacademy.sologub.SalaryRepoHardcodedImpl;
+import by.itacademy.sologub.StudentRepo;
+import by.itacademy.sologub.StudentRepoHardcodedImpl;
+import by.itacademy.sologub.SubjectRepo;
+import by.itacademy.sologub.SubjectRepoHardcodedImpl;
+import by.itacademy.sologub.TeacherRepo;
+import by.itacademy.sologub.TeacherRepoHardcodedImpl;
 
 public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     private static ModelRepoFactoryHardcodeImpl instance;
-    private static CredentialRepo credentialRepo;
-    private static TeacherRepo teacherRepo;
-    private static StudentRepo studentRepo;
-    private static SalaryRepo salaryRepo;
+    private static CredentialRepoHardcodeImpl credentialRepo;
+    private static TeacherRepoHardcodedImpl teacherRepo;
+    private static StudentRepoHardcodedImpl studentRepo;
+    private static AdminRepoHardcodedImpl adminRepo;
+    private static SalaryRepoHardcodedImpl salaryRepo;
+    private static SubjectRepoHardcodedImpl subjectRepo;
+    private static GroupRepoHardcodedImpl groupRepo;
+    private static MarkRepoHardcodedImpl markRepo;
 
     private ModelRepoFactoryHardcodeImpl() {
         credentialRepo = CredentialRepoHardcodeImpl.getInstance();
         teacherRepo = TeacherRepoHardcodedImpl.getInstance(credentialRepo);
-        studentRepo = StudentRepoHardcodedImpl.getInstance(credentialRepo);
-        salaryRepo = SalaryRepoHardcodedImpl.getInstance();
+        studentRepo = StudentRepoHardcodedImpl.getInstance(credentialRepo, GroupRepoHardcodedImpl.getInstance());
+        adminRepo = AdminRepoHardcodedImpl.getInstance(credentialRepo);
+        salaryRepo = SalaryRepoHardcodedImpl.getInstance(TeacherRepoHardcodedImpl.getInstance(credentialRepo));
+        subjectRepo = SubjectRepoHardcodedImpl.getInstance(GroupRepoHardcodedImpl.getInstance());
+        groupRepo = GroupRepoHardcodedImpl.getInstance();
+        markRepo = MarkRepoHardcodedImpl.getInstance(StudentRepoHardcodedImpl.getInstance(credentialRepo,
+                GroupRepoHardcodedImpl.getInstance()), subjectRepo);
     }
 
     public static ModelRepoFactoryHardcodeImpl getInstance() {
@@ -43,7 +67,27 @@ public final class ModelRepoFactoryHardcodeImpl implements ModelRepoFactory {
     }
 
     @Override
+    public AdminRepo getAdminRepo() {
+        return adminRepo;
+    }
+
+    @Override
     public SalaryRepo getSalariesRepo() {
         return salaryRepo;
+    }
+
+    @Override
+    public SubjectRepo getSubjectRepo() {
+        return subjectRepo;
+    }
+
+    @Override
+    public GroupRepo getGroupRepo() {
+        return groupRepo;
+    }
+
+    @Override
+    public MarkRepo getMarkRepo() {
+        return markRepo;
     }
 }

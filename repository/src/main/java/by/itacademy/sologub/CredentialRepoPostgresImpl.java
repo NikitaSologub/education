@@ -8,13 +8,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static by.itacademy.sologub.constants.Attributes.*;
-import static by.itacademy.sologub.constants.ConstantObject.*;
-import static by.itacademy.sologub.constants.SqlQuery.*;
+import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.Attributes.ID_NOT_EXISTS;
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.Attributes.PASSWORD;
+import static by.itacademy.sologub.constants.ConstantObject.LOGIN_NOT_EXISTS;
+import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
+import static by.itacademy.sologub.constants.SqlQuery.DELETE_CREDENTIAL_BY_ID;
+import static by.itacademy.sologub.constants.SqlQuery.DELETE_CREDENTIAL_BY_LOGIN;
+import static by.itacademy.sologub.constants.SqlQuery.GET_CREDENTIAL_BY_LOGIN;
+import static by.itacademy.sologub.constants.SqlQuery.SET_CREDENTIAL_AND_GET_ID;
+import static by.itacademy.sologub.constants.SqlQuery.SET_CREDENTIAL_IF_NOT_EXISTS;
+import static by.itacademy.sologub.constants.SqlQuery.UPDATE_CREDENTIAL;
 
 @Slf4j
-public class CredentialRepoPostgresImpl extends AbstractPostgresRepo implements CredentialRepo {
-    private static CredentialRepoPostgresImpl instance;
+public class CredentialRepoPostgresImpl extends AbstractPostgresRepo<Credential> implements CredentialRepo {
+    private static volatile CredentialRepoPostgresImpl instance;
 
     private CredentialRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);

@@ -11,6 +11,17 @@ body{
     color: #008075;
     font-size: 25px;
 }
+.session{
+    margin: 15px 0 0;
+    color: #001e7f;
+    font-size: 25px;
+}
+
+.average{
+    margin: 15px 0 0;
+    color: #bd6202;
+    font-size: 25px;
+}
 .table {
     table-layout: fixed;
     width: 100%;

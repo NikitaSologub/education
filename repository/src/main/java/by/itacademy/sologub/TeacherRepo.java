@@ -1,9 +1,11 @@
 package by.itacademy.sologub;
 
-import java.util.List;
+import java.util.Set;
 
 public interface TeacherRepo {
-    List<Teacher> getTeachersList();
+    Set<Teacher> getTeachersSet();
+
+    Teacher getTeacherIfExistsOrGetSpecialValue(int id);
 
     Teacher getTeacherIfExistsOrGetSpecialValue(String login);
 
