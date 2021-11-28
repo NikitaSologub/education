@@ -99,10 +99,8 @@ public abstract class AbstractPostgresRepo<T extends AbstractEntity> {
             st.setInt(1, id);
 
             set = st.executeQuery();
-            while (set.next()) {
-                objects = extractObjects(set);
-                log.info("Извлекли {}s Set из БД по id={}", item, id);
-            }
+            objects = extractObjects(set);
+            log.info("Извлекли {}s Set из БД по id={}", item, id);
         } catch (SQLException e) {
             log.error("Не удалось совершить операцию извлечения " + item + "s set по id=" + id, e);
         } finally {
