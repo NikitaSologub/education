@@ -22,7 +22,7 @@
         <mapping class="by.itacademy.sologub.Student"/>
         <mapping class="by.itacademy.sologub.Admin"/>
         <mapping class="by.itacademy.sologub.Teacher"/>
-<!--        <mapping class="by.itacademy.sologub.Group"/>-->
+        <mapping class="by.itacademy.sologub.Group"/>
         <mapping class="by.itacademy.sologub.Salary"/>
         <mapping class="by.itacademy.sologub.Mark"/>
         <mapping class="by.itacademy.sologub.Subject"/>
