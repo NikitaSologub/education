@@ -6,26 +6,29 @@ import org.hibernate.SessionFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 
 @Slf4j
 public class SubjectRepoHibernateImpl extends AbstractCrudRepoJpa<Subject> implements SubjectRepo {
     private static volatile SubjectRepoHibernateImpl instance;
+    private static volatile GroupRepoHibernateImpl groupRepo;
 
-    private SubjectRepoHibernateImpl(SessionFactory sf) {
+    private SubjectRepoHibernateImpl(SessionFactory sf, GroupRepoHibernateImpl gr) {
         super(sf, Subject.class);
+        groupRepo = gr;
     }
 
-    public static SubjectRepoHibernateImpl getInstance(SessionFactory sf) {
+    public static SubjectRepoHibernateImpl getInstance(SessionFactory sf, GroupRepoHibernateImpl gr) {
         if (instance == null) {
             synchronized (SubjectRepoHibernateImpl.class) {
                 if (instance == null) {
-                    instance = new SubjectRepoHibernateImpl(sf);
+                    instance = new SubjectRepoHibernateImpl(sf, gr);
                 }
             }
         }
@@ -42,10 +45,11 @@ public class SubjectRepoHibernateImpl extends AbstractCrudRepoJpa<Subject> imple
         return getAll();
     }
 
-    @Override//todo РЕАЛИЗОВАТЬ И ПРОТЕСТИРОВАТЬ
+    @Override
     public Set<Subject> getSubjectsByGroupId(int groupId) {
-        //скорее всего что-то типо - сначала ищем группу по id а потом из нее берём все предметы
-        return null;// дойду до групп - сделаю этот метод
+        Group g = groupRepo.getGroupById(groupId);
+        if (GROUP_NOT_EXISTS == g) return new HashSet<>();
+        return g.getSubjects();
     }
 
     @Override
@@ -75,7 +79,6 @@ public class SubjectRepoHibernateImpl extends AbstractCrudRepoJpa<Subject> imple
     @Override
     public boolean deleteSubject(Subject subject) {
         if (subject == null || subject.getId() <= 0) return false;
-        int markRows;
         boolean result = false;
         EntityManager em = getEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -83,13 +86,7 @@ public class SubjectRepoHibernateImpl extends AbstractCrudRepoJpa<Subject> imple
             transaction.begin();
             em.flush(); //1Убедимся что все изменения записаны в базу
             em.clear(); //2 отсоединим все от текущего PersistenceContext и удалим из кэша 1-го уровня
-            Query query = em
-                    .createNamedQuery("deleteAllMarksBySubjectId")
-                    .setParameter(ID, subject.getId());
-            markRows = query.executeUpdate(); //3 удалим все Marks перед удалением Subject на которую они глядят
-            log.debug("Удалили в БД {} Marks у которых subjectId={}", markRows, subject.getId());
-            System.err.println("Удалили в БД " + markRows + " Marks у которых subjectId=" + subject.getId());
-
+            deleteAllMarksBySubjectId(em,subject.getId());//3 удалим все Marks перед удалением Subject на которую они глядят
             em.remove(subject); //4 непосредственное удаление нужного Subject
             result = em.contains(subject); //5 проверяем результат операции
             transaction.commit();
@@ -99,5 +96,12 @@ public class SubjectRepoHibernateImpl extends AbstractCrudRepoJpa<Subject> imple
             em.close();
         }
         return result;
+    }
+
+    private void deleteAllMarksBySubjectId(EntityManager em, int id) {
+        int markRows = em.createNamedQuery("deleteAllMarksBySubjectId")
+                .setParameter(ID, id)
+                .executeUpdate();
+        log.debug("Удалили в БД {} Marks у которых subjectId={}", markRows, id);
     }
 }

@@ -8,22 +8,25 @@ import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
 
 @Slf4j
 public class StudentRepoHibernateImpl extends AbstractCrudRepoJpa<Student> implements StudentRepo {
     private static volatile StudentRepoHibernateImpl instance;
+    private static volatile GroupRepoHibernateImpl groupRepo;
 
-    private StudentRepoHibernateImpl(SessionFactory sf) {
+    private StudentRepoHibernateImpl(SessionFactory sf, GroupRepoHibernateImpl gr) {
         super(sf, Student.class);
+        groupRepo = gr;
     }
 
-    public static StudentRepoHibernateImpl getInstance(SessionFactory sf) {
+    public static StudentRepoHibernateImpl getInstance(SessionFactory sf, GroupRepoHibernateImpl gr) {
         if (instance == null) {
             synchronized (StudentRepoHibernateImpl.class) {
                 if (instance == null) {
-                    instance = new StudentRepoHibernateImpl(sf);
+                    instance = new StudentRepoHibernateImpl(sf, gr);
                 }
             }
         }
@@ -40,10 +43,11 @@ public class StudentRepoHibernateImpl extends AbstractCrudRepoJpa<Student> imple
         return new HashSet<>(getAll());
     }
 
-    @Override//todo РЕАЛИЗОВАТЬ И ПРОТЕСТИРОВАТЬ
+    @Override
     public Set<Student> getStudentsByGroupId(int groupId) {
-        //сначала ищем группу по id а потом из нее берём всех студентов
-        return null;// дойду до групп - сделаю этот метод
+        Group g = groupRepo.getGroupById(groupId);
+        if (GROUP_NOT_EXISTS == g) return new HashSet<>();
+        return g.getStudents();
     }
 
     @Override

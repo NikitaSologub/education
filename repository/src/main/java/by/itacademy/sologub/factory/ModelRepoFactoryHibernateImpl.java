@@ -5,6 +5,7 @@ import by.itacademy.sologub.AdminRepoHibernateImpl;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.CredentialRepoHibernateImpl;
 import by.itacademy.sologub.GroupRepo;
+import by.itacademy.sologub.GroupRepoHibernateImpl;
 import by.itacademy.sologub.MarkRepo;
 import by.itacademy.sologub.MarkRepoHibernateImpl;
 import by.itacademy.sologub.SalaryRepo;
@@ -26,17 +27,17 @@ public final class ModelRepoFactoryHibernateImpl implements ModelRepoFactory {
     private static StudentRepoHibernateImpl studentRepo;
     private static MarkRepoHibernateImpl markRepo;
     private static SubjectRepoHibernateImpl subjectRepo;
-    //тут будем добавлять ссылки на репозитории по типу private static xxxRepo;
+    private static GroupRepoHibernateImpl groupRepo;
 
     private ModelRepoFactoryHibernateImpl(SessionFactory sf) {
         credentialRepo = CredentialRepoHibernateImpl.getInstance(sf);
         adminRepo = AdminRepoHibernateImpl.getInstance(sf);
         teacherRepo = TeacherRepoHibernateImpl.getInstance(sf);
         salaryRepo = SalaryRepoHibernateImpl.getInstance(sf, teacherRepo);
-        studentRepo = StudentRepoHibernateImpl.getInstance(sf);
+        groupRepo = GroupRepoHibernateImpl.getInstance(sf);
+        studentRepo = StudentRepoHibernateImpl.getInstance(sf, groupRepo);
         markRepo = MarkRepoHibernateImpl.getInstance(sf, studentRepo);
-        subjectRepo = SubjectRepoHibernateImpl.getInstance(sf);
-        //тут будем добавлять инициализацию репозиториев через XxxRepoHibernateImpl.getInstance(sf);
+        subjectRepo = SubjectRepoHibernateImpl.getInstance(sf, groupRepo);
     }
 
     public static ModelRepoFactoryHibernateImpl getInstance(SessionFactory sf) {
@@ -82,7 +83,7 @@ public final class ModelRepoFactoryHibernateImpl implements ModelRepoFactory {
 
     @Override
     public GroupRepo getGroupRepo() {
-        return null;//todo - временная заглушка
+        return groupRepo;
     }
 
     @Override
