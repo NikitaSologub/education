@@ -85,8 +85,8 @@ public class StudentRepoHardcodedImpl extends AbstractUserHardcodedRepo<Student>
     }
 
     @Override
-    public boolean putStudentIfNotExists(Student teacher) {
-        return putUserIfNotExists(teacher);
+    public boolean putStudentIfNotExists(Student s) {
+        return putUserIfNotExists(s);
     }
 
     @Override

@@ -13,7 +13,7 @@ public interface StudentRepo {
 
     Student getStudentIfExistsOrGetSpecialValue(String login,String password);
 
-    boolean putStudentIfNotExists(Student teacher);
+    boolean putStudentIfNotExists(Student student);
 
     boolean changeStudentParametersIfExists(Student newStudent);
 
