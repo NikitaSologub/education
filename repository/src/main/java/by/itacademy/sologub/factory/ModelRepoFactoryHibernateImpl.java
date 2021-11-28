@@ -6,10 +6,13 @@ import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.CredentialRepoHibernateImpl;
 import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.MarkRepo;
+import by.itacademy.sologub.MarkRepoHibernateImpl;
 import by.itacademy.sologub.SalaryRepo;
 import by.itacademy.sologub.SalaryRepoHibernateImpl;
 import by.itacademy.sologub.StudentRepo;
+import by.itacademy.sologub.StudentRepoHibernateImpl;
 import by.itacademy.sologub.SubjectRepo;
+import by.itacademy.sologub.SubjectRepoHibernateImpl;
 import by.itacademy.sologub.TeacherRepo;
 import by.itacademy.sologub.TeacherRepoHibernateImpl;
 import org.hibernate.SessionFactory;
@@ -20,13 +23,19 @@ public final class ModelRepoFactoryHibernateImpl implements ModelRepoFactory {
     private static TeacherRepoHibernateImpl teacherRepo;
     private static SalaryRepoHibernateImpl salaryRepo;
     private static CredentialRepoHibernateImpl credentialRepo;
+    private static StudentRepoHibernateImpl studentRepo;
+    private static MarkRepoHibernateImpl markRepo;
+    private static SubjectRepoHibernateImpl subjectRepo;
     //тут будем добавлять ссылки на репозитории по типу private static xxxRepo;
 
     private ModelRepoFactoryHibernateImpl(SessionFactory sf) {
         credentialRepo = CredentialRepoHibernateImpl.getInstance(sf);
         adminRepo = AdminRepoHibernateImpl.getInstance(sf);
         teacherRepo = TeacherRepoHibernateImpl.getInstance(sf);
-        salaryRepo = SalaryRepoHibernateImpl.getInstance(sf,teacherRepo);
+        salaryRepo = SalaryRepoHibernateImpl.getInstance(sf, teacherRepo);
+        studentRepo = StudentRepoHibernateImpl.getInstance(sf);
+        markRepo = MarkRepoHibernateImpl.getInstance(sf, studentRepo);
+        subjectRepo = SubjectRepoHibernateImpl.getInstance(sf);
         //тут будем добавлять инициализацию репозиториев через XxxRepoHibernateImpl.getInstance(sf);
     }
 
@@ -53,7 +62,7 @@ public final class ModelRepoFactoryHibernateImpl implements ModelRepoFactory {
 
     @Override
     public StudentRepo getStudentRepo() {
-        return null;//todo - временная заглушка
+        return studentRepo;
     }
 
     @Override
@@ -68,7 +77,7 @@ public final class ModelRepoFactoryHibernateImpl implements ModelRepoFactory {
 
     @Override
     public SubjectRepo getSubjectRepo() {
-        return null;//todo - временная заглушка
+        return subjectRepo;
     }
 
     @Override
@@ -78,6 +87,6 @@ public final class ModelRepoFactoryHibernateImpl implements ModelRepoFactory {
 
     @Override
     public MarkRepo getMarkRepo() {
-        return null;//todo - временная заглушка
+        return markRepo;
     }
 }
