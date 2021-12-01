@@ -146,7 +146,7 @@ public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implement
         if (group == null) return false;
         boolean result = false;
         Connection con = null;
-        PreparedStatement st;
+        PreparedStatement st = null;
         ResultSet set = null;
         try {
             con = pool.getConnection();
@@ -167,7 +167,7 @@ public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implement
             rollback(con);
             log.error("Не удалось совершить операцию извлечения group с teacher (или без)", e);
         } finally {
-            closeResource(set);
+            closeResources(set, st, con);
         }
         return result;
     }
@@ -256,9 +256,10 @@ public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implement
 
         boolean result = false;
         Connection con = null;
+        PreparedStatement st = null;
         try {
             con = pool.getConnection();
-            PreparedStatement st = con.prepareStatement(sql);
+            st = con.prepareStatement(sql);
             st.setInt(1, group.getId());
             st.setInt(2, entity.getId());
             con.setAutoCommit(false);
@@ -275,7 +276,7 @@ public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implement
             rollback(con);
             log.error("Не удалось" + action + " entity c id=" + entity.getId() + " в group с id=" + group.getId(), e);
         } finally {
-            closeResource(con);
+            closeResources(st, con);
         }
         return result;
     }
