@@ -56,6 +56,7 @@ public final class Constant {
     public static final String TEACHER_REPO = "teacherRepo";
     public static final String STUDENT_REPO = "studentRepo";
     public static final String ADMIN_REPO = "adminRepo";
+    public static final String FACADE_SERVICE = "facadeService";
     public static final String REQUEST_ENCODING = "requestEncoding";
     public static final String UTF_8 = "UTF-8";
     public static final String CONTENT_TYPE = "text/html;charset=UTF-8";

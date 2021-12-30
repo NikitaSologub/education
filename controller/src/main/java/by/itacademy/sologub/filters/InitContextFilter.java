@@ -20,6 +20,21 @@ import by.itacademy.sologub.factory.ModelRepoFactory;
 import by.itacademy.sologub.factory.ModelRepoFactoryHardcodeImpl;
 import by.itacademy.sologub.factory.ModelRepoFactoryHibernateImpl;
 import by.itacademy.sologub.factory.ModelRepoFactoryPostgresDbImpl;
+import by.itacademy.sologub.services.AdminService;
+import by.itacademy.sologub.services.AdminServiceImpl;
+import by.itacademy.sologub.services.FacadeService;
+import by.itacademy.sologub.services.GroupService;
+import by.itacademy.sologub.services.GroupServiceImpl;
+import by.itacademy.sologub.services.MarkService;
+import by.itacademy.sologub.services.MarkServiceImpl;
+import by.itacademy.sologub.services.SalaryService;
+import by.itacademy.sologub.services.SalaryServiceImpl;
+import by.itacademy.sologub.services.StudentService;
+import by.itacademy.sologub.services.StudentServiceImpl;
+import by.itacademy.sologub.services.SubjectService;
+import by.itacademy.sologub.services.SubjectServiceImpl;
+import by.itacademy.sologub.services.TeacherService;
+import by.itacademy.sologub.services.TeacherServiceImpl;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +62,7 @@ import static by.itacademy.sologub.constants.Constant.ADMIN_REPO;
 import static by.itacademy.sologub.constants.Constant.CREDENTIAL_REPO;
 import static by.itacademy.sologub.constants.Constant.DB_CONFIG_FILE;
 import static by.itacademy.sologub.constants.Constant.DRIVER;
+import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
 import static by.itacademy.sologub.constants.Constant.GROUP_REPO;
 import static by.itacademy.sologub.constants.Constant.HIBERNATE;
 import static by.itacademy.sologub.constants.Constant.MARK_REPO;
@@ -96,14 +112,14 @@ public class InitContextFilter implements Filter {
         log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
     }
 
-    private void loadDatabaseHibernateApproach(FilterConfig conf){
+    private void loadDatabaseHibernateApproach(FilterConfig conf) {
         log.info("Пытаемся загружать hibernate configuration");//TODO если нет - переход на memory type
         Configuration cfg = new Configuration().configure();
-        try{
+        try {
             SessionFactory sf = cfg.buildSessionFactory();
             ModelRepoFactory factory = ModelRepoFactoryHibernateImpl.getInstance(sf);
             setAppContext(conf, factory);
-        } catch (HibernateException e){
+        } catch (HibernateException e) {
             log.info("Не получилось сконфигурировать hibernate. Переходим на HardcoreMemoryImpl Database");
             loadDatabaseInMemory(conf);
         }
@@ -130,6 +146,16 @@ public class InitContextFilter implements Filter {
         GroupRepo groupRepo = factory.getGroupRepo();
         MarkRepo markRepo = factory.getMarkRepo();
 
+        TeacherService teacherService = TeacherServiceImpl.getInstance(teacherRepo);
+        StudentService studentService = StudentServiceImpl.getInstance(studentRepo);
+        GroupService groupService = GroupServiceImpl.getInstance(groupRepo);
+        MarkService markService = MarkServiceImpl.getInstance(markRepo);
+        SalaryService salaryService = SalaryServiceImpl.getInstance(salaryRepo);
+        SubjectService subjectService = SubjectServiceImpl.getInstance(subjectRepo);
+        AdminService adminService = AdminServiceImpl.getInstance(adminRepo);
+        FacadeService facade = FacadeService.getInstance(groupService, studentService, teacherService, adminService,
+                markService, salaryService, subjectService);
+
         ServletContext context = filterConfig.getServletContext();
         context.setAttribute(CREDENTIAL_REPO, credentialRepo);
         context.setAttribute(TEACHER_REPO, teacherRepo);
@@ -139,6 +165,7 @@ public class InitContextFilter implements Filter {
         context.setAttribute(SUBJECT_REPO, subjectRepo);
         context.setAttribute(GROUP_REPO, groupRepo);
         context.setAttribute(MARK_REPO, markRepo);
+        context.setAttribute(FACADE_SERVICE, facade);
     }
 
     boolean loadDriverClass() {
