@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Slf4j
 public class FacadeService implements GroupService, StudentService, TeacherService, MarkService, SalaryService,
-        SubjectService, AdminService {
+        SubjectService, AdminService, AverageSalaryService {
     private static FacadeService facade;
     private final GroupService groupService;
     private final StudentService studentService;
@@ -317,5 +317,17 @@ public class FacadeService implements GroupService, StudentService, TeacherServi
     @Override
     public boolean deleteAdmin(Admin a) {
         return adminService.deleteAdmin(a);
+    }
+
+    @Override
+    public String getAverageSalary(int teacherId) {
+        double average = salaryService.getAllSalariesByTeacherId(teacherId).stream()
+                .mapToInt(Salary::getCoins)
+                .average().orElse(0.0);
+        return round(average);
+    }
+
+    private String round(double val) {
+        return String.format("%.2f", val);
     }
 }
