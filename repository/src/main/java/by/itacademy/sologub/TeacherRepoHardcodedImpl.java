@@ -19,7 +19,7 @@ public class TeacherRepoHardcodedImpl extends AbstractUserHardcodedRepo<Teacher>
 
     public static TeacherRepoHardcodedImpl getInstance(CredentialRepoHardcodeImpl credentialRepo) {
         if (instance == null) {
-            synchronized (CredentialRepoHardcodeImpl.class) {
+            synchronized (TeacherRepoHardcodedImpl.class) {
                 if (instance == null) {
                     instance = new TeacherRepoHardcodedImpl(credentialRepo);
                 }

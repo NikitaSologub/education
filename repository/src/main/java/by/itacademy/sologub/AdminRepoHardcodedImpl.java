@@ -19,7 +19,7 @@ public class AdminRepoHardcodedImpl extends AbstractUserHardcodedRepo<Admin> imp
 
     public static AdminRepoHardcodedImpl getInstance(CredentialRepoHardcodeImpl credentialRepo) {
         if (instance == null) {
-            synchronized (CredentialRepoHardcodeImpl.class) {
+            synchronized (AdminRepoHardcodedImpl.class) {
                 if (instance == null) {
                     instance = new AdminRepoHardcodedImpl(credentialRepo);
                 }

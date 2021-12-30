@@ -29,7 +29,7 @@ public class AdminRepoPostgresImpl extends AbstractUserPostgresRepo<Admin> imple
 
     public static AdminRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
         if (adminRepo == null) {
-            synchronized (CredentialRepoHardcodeImpl.class) {
+            synchronized (AdminRepoPostgresImpl.class) {
                 if (adminRepo == null) {
                     adminRepo = new AdminRepoPostgresImpl(pool);
                 }

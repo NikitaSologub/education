@@ -22,7 +22,7 @@ public class GroupRepoHardcodedImpl implements GroupRepo {
 
     public static GroupRepoHardcodedImpl getInstance() {
         if (instance == null) {
-            synchronized (CredentialRepoHardcodeImpl.class) {
+            synchronized (GroupRepoHardcodedImpl.class) {
                 if (instance == null) {
                     instance = new GroupRepoHardcodedImpl();
                 }

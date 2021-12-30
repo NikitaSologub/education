@@ -39,7 +39,7 @@ public class CredentialRepoPostgresImpl extends AbstractPostgresRepo<Credential>
 
     public static CredentialRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
         if (instance == null) {
-            synchronized (CredentialRepoHardcodeImpl.class) {
+            synchronized (CredentialRepoPostgresImpl.class) {
                 if (instance == null) {
                     instance = new CredentialRepoPostgresImpl(pool);
                 }

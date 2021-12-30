@@ -33,7 +33,7 @@ public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> i
 
     public static TeacherRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
         if (teacherRepo == null) {
-            synchronized (CredentialRepoHardcodeImpl.class) {
+            synchronized (TeacherRepoPostgresImpl.class) {
                 if (teacherRepo == null) {
                     teacherRepo = new TeacherRepoPostgresImpl(pool);
                 }
