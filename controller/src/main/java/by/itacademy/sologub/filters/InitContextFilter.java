@@ -3,7 +3,6 @@ package by.itacademy.sologub.filters;
 import by.itacademy.sologub.Admin;
 import by.itacademy.sologub.AdminRepo;
 import by.itacademy.sologub.Credential;
-import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.Group;
 import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.Mark;
@@ -58,20 +57,12 @@ import java.util.ResourceBundle;
 
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.PASSWORD;
-import static by.itacademy.sologub.constants.Constant.ADMIN_REPO;
-import static by.itacademy.sologub.constants.Constant.CREDENTIAL_REPO;
 import static by.itacademy.sologub.constants.Constant.DB_CONFIG_FILE;
 import static by.itacademy.sologub.constants.Constant.DRIVER;
 import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
-import static by.itacademy.sologub.constants.Constant.GROUP_REPO;
 import static by.itacademy.sologub.constants.Constant.HIBERNATE;
-import static by.itacademy.sologub.constants.Constant.MARK_REPO;
 import static by.itacademy.sologub.constants.Constant.MEMORY;
 import static by.itacademy.sologub.constants.Constant.POSTGRES;
-import static by.itacademy.sologub.constants.Constant.SALARY_REPO;
-import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
-import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
-import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
 import static by.itacademy.sologub.constants.Constant.TYPE;
 import static by.itacademy.sologub.constants.Constant.URL;
 
@@ -137,7 +128,6 @@ public class InitContextFilter implements Filter {
     }
 
     private void setAppContext(FilterConfig filterConfig, ModelRepoFactory factory) {
-        CredentialRepo credentialRepo = factory.getCredentialRepo();
         TeacherRepo teacherRepo = factory.getTeacherRepo();
         StudentRepo studentRepo = factory.getStudentRepo();
         AdminRepo adminRepo = factory.getAdminRepo();
@@ -157,14 +147,6 @@ public class InitContextFilter implements Filter {
                 markService, salaryService, subjectService);
 
         ServletContext context = filterConfig.getServletContext();
-        context.setAttribute(CREDENTIAL_REPO, credentialRepo);
-        context.setAttribute(TEACHER_REPO, teacherRepo);
-        context.setAttribute(STUDENT_REPO, studentRepo);
-        context.setAttribute(ADMIN_REPO, adminRepo);
-        context.setAttribute(SALARY_REPO, salaryRepo);
-        context.setAttribute(SUBJECT_REPO, subjectRepo);
-        context.setAttribute(GROUP_REPO, groupRepo);
-        context.setAttribute(MARK_REPO, markRepo);
         context.setAttribute(FACADE_SERVICE, facade);
     }
 
