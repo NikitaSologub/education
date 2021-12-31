@@ -1,9 +1,10 @@
 package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.Group;
-import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.Student;
-import by.itacademy.sologub.StudentRepo;
+import by.itacademy.sologub.services.FacadeService;
+import by.itacademy.sologub.services.GroupService;
+import by.itacademy.sologub.services.StudentService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -17,12 +18,11 @@ import java.util.Set;
 import static by.itacademy.sologub.constants.Attributes.GROUP;
 import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_STUDENTS_PAGE;
 import static by.itacademy.sologub.constants.Constant.CURRENT_GROUP_OBJECTS_SET;
+import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
 import static by.itacademy.sologub.constants.Constant.GROUP_ID;
-import static by.itacademy.sologub.constants.Constant.GROUP_REPO;
 import static by.itacademy.sologub.constants.Constant.GROUP_STUDENTS_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.OBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.STUDENT_LOGIN;
-import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
 
 @WebServlet(GROUP_STUDENTS_CONTROLLER)
 @Slf4j
@@ -34,12 +34,12 @@ public class GroupStudentsController extends BaseController {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GroupRepo groupRepo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
+        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
         Group group = getGroupById(req);
         Student newS = getStudentByLogin(req);
 
         String msg;
-        if (groupRepo.addStudentInGroup(group, newS)) {
+        if (service.addStudentInGroup(group, newS)) {
             msg = "Ученик " + newS.getLastname() + " успешно добавлен в группу " + group.getTitle();
             log.debug("Ученик {} добавлен в группу {}", newS.getLastname(), group.getTitle());
         } else {
@@ -51,12 +51,12 @@ public class GroupStudentsController extends BaseController {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GroupRepo groupRepo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
+        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
         Group group = getGroupById(req);
         Student oldS = getStudentByLogin(req);
 
         String msg;
-        if (groupRepo.removeStudentFromGroup(group, oldS)) {
+        if (service.removeStudentFromGroup(group, oldS)) {
             msg = "Ученик " + oldS.getLastname() + " успешно удалён из группы " + group.getTitle();
             log.debug("Ученик {} удален из группы {}", oldS.getLastname(), group.getTitle());
         } else {
@@ -77,19 +77,18 @@ public class GroupStudentsController extends BaseController {
     }
 
     private Set<Student> getAllStudentsToRequest() {
-        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
-        return new HashSet<>(repo.getStudentsSet());
+        StudentService service = (StudentService) getServletContext().getAttribute(FACADE_SERVICE);
+        return new HashSet<>(service.getStudentsSet());
     }
 
     private Group getGroupById(HttpServletRequest req) {
-        GroupRepo groupRepo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
-        StudentRepo studentRepo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
+        FacadeService service = (FacadeService) getServletContext().getAttribute(FACADE_SERVICE);
 
         int groupId = Integer.parseInt(req.getParameter(GROUP_ID));
-        Group g = groupRepo.getGroupById(groupId);
+        Group g = service.getGroupById(groupId);
         log.debug("Вернули группу по groupId={} c параметрами {}", groupId, g);
 
-        Set<Student> students = studentRepo.getStudentsByGroupId(groupId);
+        Set<Student> students = service.getStudentsByGroupId(groupId);
         log.debug("Вернули Set students по groupId={} c параметрами {}", groupId, students);
 
         g.setStudents(students);
@@ -97,8 +96,8 @@ public class GroupStudentsController extends BaseController {
     }
 
     private Student getStudentByLogin(HttpServletRequest req) {
-        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
+        StudentService service = (StudentService) getServletContext().getAttribute(FACADE_SERVICE);
         String login = req.getParameter(STUDENT_LOGIN);
-        return repo.getStudentIfExistsOrGetSpecialValue(login);
+        return service.getStudentIfExistsOrGetSpecialValue(login);
     }
 }

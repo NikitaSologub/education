@@ -1,7 +1,7 @@
 package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.Subject;
-import by.itacademy.sologub.SubjectRepo;
+import by.itacademy.sologub.services.SubjectService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -14,9 +14,9 @@ import java.util.List;
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SUBJECTS_PAGE;
+import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
 import static by.itacademy.sologub.constants.Constant.SUBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_CONTROLLER;
-import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
 
 @WebServlet(SUBJECT_CONTROLLER)
 @Slf4j
@@ -28,8 +28,8 @@ public class SubjectController extends BaseController {
     }
 
     private void refreshSubjectsListAndForward(String msg, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SubjectRepo subjectRepo = (SubjectRepo) getServletContext().getAttribute(SUBJECT_REPO);
-        List<Subject> list = subjectRepo.getSubjectsList();
+        SubjectService service = (SubjectService) getServletContext().getAttribute(FACADE_SERVICE);
+        List<Subject> list = service.getSubjectsList();
 
         log.debug("set предметов (добавляем к запросу){}", list);
         req.setAttribute(SUBJECTS_SET, list);
@@ -38,17 +38,17 @@ public class SubjectController extends BaseController {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SubjectRepo repo = (SubjectRepo) getServletContext().getAttribute(SUBJECT_REPO);
-        Subject subject = extractSubjectFromFormWithoutId(req);
-        boolean result = repo.putSubjectIfNotExists(subject);
+        SubjectService service = (SubjectService) getServletContext().getAttribute(FACADE_SERVICE);
+        Subject s = extractSubjectFromFormWithoutId(req);
+        boolean result = service.putSubjectIfNotExists(s);
 
         String msg;
         if (result) {
-            msg = "Subject " + subject + " успешно добавлен";
-            log.info("Subject {} успешно добавлена", subject);
+            msg = "Subject " + s + " успешно добавлен";
+            log.info("Subject {} успешно добавлена", s);
         } else {
-            msg = "Не удалось добавить Subject " + subject;
-            log.info("Не удалось добавить Subject {}", subject);
+            msg = "Не удалось добавить Subject " + s;
+            log.info("Не удалось добавить Subject {}", s);
         }
         refreshSubjectsListAndForward(msg, req, resp);
     }
@@ -65,9 +65,9 @@ public class SubjectController extends BaseController {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SubjectRepo repo = (SubjectRepo) getServletContext().getAttribute(SUBJECT_REPO);
+        SubjectService service = (SubjectService) getServletContext().getAttribute(FACADE_SERVICE);
         Subject s = extractSubjectFromForm(req);
-        boolean result = repo.changeSubjectsParametersIfExists(s);
+        boolean result = service.changeSubjectsParametersIfExists(s);
         String msg;
         if (result) {
             msg = "Subject " + s + " успешно изменён";
@@ -81,10 +81,10 @@ public class SubjectController extends BaseController {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SubjectRepo repo = (SubjectRepo) getServletContext().getAttribute(SUBJECT_REPO);
+        SubjectService service = (SubjectService) getServletContext().getAttribute(FACADE_SERVICE);
         Subject s = extractSubjectFromForm(req);
         System.out.println(s);
-        boolean result = repo.deleteSubject(s);
+        boolean result = service.deleteSubject(s);
         String msg;
         if (result) {
             msg = "Subject по id " + s.getId() + " успешно удалён";

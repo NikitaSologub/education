@@ -1,12 +1,12 @@
 package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.Admin;
-import by.itacademy.sologub.AdminRepo;
 import by.itacademy.sologub.Student;
-import by.itacademy.sologub.StudentRepo;
 import by.itacademy.sologub.Teacher;
-import by.itacademy.sologub.TeacherRepo;
 import by.itacademy.sologub.User;
+import by.itacademy.sologub.services.AdminService;
+import by.itacademy.sologub.services.StudentService;
+import by.itacademy.sologub.services.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -19,14 +19,12 @@ import java.io.IOException;
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.Constant.ADMIN_FRONT_PAGE;
-import static by.itacademy.sologub.constants.Constant.ADMIN_REPO;
+import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
 import static by.itacademy.sologub.constants.Constant.LOGIN_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.LOGIN_PAGE;
 import static by.itacademy.sologub.constants.Constant.SESSION_ENTITY;
 import static by.itacademy.sologub.constants.Constant.STUDENT_FRONT_PAGE;
-import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
 import static by.itacademy.sologub.constants.Constant.TEACHER_FRONT_PAGE;
-import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
 import static by.itacademy.sologub.constants.ConstantObject.ADMIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
@@ -68,8 +66,8 @@ public class LoginController extends BaseController {
 
     //todo - убрать (сделать один универсальный метод)
     boolean checkAdminLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        AdminRepo repo = (AdminRepo) getServletContext().getAttribute(ADMIN_REPO);
-        Admin admin = repo.getAdminIfExistsOrGetSpecialValue(login, password);
+        AdminService service = (AdminService) getServletContext().getAttribute(FACADE_SERVICE);
+        Admin admin = service.getAdminIfExistsOrGetSpecialValue(login, password);
 
         if (admin != null && ADMIN_NOT_EXISTS != admin) {
             if (ADMIN_PASSWORD_WRONG != admin) {
@@ -86,15 +84,10 @@ public class LoginController extends BaseController {
         return false;
     }
 
-    void createSessionAndSetAttribute(User user, HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        session.setAttribute(SESSION_ENTITY, user);
-        log.info("пользователь {} положен в сессию.", user);
-    }
     //todo - убрать (сделать один универсальный метод)
     boolean checkTeacherLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        Teacher teacher = repo.getTeacherIfExistsOrGetSpecialValue(login, password);
+        TeacherService service = (TeacherService) getServletContext().getAttribute(FACADE_SERVICE);
+        Teacher teacher = service.getTeacherIfExistsOrGetSpecialValue(login, password);
 
         if (teacher != null && TEACHER_NOT_EXISTS != teacher) {
             if (TEACHER_PASSWORD_WRONG != teacher) {
@@ -110,10 +103,11 @@ public class LoginController extends BaseController {
         log.info("учителя с логином={} не существует в системе", login);
         return false;
     }
+
     //todo - убрать (сделать один универсальный метод)
     boolean checkStudentLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        StudentRepo repo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
-        Student student = repo.getStudentIfExistsOrGetSpecialValue(login, password);
+        StudentService service = (StudentService) getServletContext().getAttribute(FACADE_SERVICE);
+        Student student = service.getStudentIfExistsOrGetSpecialValue(login, password);
 
         if (student != null && STUDENT_NOT_EXISTS != student) {
             if (STUDENT_PASSWORD_WRONG != student) {
@@ -128,5 +122,11 @@ public class LoginController extends BaseController {
         }
         log.info("студента с логином={} не существует в системе", login);
         return false;
+    }
+
+    void createSessionAndSetAttribute(User user, HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        session.setAttribute(SESSION_ENTITY, user);
+        log.info("пользователь {} положен в сессию.", user);
     }
 }

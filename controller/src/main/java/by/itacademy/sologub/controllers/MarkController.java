@@ -1,11 +1,11 @@
 package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.Mark;
-import by.itacademy.sologub.MarkRepo;
 import by.itacademy.sologub.Student;
-import by.itacademy.sologub.StudentRepo;
 import by.itacademy.sologub.Subject;
-import by.itacademy.sologub.SubjectRepo;
+import by.itacademy.sologub.services.FacadeService;
+import by.itacademy.sologub.services.MarkService;
+import by.itacademy.sologub.services.SubjectService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -22,14 +22,12 @@ import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.POINT;
 import static by.itacademy.sologub.constants.Attributes.STUDENT;
 import static by.itacademy.sologub.constants.Constant.ADMIN_STUDENTS_MARKS_PAGE;
+import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
 import static by.itacademy.sologub.constants.Constant.MARK_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.MARK_ID;
-import static by.itacademy.sologub.constants.Constant.MARK_REPO;
 import static by.itacademy.sologub.constants.Constant.STUDENT_ID;
-import static by.itacademy.sologub.constants.Constant.STUDENT_REPO;
 import static by.itacademy.sologub.constants.Constant.SUBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_ID;
-import static by.itacademy.sologub.constants.Constant.SUBJECT_REPO;
 
 @WebServlet(MARK_CONTROLLER)
 @Slf4j
@@ -42,32 +40,32 @@ public class MarkController extends BaseController {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        MarkRepo markRepo = (MarkRepo) getServletContext().getAttribute(MARK_REPO);
-        Mark mark = extractMarkFromFormWithoutId(req);
+        MarkService service = (MarkService) getServletContext().getAttribute(FACADE_SERVICE);
+        Mark m = extractMarkFromFormWithoutId(req);
         int studentId = Integer.parseInt(req.getParameter(STUDENT_ID));
 
         String msg;
-        if (markRepo.putMarkToStudent(mark, studentId)) {
-            msg = "Оценка " + mark + " успешно добавлена";
-            log.info("Оценка {} успешно добавлена", mark);
+        if (service.putMarkToStudent(m, studentId)) {
+            msg = "Оценка " + m + " успешно добавлена";
+            log.info("Оценка {} успешно добавлена", m);
         } else {
-            msg = "Не удалось добавить оценку " + mark;
-            log.info("Не удалось добавить оценку {}", mark);
+            msg = "Не удалось добавить оценку " + m;
+            log.info("Не удалось добавить оценку {}", m);
         }
         refreshAndForward(msg, req, res);
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        MarkRepo markRepo = (MarkRepo) getServletContext().getAttribute(MARK_REPO);
-        Mark mark = extractMarkFromForm(req);
+        MarkService service = (MarkService) getServletContext().getAttribute(FACADE_SERVICE);
+        Mark m = extractMarkFromForm(req);
         String msg;
-        if (markRepo.changeMark(mark)) {
-            msg = "Оценка " + mark + " успешно изменена";
-            log.debug("Оценка {} успешно изменена", mark);
+        if (service.changeMark(m)) {
+            msg = "Оценка " + m + " успешно изменена";
+            log.debug("Оценка {} успешно изменена", m);
         } else {
-            msg = "Не удалось изменить оценку " + mark;
-            log.debug("Не удалось изменить оценку {}", mark);
+            msg = "Не удалось изменить оценку " + m;
+            log.debug("Не удалось изменить оценку {}", m);
         }
         refreshAndForward(msg, req, res);
     }
@@ -90,22 +88,16 @@ public class MarkController extends BaseController {
 
     private Subject extractSubjectFromForm(HttpServletRequest req) {
         int id = Integer.parseInt(req.getParameter(SUBJECT_ID));
-        SubjectRepo repo = (SubjectRepo) getServletContext().getAttribute(SUBJECT_REPO);
-//        String title = req.getParameter(SUBJECT_TITLE + id);
-//        System.out.println(title);
-//        return new Subject()//TODO - было бы круто на месте формировать предмет
-//                .withId(id)//TODO - (а для этого надо еще как-то получать title)
-//                .withTitle(title);
-        return repo.getSubjectIfExistsOrGetSpecialValue(id);
-
+        SubjectService service = (SubjectService) getServletContext().getAttribute(FACADE_SERVICE);
+        return service.getSubjectIfExistsOrGetSpecialValue(id);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        MarkRepo markRepo = (MarkRepo) getServletContext().getAttribute(MARK_REPO);
+        MarkService service = (MarkService) getServletContext().getAttribute(FACADE_SERVICE);
         int markId = Integer.parseInt(req.getParameter(MARK_ID));
         String msg;
-        if (markRepo.deleteMark(markId)) {
+        if (service.deleteMark(markId)) {
             msg = "Оценка по id " + markId + " успешно удалена";
             log.debug("Оценка по id={} успешно удалена", markId);
         } else {
@@ -122,17 +114,16 @@ public class MarkController extends BaseController {
     }
 
     private void setSubjectsToView(HttpServletRequest req) {
-        SubjectRepo subjectRepo = (SubjectRepo) getServletContext().getAttribute(SUBJECT_REPO);
-        Set<Subject> set = new HashSet<>(subjectRepo.getSubjectsList());
+        SubjectService service = (SubjectService) getServletContext().getAttribute(FACADE_SERVICE);
+        Set<Subject> set = new HashSet<>(service.getSubjectsList());
         log.debug("Все предметы что есть (добавляем к запросу){}", set);
         req.setAttribute(SUBJECTS_SET, set);
     }
 
     private void setStudentToView(HttpServletRequest req) {
-        StudentRepo studentRepo = (StudentRepo) getServletContext().getAttribute(STUDENT_REPO);
-        MarkRepo markRepo = (MarkRepo) getServletContext().getAttribute(MARK_REPO);
-        Student s = studentRepo.getStudentIfExistsOrGetSpecialValue(Integer.parseInt(req.getParameter(STUDENT_ID)));
-        s.setMarks(markRepo.getAllMarksByStudentId(s.getId()));
+        FacadeService facade = (FacadeService) getServletContext().getAttribute(FACADE_SERVICE);
+        Student s = facade.getStudentIfExistsOrGetSpecialValue(Integer.parseInt(req.getParameter(STUDENT_ID)));
+        s.setMarks(facade.getAllMarksByStudentId(s.getId()));
         log.debug("Оценки которые есть у студента (добавляем к запросу){}", s.getMarks());
         req.setAttribute(STUDENT, s);
     }

@@ -2,8 +2,8 @@ package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.Credential;
 import by.itacademy.sologub.Teacher;
-import by.itacademy.sologub.TeacherRepo;
 import by.itacademy.sologub.role.Role;
+import by.itacademy.sologub.services.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.annotation.WebServlet;
@@ -20,8 +20,8 @@ import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
 import static by.itacademy.sologub.constants.Constant.ADMIN_TEACHERS_PAGE;
 import static by.itacademy.sologub.constants.Constant.CREDENTIAL_ID;
 import static by.itacademy.sologub.constants.Constant.DATE_OF_BIRTH;
+import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
 import static by.itacademy.sologub.constants.Constant.TEACHER_CONTROLLER;
-import static by.itacademy.sologub.constants.Constant.TEACHER_REPO;
 
 @WebServlet(TEACHER_CONTROLLER)
 @Slf4j
@@ -38,37 +38,37 @@ public class TeacherController extends AbstractPersonController<Teacher> {
 
     @Override
     protected Set<Teacher> getSet() {
-        TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        return repo.getTeachersSet();
+        TeacherService service = (TeacherService) getServletContext().getAttribute(FACADE_SERVICE);
+        return service.getTeachersSet();
     }
 
     @Override
     protected boolean putInRepo(Teacher user) {
-        TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        return repo.putTeacherIfNotExists(user);
+        TeacherService service = (TeacherService) getServletContext().getAttribute(FACADE_SERVICE);
+        return service.putTeacherIfNotExists(user);
     }
 
     @Override
     protected boolean changeInRepo(Teacher user) {
-        TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        return repo.changeTeachersParametersIfExists(user);
+        TeacherService service = (TeacherService) getServletContext().getAttribute(FACADE_SERVICE);
+        return service.changeTeachersParametersIfExists(user);
     }
 
     @Override
     protected boolean deleteInRepo(Teacher user) {
-        TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        return repo.deleteTeacher(user);
+        TeacherService service = (TeacherService) getServletContext().getAttribute(FACADE_SERVICE);
+        return service.deleteTeacher(user);
     }
 
     @Override
     protected boolean deleteInRepo(String userLogin) {
-        TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        return repo.deleteTeacher(userLogin);
+        TeacherService service = (TeacherService) getServletContext().getAttribute(FACADE_SERVICE);
+        return service.deleteTeacher(userLogin);
     }
 
     @Override
     protected Teacher extractUserFromForm(HttpServletRequest req) {
-        Teacher teacher = new Teacher()
+        Teacher t = new Teacher()
                 .withCredential(new Credential()
                         .withLogin(req.getParameter(LOGIN))
                         .withPassword(req.getParameter(PASSWORD)))
@@ -77,16 +77,16 @@ public class TeacherController extends AbstractPersonController<Teacher> {
                 .withPatronymic(req.getParameter(PATRONYMIC))
                 .withDateOfBirth(LocalDate.parse(req.getParameter(DATE_OF_BIRTH)));
 
-        log.debug("Из запроса извлечён обьект учителя (без id и credential_id) {}", teacher);
-        return teacher;
+        log.debug("Из запроса извлечён обьект учителя (без id и credential_id) {}", t);
+        return t;
     }
 
     @Override
     protected Teacher extractUserFromFormWithIds(HttpServletRequest req) {
-        Teacher teacher = extractUserFromForm(req);
-        teacher.setId(Integer.parseInt(req.getParameter(ID)));
-        teacher.getCredential().setId(Integer.parseInt(req.getParameter(CREDENTIAL_ID)));
-        log.debug("Из запроса извлечён обьект учителя {}", teacher);
-        return teacher;
+        Teacher t = extractUserFromForm(req);
+        t.setId(Integer.parseInt(req.getParameter(ID)));
+        t.getCredential().setId(Integer.parseInt(req.getParameter(CREDENTIAL_ID)));
+        log.debug("Из запроса извлечён обьект учителя {}", t);
+        return t;
     }
 }

@@ -1,7 +1,7 @@
 package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.Group;
-import by.itacademy.sologub.GroupRepo;
+import by.itacademy.sologub.services.GroupService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletException;
@@ -15,9 +15,9 @@ import static by.itacademy.sologub.constants.Attributes.DESCRIPTION;
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_GROUPS_PAGE;
+import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
 import static by.itacademy.sologub.constants.Constant.GROUP_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.GROUP_LIST;
-import static by.itacademy.sologub.constants.Constant.GROUP_REPO;
 
 @WebServlet(GROUP_CONTROLLER)
 @Slf4j
@@ -28,8 +28,8 @@ public class GroupController extends BaseController {
     }
 
     private void refreshGroupsAndForward(String msg, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GroupRepo groupRepo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
-        List<Group> groups = groupRepo.getGroups();
+        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
+        List<Group> groups = service.getGroups();
 
         log.debug("Группы(добавляем к запросу){}", groups);
         req.setAttribute(GROUP_LIST, groups);
@@ -39,10 +39,10 @@ public class GroupController extends BaseController {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        GroupRepo repo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
+        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
         Group g = extractGroupOnlyTitleAndDescription(req);
 
-        boolean result = repo.putGroupIfNotExists(g);
+        boolean result = service.putGroupIfNotExists(g);
         String msg;
         if (result) {
             msg = "Группа " + g + " успешно создана";
@@ -72,8 +72,8 @@ public class GroupController extends BaseController {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter(ID));
 
-        GroupRepo repo = (GroupRepo) getServletContext().getAttribute(GROUP_REPO);
-        boolean result = repo.deleteGroupIfExists(id);
+        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
+        boolean result = service.deleteGroupIfExists(id);
         String msg;
         if (result) {
             msg = "Группа по id " + id + " успешно удалена";
