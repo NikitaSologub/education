@@ -1,31 +1,32 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.CredentialRepoHardcodeImpl;
 import by.itacademy.sologub.Salary;
 import by.itacademy.sologub.SalaryRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class SalaryServiceImpl implements SalaryService {
-    private static SalaryServiceImpl salaryService;
-    private final SalaryRepo repo;
+@Service
+public class SalaryServiceImpl extends AbstractService implements SalaryService {
+    private static final String PREFIX = "salaryRepo";
+    private final Map<String, SalaryRepo> repoMap;
+    private volatile SalaryRepo repo = null;
 
-    private SalaryServiceImpl(SalaryRepo salaryRepo) {
-        this.repo = salaryRepo;
+    @Autowired
+    public SalaryServiceImpl(Map<String, SalaryRepo> repoMap) {
+        this.repoMap = repoMap;
     }
 
-    public static SalaryServiceImpl getInstance(SalaryRepo salaryRepo) {
-        if (salaryService == null) {
-            synchronized (SalaryServiceImpl.class) {
-                if (salaryService == null) {
-                    salaryService = new SalaryServiceImpl(salaryRepo);
-                }
-            }
-        }
-        return salaryService;
+    @PostConstruct
+    public void init() {
+        repo = repoMap.get(PREFIX + StringUtils.capitalize(type) + SUFFIX);
     }
 
     @Override

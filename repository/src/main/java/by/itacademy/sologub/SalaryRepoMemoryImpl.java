@@ -1,6 +1,8 @@
 package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -13,26 +15,16 @@ import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 
 @Slf4j
-public class SalaryRepoHardcodedImpl implements SalaryRepo {
+@Repository
+public class SalaryRepoMemoryImpl implements SalaryRepo {
     static int CURRENT_MAX_SALARY_ID = 517;
-    private static volatile SalaryRepoHardcodedImpl instance;
-    private static volatile TeacherRepoHardcodedImpl teacherRepo;
+    private static volatile TeacherRepoMemoryImpl teacherRepo;
     private final Map<Integer, Salary> repo;
 
-    private SalaryRepoHardcodedImpl(TeacherRepoHardcodedImpl teacherRepo) {
+    @Autowired
+    public SalaryRepoMemoryImpl(TeacherRepoMemoryImpl teacherRepo) {
         repo = new ConcurrentHashMap<>();
-        SalaryRepoHardcodedImpl.teacherRepo = teacherRepo;
-    }
-
-    public static SalaryRepoHardcodedImpl getInstance(TeacherRepoHardcodedImpl teacherRepo) {
-        if (instance == null) {
-            synchronized (SalaryRepoHardcodedImpl.class) {
-                if (instance == null) {
-                    instance = new SalaryRepoHardcodedImpl(teacherRepo);
-                }
-            }
-        }
-        return instance;
+        SalaryRepoMemoryImpl.teacherRepo = teacherRepo;
     }
 
     @Override

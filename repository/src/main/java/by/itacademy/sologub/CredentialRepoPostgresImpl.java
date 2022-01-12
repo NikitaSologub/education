@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,10 +24,10 @@ import static by.itacademy.sologub.constants.SqlQuery.SET_CREDENTIAL_IF_NOT_EXIS
 import static by.itacademy.sologub.constants.SqlQuery.UPDATE_CREDENTIAL;
 
 @Slf4j
+@Repository
 public class CredentialRepoPostgresImpl extends AbstractPostgresRepo<Credential> implements CredentialRepo {
-    private static volatile CredentialRepoPostgresImpl instance;
-
-    private CredentialRepoPostgresImpl(ComboPooledDataSource pool) {
+    @Autowired
+    public CredentialRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
     }
 
@@ -35,17 +37,6 @@ public class CredentialRepoPostgresImpl extends AbstractPostgresRepo<Credential>
                 .withId(rs.getInt(ID))
                 .withLogin(rs.getString(LOGIN))
                 .withPassword(rs.getString(PASSWORD));
-    }
-
-    public static CredentialRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
-        if (instance == null) {
-            synchronized (CredentialRepoPostgresImpl.class) {
-                if (instance == null) {
-                    instance = new CredentialRepoPostgresImpl(pool);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override
@@ -75,7 +66,7 @@ public class CredentialRepoPostgresImpl extends AbstractPostgresRepo<Credential>
             st.setString(1, login);
             rs = st.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 cred = extractObject(rs);
                 log.debug("Получили из БД {}", cred);
             } else {

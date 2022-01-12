@@ -5,7 +5,7 @@
     <title>Admin students page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/general_style.css'/>"/>
-    <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
+    <link rel="shortcut icon" href="../img/book_favicon.png" type="image/png">
 </head>
 <body>
 <h1>ADMIN - STUDENTS MARKS PAGE!</h1>
@@ -36,29 +36,31 @@
                     <form action="StudentController" method="post">
                         <input type="hidden" name="action" value="delete">
                         <input type="hidden" name="id" value=${student.id}>
-                        <input type="hidden" name="credentialId" value=${student.credential.id}>
                         <input type="hidden" name="login" value="${student.credential.login}">
+                        <input type="hidden" name="credentialId" value=${student.credential.id}>
                         <button type="submit">Удалить студента</button>
                     </form>
                 </td>
                 <td>
                     <form action="StudentController" method="post">
-                    <input type="hidden" name="action" value="put">
-                    <input type="hidden" name="id" value=${student.id}>
-                    <input type="hidden" name="credentialId" value=${student.credential.id}>
-                    Username: ${student.credential.login} <input type="hidden" name="login" value="${student.credential.login}">
-                    Password: <input type="password" name="password" value="${student.credential.password}">
-                    Firstname: <input type="text" name="firstname" value="${student.firstname}">
-                    Lastname: <input type="text" name="lastname" value="${student.lastname}">
-                    Patronymic: <input type="text" name="patronymic" value="${student.patronymic}">
-                    Date of birth: <input type="date" name="dateOfBirth" value="${student.dateOfBirth}">
-                    <button type="submit">Изменить параметры студента</button>
-                </form>
+                        <input type="hidden" name="action" value="put">
+                        <input type="hidden" name="id" value=${student.id}>
+                        <input type="hidden" name="credentialId" value=${student.credential.id}>
+                        <input type="hidden" name="login" value="${student.credential.login}">
+<%--                        Username: ${student.credential.login}--%>
+                        Password: <input type="password" name="password" value="${student.credential.password}">
+                        Firstname: <input type="text" name="firstname" value="${student.firstname}">
+                        Lastname: <input type="text" name="lastname" value="${student.lastname}">
+                        Patronymic: <input type="text" name="patronymic" value="${student.patronymic}">
+                        Date of birth: <input type="date" name="dateOfBirth" value="${student.dateOfBirth}">
+                        <button type="submit">Изменить параметры студента</button>
+                    </form>
                 </td>
                 <td>
                     <form action="<c:url value="MarkController"/>" method="get">
                         <input type="hidden" name="login" value="${student.credential.login}">
                         <input type="hidden" name="studentId" value="${student.id}">
+                        <input type="hidden" name="credentialId" value="${student.credential.id}">
                         <button type="submit">На страницу оценок</button>
                     </form>
                 </td>

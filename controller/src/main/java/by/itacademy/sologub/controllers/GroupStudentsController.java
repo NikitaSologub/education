@@ -2,102 +2,101 @@ package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.Group;
 import by.itacademy.sologub.Student;
-import by.itacademy.sologub.services.FacadeService;
 import by.itacademy.sologub.services.GroupService;
 import by.itacademy.sologub.services.StudentService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.GROUP;
-import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_STUDENTS_PAGE;
+import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_STUDENTS_VIEW;
 import static by.itacademy.sologub.constants.Constant.CURRENT_GROUP_OBJECTS_SET;
-import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
 import static by.itacademy.sologub.constants.Constant.GROUP_ID;
 import static by.itacademy.sologub.constants.Constant.GROUP_STUDENTS_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.OBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.STUDENT_LOGIN;
 
-@WebServlet(GROUP_STUDENTS_CONTROLLER)
+@Controller
+@RequestMapping(GROUP_STUDENTS_CONTROLLER)
 @Slf4j
-public class GroupStudentsController extends BaseController {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        refreshViewAndForward("вы на странице управления студентами группы", req, res);
+public class GroupStudentsController extends AbstractController {
+    private final GroupService groupService;
+    private final StudentService studentService;
+
+    @Autowired
+    public GroupStudentsController(GroupService groupService, StudentService studentService) {
+        this.groupService = groupService;
+        this.studentService = studentService;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
-        Group group = getGroupById(req);
-        Student newS = getStudentByLogin(req);
+    @GetMapping
+    public ModelAndView doGet(@RequestParam(GROUP_ID) int groupId) {
+        return refreshViewAndForward(groupId, "вы на странице управления студентами группы");
+    }
+
+    @PostMapping
+    public ModelAndView doPost(@RequestParam(GROUP_ID) int groupId, @RequestParam(STUDENT_LOGIN) String studentLogin) {
+        Group group = getGroupByIdWithStudents(groupId);
+        Student newS = studentService.getStudentIfExistsOrGetSpecialValue(studentLogin);
 
         String msg;
-        if (service.addStudentInGroup(group, newS)) {
+        if (groupService.addStudentInGroup(group, newS)) {
             msg = "Ученик " + newS.getLastname() + " успешно добавлен в группу " + group.getTitle();
             log.debug("Ученик {} добавлен в группу {}", newS.getLastname(), group.getTitle());
         } else {
             msg = "Не удалось добавить ученика " + newS.getLastname() + " в группу " + group.getTitle();
             log.debug("Не удалось добавить ученика {} в группу {}", newS.getLastname(), group.getTitle());
         }
-        refreshViewAndForward(msg, req, res);
+        return refreshViewAndForward(groupId, msg);
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
-        Group group = getGroupById(req);
-        Student oldS = getStudentByLogin(req);
+    @DeleteMapping
+    public ModelAndView doDelete(@RequestParam(GROUP_ID) int groupId, @RequestParam(STUDENT_LOGIN) String studentLogin,
+                                 HttpServletRequest req) {
+        Group group = getGroupByIdWithStudents(groupId);
+        Student oldS = studentService.getStudentIfExistsOrGetSpecialValue(studentLogin);
 
         String msg;
-        if (service.removeStudentFromGroup(group, oldS)) {
+        if (groupService.removeStudentFromGroup(group, oldS)) {
             msg = "Ученик " + oldS.getLastname() + " успешно удалён из группы " + group.getTitle();
             log.debug("Ученик {} удален из группы {}", oldS.getLastname(), group.getTitle());
         } else {
             msg = "Не удалось удалить ученика " + oldS.getLastname() + " из группы " + group.getTitle();
             log.debug("Не удалось удалить ученика {} из группы {}", oldS.getLastname(), group.getTitle());
         }
-        refreshViewAndForward(msg, req, res);
+        resetMethod(req);
+        return refreshViewAndForward(groupId, msg);
     }
 
-    private void refreshViewAndForward(String msg, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        Group g = getGroupById(req);
+    private ModelAndView refreshViewAndForward(int groupId, String msg) {
+        ModelAndView mav = new ModelAndView(ADMIN_GROUP_STUDENTS_VIEW);
+        Group g = getGroupByIdWithStudents(groupId);
 
-        req.setAttribute(GROUP, g);
-        req.setAttribute(CURRENT_GROUP_OBJECTS_SET, g.getStudents());
-        req.setAttribute(OBJECTS_SET, getAllStudentsToRequest());
-
-        forward(ADMIN_GROUP_STUDENTS_PAGE, msg, req, res);
+        mav.getModel().put(GROUP, g);
+        mav.getModel().put(CURRENT_GROUP_OBJECTS_SET, g.getStudents());
+        mav.getModel().put(OBJECTS_SET, new HashSet<>(studentService.getStudentsSet()));
+        mav.getModel().put(MESSAGE, msg);
+        return mav;
     }
 
-    private Set<Student> getAllStudentsToRequest() {
-        StudentService service = (StudentService) getServletContext().getAttribute(FACADE_SERVICE);
-        return new HashSet<>(service.getStudentsSet());
-    }
-
-    private Group getGroupById(HttpServletRequest req) {
-        FacadeService service = (FacadeService) getServletContext().getAttribute(FACADE_SERVICE);
-
-        int groupId = Integer.parseInt(req.getParameter(GROUP_ID));
-        Group g = service.getGroupById(groupId);
+    private Group getGroupByIdWithStudents(int groupId) {
+        Group g = groupService.getGroupById(groupId);
         log.debug("Вернули группу по groupId={} c параметрами {}", groupId, g);
 
-        Set<Student> students = service.getStudentsByGroupId(groupId);
-        log.debug("Вернули Set students по groupId={} c параметрами {}", groupId, students);
-
+        Set<Student> students = studentService.getStudentsByGroupId(groupId);
         g.setStudents(students);
+        log.debug("Вернули Set students по groupId={} c параметрами {}", groupId, students);
         return g;
-    }
-
-    private Student getStudentByLogin(HttpServletRequest req) {
-        StudentService service = (StudentService) getServletContext().getAttribute(FACADE_SERVICE);
-        String login = req.getParameter(STUDENT_LOGIN);
-        return service.getStudentIfExistsOrGetSpecialValue(login);
     }
 }

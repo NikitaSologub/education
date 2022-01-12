@@ -5,7 +5,7 @@
     <title>Group page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/general_style.css'/>"/>
-    <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
+    <link rel="shortcut icon" href="../img/book_favicon.png" type="image/png">
 </head>
 <body>
 <h1>ADMIN GROUP PAGE!</h1>
@@ -56,7 +56,7 @@
 <form action="<c:url value="GroupEditController"/>" method="post">
     <input type="hidden" name="action" value="delete">
     <input type="hidden" name="groupId" value=${requestScope.group.id}>
-    <input type="hidden" name="groupId" value=${requestScope.group.id}>
+    <input type="hidden" name="teacherLogin" value=${requestScope.teacher.id}>
     <button type="submit">Разжаловать учителя</button>
 </form>
 

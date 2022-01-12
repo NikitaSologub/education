@@ -1,30 +1,31 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.CredentialRepoHardcodeImpl;
 import by.itacademy.sologub.Teacher;
 import by.itacademy.sologub.TeacherRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class TeacherServiceImpl implements TeacherService {
-    private static TeacherServiceImpl teacherService;
-    private final TeacherRepo repo;
+@Service
+public class TeacherServiceImpl extends AbstractService implements TeacherService {
+    private static final String PREFIX = "teacherRepo";
+    private final Map<String, TeacherRepo> repoMap;
+    private volatile TeacherRepo repo = null;
 
-    private TeacherServiceImpl(TeacherRepo teacherRepo) {
-        this.repo = teacherRepo;
+    @Autowired
+    public TeacherServiceImpl(Map<String, TeacherRepo> repoMap) {
+        this.repoMap = repoMap;
     }
 
-    public static TeacherServiceImpl getInstance(TeacherRepo teacherRepo) {
-        if (teacherService == null) {
-            synchronized (TeacherServiceImpl.class) {
-                if (teacherService == null) {
-                    teacherService = new TeacherServiceImpl(teacherRepo);
-                }
-            }
-        }
-        return teacherService;
+    @PostConstruct
+    public void init() {
+        repo = repoMap.get(PREFIX + StringUtils.capitalize(type) + SUFFIX);
     }
 
     @Override

@@ -4,8 +4,8 @@
 <head>
     <title>Login page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" type="text/css" href="<c:url value='css/hallway_style.css'/>"/>
-    <link rel="icon" href="img/book_favicon.png" type="image/png">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/hallway_style.css'/>"/>
+    <link rel="icon" href="../img/book_favicon.png" type="image/png">
 </head>
 <body class="basic">
 <h1>Welcome in login page!</h1>
@@ -25,6 +25,6 @@
         <c:out value="${requestScope.errorMessage}"/>
     </c:if>
 </h3>
-<a href="${pageContext.request.contextPath}/registration_page.jsp">Not registered? Create an account.</a>
+<a href="${pageContext.request.contextPath}/view/registration_page.jsp">Not registered? Create an account.</a>
 </body>
 </html>

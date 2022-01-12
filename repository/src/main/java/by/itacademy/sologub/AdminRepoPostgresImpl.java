@@ -3,6 +3,8 @@ package by.itacademy.sologub;
 import by.itacademy.sologub.role.Role;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,22 +22,11 @@ import static by.itacademy.sologub.constants.ConstantObject.ADMIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG;
 
 @Slf4j
+@Repository
 public class AdminRepoPostgresImpl extends AbstractUserPostgresRepo<Admin> implements AdminRepo {
-    private static volatile AdminRepoPostgresImpl adminRepo;
-
-    private AdminRepoPostgresImpl(ComboPooledDataSource pool) {
+    @Autowired
+    public AdminRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
-    }
-
-    public static AdminRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
-        if (adminRepo == null) {
-            synchronized (AdminRepoPostgresImpl.class) {
-                if (adminRepo == null) {
-                    adminRepo = new AdminRepoPostgresImpl(pool);
-                }
-            }
-        }
-        return adminRepo;
     }
 
     @Override //todo - вынести метод ниже
@@ -64,7 +55,7 @@ public class AdminRepoPostgresImpl extends AbstractUserPostgresRepo<Admin> imple
 
     @Override
     public Admin getAdminIfExistsOrGetSpecialValue(String login, String password) {
-        return getUserIfExistsOrGetSpecialValue(login,password);
+        return getUserIfExistsOrGetSpecialValue(login, password);
     }
 
     @Override
@@ -79,7 +70,7 @@ public class AdminRepoPostgresImpl extends AbstractUserPostgresRepo<Admin> imple
 
     @Override
     public boolean deleteAdmin(String login) {
-        Admin a = adminRepo.getAdminIfExistsOrGetSpecialValue(login);
+        Admin a = getAdminIfExistsOrGetSpecialValue(login);
         return deleteAdmin(a);
     }
 

@@ -11,11 +11,11 @@ import static by.itacademy.sologub.constants.ConstantObject.LOGIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
 
 @Slf4j
-public abstract class AbstractUserHardcodedRepo<T extends User> {
-    private final CredentialRepoHardcodeImpl credentialRepo;
+public abstract class AbstractUserMemoryRepo<T extends User> {
+    private final CredentialRepoMemoryImpl credentialRepo;
     private final Map<Integer, T> users;
 
-    protected AbstractUserHardcodedRepo(CredentialRepoHardcodeImpl credentialRepo) {
+    protected AbstractUserMemoryRepo(CredentialRepoMemoryImpl credentialRepo) {
         this.credentialRepo = credentialRepo;
         users = new ConcurrentHashMap<>();
     }

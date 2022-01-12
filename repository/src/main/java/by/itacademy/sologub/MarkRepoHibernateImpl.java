@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.Set;
 
@@ -10,24 +12,14 @@ import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 
 @Slf4j
+@Repository
 public class MarkRepoHibernateImpl extends AbstractCrudRepoJpa<Mark> implements MarkRepo {
-    private static volatile MarkRepoHibernateImpl instance;
     private static volatile StudentRepoHibernateImpl studentRepo;
 
-    private MarkRepoHibernateImpl(SessionFactory sf, StudentRepoHibernateImpl tr) {
+    @Autowired
+    public MarkRepoHibernateImpl(SessionFactory sf, StudentRepoHibernateImpl tr) {
         super(sf, Mark.class);
         studentRepo = tr;
-    }
-
-    public static MarkRepoHibernateImpl getInstance(SessionFactory sf, StudentRepoHibernateImpl tr) {
-        if (instance == null) {
-            synchronized (MarkRepoHibernateImpl.class) {
-                if (instance == null) {
-                    instance = new MarkRepoHibernateImpl(sf, tr);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

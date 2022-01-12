@@ -5,105 +5,90 @@ import by.itacademy.sologub.Teacher;
 import by.itacademy.sologub.services.GroupService;
 import by.itacademy.sologub.services.TeacherService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.DESCRIPTION;
 import static by.itacademy.sologub.constants.Attributes.GROUP;
 import static by.itacademy.sologub.constants.Attributes.TEACHER;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
-import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_EDIT_PAGE;
-import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
+import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_EDIT_VIEW;
 import static by.itacademy.sologub.constants.Constant.GROUP_EDIT_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.GROUP_ID;
+import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.PERSONS_SET;
 import static by.itacademy.sologub.constants.Constant.TEACHER_LOGIN;
 
-@WebServlet(GROUP_EDIT_CONTROLLER)
+@Controller
+@RequestMapping(GROUP_EDIT_CONTROLLER)
 @Slf4j
-public class GroupEditController extends BaseController {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        refreshGroupAndForward("переход на страницу редактирования параметров группы", req, resp);
+public class GroupEditController extends AbstractController {
+    private final TeacherService teacherService;
+    private final GroupService groupService;
+
+    @Autowired
+    public GroupEditController(TeacherService teacherService, GroupService groupService) {
+        this.teacherService = teacherService;
+        this.groupService = groupService;
     }
 
-    private void refreshGroupAndForward(String msg, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        TeacherService service = (TeacherService) getServletContext().getAttribute(FACADE_SERVICE);
-        Set<Teacher> teacherSet = service.getTeachersSet();
-        Teacher t = getTeacherById(req);
-        Group group = getGroupById(req);
-
-        req.setAttribute(TEACHER, t);
-        req.setAttribute(PERSONS_SET, teacherSet);
-        req.setAttribute(GROUP, group);
-
-        log.debug("Группа {} текущий учитель {} и set всх учителей {}", group, t, teacherSet);
-        forward(ADMIN_GROUP_EDIT_PAGE, msg, req, res);
+    @GetMapping
+    public ModelAndView doGet(@RequestParam(TEACHER_LOGIN) String teacherLogin, @RequestParam(GROUP_ID) int groupId) {
+        return refreshGroupAndForward(teacherLogin, groupId, "вы на странице редактирования группы");
     }
 
-    private Teacher getTeacherById(HttpServletRequest req) {
-        TeacherService service = (TeacherService) getServletContext().getAttribute(FACADE_SERVICE);
-        String teacherLogin = req.getParameter(TEACHER_LOGIN);
-        return service.getTeacherIfExistsOrGetSpecialValue(teacherLogin);
-    }
-
-    private Group getGroupById(HttpServletRequest req) {
-        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
-        int groupId = Integer.parseInt(req.getParameter(GROUP_ID));
-        return service.getGroupById(groupId);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
-        String newTitle = req.getParameter(TITLE);
-        log.debug("Новое значение title={}", newTitle);
-        String newDescription = req.getParameter(DESCRIPTION);
-        log.debug("Новое значение description={}", newDescription);
-
-        Group newGr = getGroupById(req);
+    @PostMapping()
+    public ModelAndView doPost(@RequestParam(TEACHER_LOGIN) String teacherLogin, @RequestParam(GROUP_ID) int groupId,
+                               @RequestParam(TITLE) String newTitle, @RequestParam(DESCRIPTION) String newDescription) {
+        Group newGr = groupService.getGroupById(groupId);
         newGr.setTitle(newTitle);
         newGr.setDescription(newDescription);
         log.debug("Новое значение group={}", newGr);
 
         String msg;
-        if (service.changeGroupsParametersIfExists(newGr)) {
+        if (groupService.changeGroupsParametersIfExists(newGr)) {
             msg = "Параметры " + newGr.getTitle() + " и " + newGr.getDescription() + " заданы как новые для группы";
             log.debug("Параметры группы {} изменены", newGr);
         } else {
             msg = "Новые параметры " + newGr.getTitle() + " и " + newGr.getDescription() + " не изменены";
             log.debug("Параметры группы {} не изменены", newGr);
         }
-        refreshGroupAndForward(msg, req, res);
+        return refreshGroupAndForward(teacherLogin, groupId, msg);
     }
 
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
-        Group group = getGroupById(req);
-        Teacher newT = getTeacherById(req);
+    @PutMapping
+    public ModelAndView doPut(@RequestParam(TEACHER_LOGIN) String teacherLogin, @RequestParam(GROUP_ID) int groupId,
+                              HttpServletRequest req) {
+        Group group = groupService.getGroupById(groupId);
+        Teacher newT = teacherService.getTeacherIfExistsOrGetSpecialValue(teacherLogin);
         group.setTeacher(newT);
 
         String msg;
-        if (service.changeGroupsParametersIfExists(group)) {
+        if (groupService.changeGroupsParametersIfExists(group)) {
             msg = "Новый учитель " + newT.getCredential().getLogin() + "назначен руководителем";
             log.debug("Параметры группы изменены. Новый учитель {} назначен руководителем", newT);
         } else {
             msg = "Не получилось назначить " + newT.getCredential().getLogin() + "новым руководителем";
             log.debug("Параметры группы не изменены. Новый учитель {} не назначен руководителем", newT);
         }
-        refreshGroupAndForward(msg, req, res);
+        resetMethod(req);
+        return refreshGroupAndForward(teacherLogin, groupId, msg);
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
-        Group group = getGroupById(req);
+    @DeleteMapping
+    public ModelAndView doDelete(@RequestParam(TEACHER_LOGIN) String teacherLogin, @RequestParam(GROUP_ID) int groupId,
+                                 HttpServletRequest req) {
+        Group group = groupService.getGroupById(groupId);
         Teacher oldT = group.getTeacher();
         String login;
         try {
@@ -114,13 +99,28 @@ public class GroupEditController extends BaseController {
         group.setTeacher(null);
 
         String msg;
-        if (service.changeGroupsParametersIfExists(group)) {
+        if (groupService.changeGroupsParametersIfExists(group)) {
             msg = "Учитель " + login + " снят с должности руководителя группы";
             log.debug("Параметры группы изменены. Учитель {} снят с должности руководителя группы", oldT);
         } else {
             msg = "Не получилось снять " + login + " с поста руководителя группы";
             log.debug("Параметры группы не изменены. Новый учитель {} не назначен руководителем", oldT);
         }
-        refreshGroupAndForward(msg, req, res);
+        resetMethod(req);
+        return refreshGroupAndForward(teacherLogin, groupId, msg);
+    }
+
+    private ModelAndView refreshGroupAndForward(String login, int id, String msg) {
+        ModelAndView mav = new ModelAndView(ADMIN_GROUP_EDIT_VIEW);
+        Set<Teacher> teacherSet = teacherService.getTeachersSet();
+        Teacher t = teacherService.getTeacherIfExistsOrGetSpecialValue(login);
+        Group group = groupService.getGroupById(id);
+        log.debug("Группа {} текущий учитель {} и set всх учителей {}", group, t, teacherSet);
+
+        mav.getModel().put(PERSONS_SET, teacherSet);
+        mav.getModel().put(TEACHER, t);
+        mav.getModel().put(GROUP, group);
+        mav.getModel().put(MESSAGE, msg);
+        return mav;
     }
 }

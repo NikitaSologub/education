@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -13,22 +15,11 @@ import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 
 @Slf4j
+@Repository
 public class GroupRepoHibernateImpl extends AbstractCrudRepoJpa<Group> implements GroupRepo {
-    private static volatile GroupRepoHibernateImpl instance;
-
-    private GroupRepoHibernateImpl(SessionFactory sf) {
+    @Autowired
+    public GroupRepoHibernateImpl(SessionFactory sf) {
         super(sf, Group.class);
-    }
-
-    public static GroupRepoHibernateImpl getInstance(SessionFactory sf) {
-        if (instance == null) {
-            synchronized (GroupRepoHibernateImpl.class) {
-                if (instance == null) {
-                    instance = new GroupRepoHibernateImpl(sf);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

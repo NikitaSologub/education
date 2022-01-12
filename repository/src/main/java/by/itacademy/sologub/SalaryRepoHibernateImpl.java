@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -12,24 +14,14 @@ import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 
 @Slf4j
+@Repository
 public class SalaryRepoHibernateImpl extends AbstractCrudRepoJpa<Salary> implements SalaryRepo {
-    private static volatile SalaryRepoHibernateImpl instance;
     private static volatile TeacherRepoHibernateImpl teacherRepo;
 
-    private SalaryRepoHibernateImpl(SessionFactory sf, TeacherRepoHibernateImpl tr) {
+    @Autowired
+    public SalaryRepoHibernateImpl(SessionFactory sf, TeacherRepoHibernateImpl tr) {
         super(sf, Salary.class);
         teacherRepo = tr;
-    }
-
-    public static SalaryRepoHibernateImpl getInstance(SessionFactory sf, TeacherRepoHibernateImpl tr) {
-        if (instance == null) {
-            synchronized (SalaryRepoHibernateImpl.class) {
-                if (instance == null) {
-                    instance = new SalaryRepoHibernateImpl(sf, tr);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

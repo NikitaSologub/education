@@ -1,6 +1,8 @@
 package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,26 +15,16 @@ import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 
 @Slf4j
-public class SubjectRepoHardcodedImpl implements SubjectRepo {
+@Repository
+public class SubjectRepoMemoryImpl implements SubjectRepo {
     static int CURRENT_MAX_SUBJECT_ID = 263;
-    private static volatile SubjectRepoHardcodedImpl instance;
     private static volatile Map<Integer, Subject> subjects;
-    private static volatile GroupRepoHardcodedImpl groupRepo;
+    private static volatile GroupRepoMemoryImpl groupRepo;
 
-    private SubjectRepoHardcodedImpl(GroupRepoHardcodedImpl groupRepo) {
+    @Autowired
+    public SubjectRepoMemoryImpl(GroupRepoMemoryImpl groupRepo) {
         subjects = new ConcurrentHashMap<>();
-        SubjectRepoHardcodedImpl.groupRepo = groupRepo;
-    }
-
-    public static SubjectRepoHardcodedImpl getInstance(GroupRepoHardcodedImpl groupRepo) {
-        if (instance == null) {
-            synchronized (SubjectRepoHardcodedImpl.class) {
-                if (instance == null) {
-                    instance = new SubjectRepoHardcodedImpl(groupRepo);
-                }
-            }
-        }
-        return instance;
+        SubjectRepoMemoryImpl.groupRepo = groupRepo;
     }
 
     @Override

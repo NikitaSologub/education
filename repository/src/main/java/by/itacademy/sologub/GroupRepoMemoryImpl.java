@@ -1,6 +1,8 @@
 package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,24 +13,14 @@ import java.util.stream.Collectors;
 import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 
 @Slf4j
-public class GroupRepoHardcodedImpl implements GroupRepo {
+@Repository
+public class GroupRepoMemoryImpl implements GroupRepo {
     private static int CURRENT_MAX_GROUP_ID = 17;
-    public static volatile GroupRepoHardcodedImpl instance;
     private static volatile Map<Integer, Group> groups;
 
-    private GroupRepoHardcodedImpl() {
+    @Autowired
+    public GroupRepoMemoryImpl() {
         groups = new ConcurrentHashMap<>();
-    }
-
-    public static GroupRepoHardcodedImpl getInstance() {
-        if (instance == null) {
-            synchronized (GroupRepoHardcodedImpl.class) {
-                if (instance == null) {
-                    instance = new GroupRepoHardcodedImpl();
-                }
-            }
-        }
-        return instance;
     }
 
     @Override
@@ -99,9 +91,9 @@ public class GroupRepoHardcodedImpl implements GroupRepo {
                     oldGr.setTitle(newGr.getTitle());
                 }
             }
-            log.debug("Задаём значение для Teacher = {}",newGr.getTeacher());
+            log.debug("Задаём значение для Teacher = {}", newGr.getTeacher());
             oldGr.setTeacher(newGr.getTeacher());
-            log.debug("Задаём значение для Description = {}",newGr.getDescription());
+            log.debug("Задаём значение для Description = {}", newGr.getDescription());
             oldGr.setDescription(newGr.getDescription());
             log.debug("Group {} изменила свои значения", oldGr);
             return true;

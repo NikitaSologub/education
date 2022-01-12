@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,22 +13,11 @@ import static by.itacademy.sologub.constants.ConstantObject.ADMIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG;
 
 @Slf4j
+@Repository
 public class AdminRepoHibernateImpl extends AbstractCrudRepoJpa<Admin> implements AdminRepo {
-    private static volatile AdminRepoHibernateImpl instance;
-
-    private AdminRepoHibernateImpl(SessionFactory sf) {
+    @Autowired
+    public AdminRepoHibernateImpl(SessionFactory sf) {
         super(sf, Admin.class);
-    }
-
-    public static AdminRepoHibernateImpl getInstance(SessionFactory sf) {
-        if (instance == null) {
-            synchronized (AdminRepoHibernateImpl.class) {
-                if (instance == null) {
-                    instance = new AdminRepoHibernateImpl(sf);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

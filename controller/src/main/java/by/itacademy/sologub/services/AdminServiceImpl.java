@@ -3,27 +3,29 @@ package by.itacademy.sologub.services;
 import by.itacademy.sologub.Admin;
 import by.itacademy.sologub.AdminRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class AdminServiceImpl implements AdminService {
-    private static AdminServiceImpl teacherService;
-    private final AdminRepo repo;
+@Service
+public class AdminServiceImpl extends AbstractService implements AdminService {
+    private static final String PREFIX = "adminRepo";
+    private final Map<String, AdminRepo> repoMap;
+    private volatile AdminRepo repo = null;
 
-    private AdminServiceImpl(AdminRepo adminRepo) {
-        this.repo = adminRepo;
+    @Autowired
+    public AdminServiceImpl(Map<String, AdminRepo> repoMap) {
+        this.repoMap = repoMap;
     }
 
-    public static AdminServiceImpl getInstance(AdminRepo adminRepo) {
-        if (teacherService == null) {
-            synchronized (AdminServiceImpl.class) {
-                if (teacherService == null) {
-                    teacherService = new AdminServiceImpl(adminRepo);
-                }
-            }
-        }
-        return teacherService;
+    @PostConstruct
+    public void init() {
+        repo = repoMap.get(PREFIX + StringUtils.capitalize(type) + SUFFIX);
     }
 
     @Override

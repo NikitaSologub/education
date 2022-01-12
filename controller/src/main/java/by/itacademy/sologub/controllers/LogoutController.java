@@ -1,24 +1,24 @@
 package by.itacademy.sologub.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.servlet.http.HttpSession;
 
-import static by.itacademy.sologub.constants.Constant.LOGIN_PAGE;
+import static by.itacademy.sologub.constants.Constant.LOGIN_VIEW;
 import static by.itacademy.sologub.constants.Constant.LOGOUT_CONTROLLER;
 
-@WebServlet(LOGOUT_CONTROLLER)
+@Controller
+@RequestMapping(LOGOUT_CONTROLLER)
 @Slf4j
-public class LogoutController extends BaseController {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getSession()
-                .invalidate();
+public class LogoutController {
+    @GetMapping
+    protected ModelAndView doGet(HttpSession session) {
+        session.invalidate();
         log.info("Инвалидируем сессию");
-        forward(LOGIN_PAGE, req, resp);
+        return new ModelAndView(LOGIN_VIEW);
     }
 }

@@ -3,28 +3,30 @@ package by.itacademy.sologub.services;
 import by.itacademy.sologub.Subject;
 import by.itacademy.sologub.SubjectRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class SubjectServiceImpl implements SubjectService {
-    private static SubjectServiceImpl StudentService;
-    private final SubjectRepo repo;
+@Service
+public class SubjectServiceImpl extends AbstractService implements SubjectService {
+    private static final String PREFIX = "subjectRepo";
+    private final Map<String, SubjectRepo> repoMap;
+    private volatile SubjectRepo repo = null;
 
-    private SubjectServiceImpl(SubjectRepo subjectRepo) {
-        this.repo = subjectRepo;
+    @Autowired
+    public SubjectServiceImpl(Map<String, SubjectRepo> repoMap) {
+        this.repoMap = repoMap;
     }
 
-    public static SubjectServiceImpl getInstance(SubjectRepo subjectRepo) {
-        if (StudentService == null) {
-            synchronized (SubjectServiceImpl.class) {
-                if (StudentService == null) {
-                    StudentService = new SubjectServiceImpl(subjectRepo);
-                }
-            }
-        }
-        return StudentService;
+    @PostConstruct
+    public void init() {
+        repo = repoMap.get(PREFIX + StringUtils.capitalize(type) + SUFFIX);
     }
 
     @Override

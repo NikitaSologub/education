@@ -5,7 +5,7 @@
     <title>Salaries page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/general_style.css'/>"/>
-    <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
+    <link rel="shortcut icon" href="../img/book_favicon.png" type="image/png">
 </head>
 <body>
 <h1>ADMIN SALARIES PAGE!</h1>
@@ -14,7 +14,7 @@ ${requestScope.teacher.credential.login} | ${requestScope.teacher.lastname} | ${
 ${requestScope.teacher.patronymic} | ${requestScope.teacher.dateOfBirth}
 
 <form action="SalaryController" method="post">
-    <input type="hidden" name="action" value="average">
+    <input type="hidden" name="action" value="patch">
     <input type="hidden" name="id" value=${requestScope.teacher.id}>
     <input type="hidden" name="login" value=${requestScope.teacher.credential.login}>
     <button type="submit">Узнать среднюю зарплату</button>

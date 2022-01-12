@@ -1,6 +1,8 @@
 package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.Set;
 
@@ -9,23 +11,13 @@ import static by.itacademy.sologub.constants.ConstantObject.ADMIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG;
 
 @Slf4j
-public class AdminRepoHardcodedImpl extends AbstractUserHardcodedRepo<Admin> implements AdminRepo {
+@Repository
+public class AdminRepoMemoryImpl extends AbstractUserMemoryRepo<Admin> implements AdminRepo {
     static int CURRENT_MAX_ADMIN_ID = 139051;
-    private static volatile AdminRepoHardcodedImpl instance;
 
-    private AdminRepoHardcodedImpl(CredentialRepoHardcodeImpl credentialRepo) {
+    @Autowired
+    public AdminRepoMemoryImpl(CredentialRepoMemoryImpl credentialRepo) {
         super(credentialRepo);
-    }
-
-    public static AdminRepoHardcodedImpl getInstance(CredentialRepoHardcodeImpl credentialRepo) {
-        if (instance == null) {
-            synchronized (AdminRepoHardcodedImpl.class) {
-                if (instance == null) {
-                    instance = new AdminRepoHardcodedImpl(credentialRepo);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

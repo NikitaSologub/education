@@ -5,7 +5,7 @@
     <title>Title</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/hallway_style.css'/>"/>
-    <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
+    <link rel="shortcut icon" href="../img/book_favicon.png" type="image/png">
 </head>
 
 <body>
@@ -40,6 +40,6 @@
         <c:out value="${requestScope.errorMessage}"/>
     </c:if>
 </h3>
-<a href="${pageContext.request.contextPath}/login_page.jsp">Already have an account? Login here.</a>
+<a href="${pageContext.request.contextPath}/view/login_page.jsp">Already have an account? Login here.</a>
 </body>
 </html>

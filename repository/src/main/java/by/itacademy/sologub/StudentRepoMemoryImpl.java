@@ -1,6 +1,8 @@
 package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,25 +13,15 @@ import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
 
 @Slf4j
-public class StudentRepoHardcodedImpl extends AbstractUserHardcodedRepo<Student> implements StudentRepo {
+@Repository
+public class StudentRepoMemoryImpl extends AbstractUserMemoryRepo<Student> implements StudentRepo {
     static int CURRENT_MAX_STUDENT_ID = 6789;
-    private static volatile StudentRepoHardcodedImpl instance;
-    private static volatile GroupRepoHardcodedImpl groupRepo;
+    private static volatile GroupRepoMemoryImpl groupRepo;
 
-    private StudentRepoHardcodedImpl(CredentialRepoHardcodeImpl credentialRepo,GroupRepoHardcodedImpl groupRepo) {
+    @Autowired
+    public StudentRepoMemoryImpl(CredentialRepoMemoryImpl credentialRepo, GroupRepoMemoryImpl groupRepo) {
         super(credentialRepo);
-        StudentRepoHardcodedImpl.groupRepo = groupRepo;
-    }
-
-    public static StudentRepoHardcodedImpl getInstance(CredentialRepoHardcodeImpl credentialRepo,GroupRepoHardcodedImpl groupRepo) {
-        if (instance == null) {
-            synchronized (StudentRepoHardcodedImpl.class) {
-                if (instance == null) {
-                    instance = new StudentRepoHardcodedImpl(credentialRepo,groupRepo);
-                }
-            }
-        }
-        return instance;
+        StudentRepoMemoryImpl.groupRepo = groupRepo;
     }
 
     @Override

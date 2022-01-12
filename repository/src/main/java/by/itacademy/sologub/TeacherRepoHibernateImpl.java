@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,22 +14,11 @@ import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
 
 @Slf4j
+@Repository
 public class TeacherRepoHibernateImpl extends AbstractCrudRepoJpa<Teacher> implements TeacherRepo {
-    private static volatile TeacherRepoHibernateImpl instance;
-
-    private TeacherRepoHibernateImpl(SessionFactory sf) {
+    @Autowired
+    public TeacherRepoHibernateImpl(SessionFactory sf) {
         super(sf, Teacher.class);
-    }
-
-    public static TeacherRepoHibernateImpl getInstance(SessionFactory sf) {
-        if (instance == null) {
-            synchronized (TeacherRepoHibernateImpl.class) {
-                if (instance == null) {
-                    instance = new TeacherRepoHibernateImpl(sf);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

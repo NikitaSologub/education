@@ -1,183 +1,71 @@
-package by.itacademy.sologub.filters;
+package by.itacademy.sologub.config;
 
 import by.itacademy.sologub.Admin;
-import by.itacademy.sologub.AdminRepo;
+import by.itacademy.sologub.AdminRepoMemoryImpl;
 import by.itacademy.sologub.Credential;
 import by.itacademy.sologub.Group;
-import by.itacademy.sologub.GroupRepo;
+import by.itacademy.sologub.GroupRepoMemoryImpl;
 import by.itacademy.sologub.Mark;
-import by.itacademy.sologub.MarkRepo;
+import by.itacademy.sologub.MarkRepoMemoryImpl;
 import by.itacademy.sologub.Salary;
-import by.itacademy.sologub.SalaryRepo;
+import by.itacademy.sologub.SalaryRepoMemoryImpl;
 import by.itacademy.sologub.Student;
-import by.itacademy.sologub.StudentRepo;
+import by.itacademy.sologub.StudentRepoMemoryImpl;
 import by.itacademy.sologub.Subject;
-import by.itacademy.sologub.SubjectRepo;
+import by.itacademy.sologub.SubjectRepoMemoryImpl;
 import by.itacademy.sologub.Teacher;
-import by.itacademy.sologub.TeacherRepo;
-import by.itacademy.sologub.factory.ModelRepoFactory;
-import by.itacademy.sologub.factory.ModelRepoFactoryHardcodeImpl;
-import by.itacademy.sologub.factory.ModelRepoFactoryHibernateImpl;
-import by.itacademy.sologub.factory.ModelRepoFactoryPostgresDbImpl;
-import by.itacademy.sologub.services.AdminService;
-import by.itacademy.sologub.services.AdminServiceImpl;
-import by.itacademy.sologub.services.FacadeService;
-import by.itacademy.sologub.services.GroupService;
-import by.itacademy.sologub.services.GroupServiceImpl;
-import by.itacademy.sologub.services.MarkService;
-import by.itacademy.sologub.services.MarkServiceImpl;
-import by.itacademy.sologub.services.SalaryService;
-import by.itacademy.sologub.services.SalaryServiceImpl;
-import by.itacademy.sologub.services.StudentService;
-import by.itacademy.sologub.services.StudentServiceImpl;
-import by.itacademy.sologub.services.SubjectService;
-import by.itacademy.sologub.services.SubjectServiceImpl;
-import by.itacademy.sologub.services.TeacherService;
-import by.itacademy.sologub.services.TeacherServiceImpl;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
-import lombok.SneakyThrows;
+import by.itacademy.sologub.TeacherRepoMemoryImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import java.beans.PropertyVetoException;
-import java.io.IOException;
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ResourceBundle;
 
-import static by.itacademy.sologub.constants.Attributes.LOGIN;
-import static by.itacademy.sologub.constants.Attributes.PASSWORD;
-import static by.itacademy.sologub.constants.Constant.DB_CONFIG_FILE;
-import static by.itacademy.sologub.constants.Constant.DRIVER;
-import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
-import static by.itacademy.sologub.constants.Constant.HIBERNATE;
-import static by.itacademy.sologub.constants.Constant.MEMORY;
-import static by.itacademy.sologub.constants.Constant.POSTGRES;
-import static by.itacademy.sologub.constants.Constant.TYPE;
-import static by.itacademy.sologub.constants.Constant.URL;
+import static by.itacademy.sologub.constants.Constant.MEMORY_TYPE;
 
-@WebFilter
+@PropertySource("classpath:db_config.properties")
 @Slf4j
-public class InitContextFilter implements Filter {
-    ResourceBundle resourceBundle = ResourceBundle.getBundle(DB_CONFIG_FILE);
-    ComboPooledDataSource pool = null;
+@Component
+public class MemoryContentInitializer {
+    private final AdminRepoMemoryImpl adminRepo;
+    private final TeacherRepoMemoryImpl teacherRepo;
+    private final StudentRepoMemoryImpl studentRepo;
+    private final GroupRepoMemoryImpl groupRepo;
+    private final SalaryRepoMemoryImpl salaryRepo;
+    private final MarkRepoMemoryImpl markRepo;
+    private final SubjectRepoMemoryImpl subjectRepo;
+    private @Value("${type}")
+    String type;
 
-    @SneakyThrows
-    @Override        //Тут я буду инициализировать все что можно
-    public void init(FilterConfig filterConfig) {
-        String databaseType = resourceBundle.getString(TYPE);
-
-        initRepositoryAndSetContext(databaseType, filterConfig);
+    @Autowired
+    private MemoryContentInitializer(AdminRepoMemoryImpl adminRepoMemory, TeacherRepoMemoryImpl teacherRepoMemory,
+                                     StudentRepoMemoryImpl studentRepoMemory, GroupRepoMemoryImpl groupRepoMemory,
+                                     SalaryRepoMemoryImpl salaryRepoMemory, MarkRepoMemoryImpl markRepoMemory,
+                                     SubjectRepoMemoryImpl subjectRepoMemory) {
+        this.adminRepo = adminRepoMemory;
+        this.teacherRepo = teacherRepoMemory;
+        this.studentRepo = studentRepoMemory;
+        this.groupRepo = groupRepoMemory;
+        this.salaryRepo = salaryRepoMemory;
+        this.markRepo = markRepoMemory;
+        this.subjectRepo = subjectRepoMemory;
     }
 
-    private void initRepositoryAndSetContext(String databaseType, FilterConfig filterConfig) throws PropertyVetoException {
-        log.info("Приложение должно загружать {} тип баз данных", databaseType);
-        switch (databaseType) {
-            case (POSTGRES):
-                loadDatabasePostgres(filterConfig);
-                break;
-            case (HIBERNATE):
-                loadDatabaseHibernateApproach(filterConfig);
-                break;
-            case (MEMORY):
-            default:
-                loadDatabaseInMemory(filterConfig);
-                break;
-        }
-    }
-
-    private void loadDatabaseInMemory(FilterConfig conf) {
-        ModelRepoFactory factory = ModelRepoFactoryHardcodeImpl.getInstance();
-        setAppContext(conf, factory);
-        setContent(factory);
-        log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
-    }
-
-    private void loadDatabaseHibernateApproach(FilterConfig conf) {
-        log.info("Пытаемся загружать hibernate configuration");//TODO если нет - переход на memory type
-        Configuration cfg = new Configuration().configure();
-        try {
-            SessionFactory sf = cfg.buildSessionFactory();
-            ModelRepoFactory factory = ModelRepoFactoryHibernateImpl.getInstance(sf);
-            setAppContext(conf, factory);
-        } catch (HibernateException e) {
-            log.info("Не получилось сконфигурировать hibernate. Переходим на HardcoreMemoryImpl Database");
-            loadDatabaseInMemory(conf);
-        }
-    }
-
-    private void loadDatabasePostgres(FilterConfig conf) throws PropertyVetoException {
-        if (loadDriverClass()) {
-            pool = initAndGetPoolConnection();
-            ModelRepoFactory factory = ModelRepoFactoryPostgresDbImpl.getInstance(pool);
-            setAppContext(conf, factory);
+    @PostConstruct
+    private void setContextIfMemory() {
+        if (MEMORY_TYPE.equalsIgnoreCase(type)) {
+            setContent();
+            log.info("выбранный тип БД=memory. Заполнили содержимым базу данных");
         } else {
-            log.info("Не получилось подключиться к БД. Переходим на HardcoreMemoryImpl Database");
-            loadDatabaseInMemory(conf);
+            log.info("выбранный тип БД={}.Нет смысла заполнять базу данных memory db содержимым", type);
         }
     }
 
-    private void setAppContext(FilterConfig filterConfig, ModelRepoFactory factory) {
-        TeacherRepo teacherRepo = factory.getTeacherRepo();
-        StudentRepo studentRepo = factory.getStudentRepo();
-        AdminRepo adminRepo = factory.getAdminRepo();
-        SalaryRepo salaryRepo = factory.getSalariesRepo();
-        SubjectRepo subjectRepo = factory.getSubjectRepo();
-        GroupRepo groupRepo = factory.getGroupRepo();
-        MarkRepo markRepo = factory.getMarkRepo();
-
-        TeacherService teacherService = TeacherServiceImpl.getInstance(teacherRepo);
-        StudentService studentService = StudentServiceImpl.getInstance(studentRepo);
-        GroupService groupService = GroupServiceImpl.getInstance(groupRepo);
-        MarkService markService = MarkServiceImpl.getInstance(markRepo);
-        SalaryService salaryService = SalaryServiceImpl.getInstance(salaryRepo);
-        SubjectService subjectService = SubjectServiceImpl.getInstance(subjectRepo);
-        AdminService adminService = AdminServiceImpl.getInstance(adminRepo);
-        FacadeService facade = FacadeService.getInstance(groupService, studentService, teacherService, adminService,
-                markService, salaryService, subjectService);
-
-        ServletContext context = filterConfig.getServletContext();
-        context.setAttribute(FACADE_SERVICE, facade);
-    }
-
-    boolean loadDriverClass() {
-        try {
-            Class.forName(resourceBundle.getString(DRIVER));
-            log.info("Драйвер {} загружен", resourceBundle.getString(DRIVER));
-            return true;
-        } catch (ClassNotFoundException e) {
-            log.error("не удалость подключить драйвер.", e);
-            return false;
-        }
-    }
-
-    private ComboPooledDataSource initAndGetPoolConnection() throws PropertyVetoException {
-        ComboPooledDataSource pool = new ComboPooledDataSource();
-        pool.setJdbcUrl(resourceBundle.getString(URL));
-        pool.setUser(resourceBundle.getString(LOGIN));
-        pool.setPassword(resourceBundle.getString(PASSWORD));
-        pool.setInitialPoolSize(1);
-        pool.setMinPoolSize(1);
-        pool.setAcquireIncrement(1);
-        pool.setMaxPoolSize(5);
-        pool.setMaxStatements(100);
-        pool.setDriverClass(resourceBundle.getString(DRIVER));
-        return pool;
-    }
-
-    private void setContent(ModelRepoFactory factory) {
-        SubjectRepo subjectRepo = factory.getSubjectRepo();
-
+    private void setContent() {
         Subject sub1 = new Subject().withTitle("География");
         Subject sub2 = new Subject().withTitle("Экономика");
         Subject sub3 = new Subject().withTitle("Информатика");
@@ -192,8 +80,6 @@ public class InitContextFilter implements Filter {
         subjectRepo.putSubjectIfNotExists(sub5);
         subjectRepo.putSubjectIfNotExists(sub6);
 
-        AdminRepo adminRepo = factory.getAdminRepo();
-
         adminRepo.putAdminIfNotExists(new Admin()
                 .withId(323)
                 .withCredential(new Credential()
@@ -204,8 +90,6 @@ public class InitContextFilter implements Filter {
                 .withLastname("Сологуб")
                 .withPatronymic("Олегович")
                 .withDateOfBirth(LocalDate.of(1992, Month.APRIL, 23)));
-
-        StudentRepo studentRepo = factory.getStudentRepo();
 
         Student stud1 = new Student()
                 .withCredential(new Credential()
@@ -268,8 +152,6 @@ public class InitContextFilter implements Filter {
         studentRepo.putStudentIfNotExists(stud5);
         studentRepo.putStudentIfNotExists(stud6);
 
-        TeacherRepo teacherRepo = factory.getTeacherRepo();
-
         Teacher t1 = new Teacher().
                 withCredential(new Credential()
                         .withLogin("DETSUK59")
@@ -320,8 +202,6 @@ public class InitContextFilter implements Filter {
         teacherRepo.putTeacherIfNotExists(t3);
         teacherRepo.putTeacherIfNotExists(t4);
         teacherRepo.putTeacherIfNotExists(t5);
-
-        SalaryRepo salaryRepo = factory.getSalariesRepo();
 
         Salary s1 = new Salary()
                 .withDate(LocalDate.parse("2021-01-12"))
@@ -380,8 +260,6 @@ public class InitContextFilter implements Filter {
         salaryRepo.putSalaryToTeacher(s11, t4.getId());
         salaryRepo.putSalaryToTeacher(s12, t4.getId());
         salaryRepo.putSalaryToTeacher(s13, t5.getId());
-
-        MarkRepo markRepo = factory.getMarkRepo();
 
         Mark m1 = new Mark()
                 .withSubject(sub1)
@@ -445,8 +323,6 @@ public class InitContextFilter implements Filter {
         markRepo.putMarkToStudent(m11, stud6.getId());
         markRepo.putMarkToStudent(m12, stud6.getId());
 
-        GroupRepo groupRepo = factory.getGroupRepo();
-
         Group gr1 = new Group()
                 .withTitle("Смешарики")
                 .withTeacher(t1)
@@ -475,18 +351,5 @@ public class InitContextFilter implements Filter {
         groupRepo.putGroupIfNotExists(gr2);
         groupRepo.putGroupIfNotExists(gr3);
         groupRepo.putGroupIfNotExists(gr4);
-    }
-
-    @Override
-    public void doFilter(ServletRequest rq, ServletResponse rs, FilterChain c) throws ServletException, IOException {
-        c.doFilter(rq, rs);
-    }
-
-    @Override
-    public void destroy() {
-        if (pool != null) {
-            pool.close();
-            log.info("Закрываем pool connection");
-        }
     }
 }

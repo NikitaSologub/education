@@ -1,6 +1,8 @@
 package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 import java.util.Objects;
@@ -11,24 +13,14 @@ import static by.itacademy.sologub.constants.ConstantObject.LOGIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
 
 @Slf4j
-public class CredentialRepoHardcodeImpl implements CredentialRepo {
+@Repository
+public class CredentialRepoMemoryImpl implements CredentialRepo {
     static int CURRENT_MAX_CREDENTIAL_ID = 137;
-    private static volatile CredentialRepoHardcodeImpl instance;
     private final Map<Integer, Credential> repo;
 
-    private CredentialRepoHardcodeImpl() {
+    @Autowired
+    public CredentialRepoMemoryImpl() {
         repo = new ConcurrentHashMap<>();
-    }
-
-    public static CredentialRepoHardcodeImpl getInstance() {
-        if (instance == null) {
-            synchronized (CredentialRepoHardcodeImpl.class) {
-                if (instance == null) {
-                    instance = new CredentialRepoHardcodeImpl();
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

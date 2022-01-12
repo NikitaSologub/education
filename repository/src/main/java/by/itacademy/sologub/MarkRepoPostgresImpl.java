@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -27,23 +29,11 @@ import static by.itacademy.sologub.constants.SqlQuery.SET_MARK;
 import static by.itacademy.sologub.constants.SqlQuery.UPDATE_MARK;
 
 @Slf4j
+@Repository
 public class MarkRepoPostgresImpl extends AbstractPostgresRepo<Mark> implements MarkRepo {
-
-    private static volatile MarkRepoPostgresImpl instance;
-
-    private MarkRepoPostgresImpl(ComboPooledDataSource pool) {
+    @Autowired
+    public MarkRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
-    }
-
-    public static MarkRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
-        if (instance == null) {
-            synchronized (MarkRepoPostgresImpl.class) {
-                if (instance == null) {
-                    instance = new MarkRepoPostgresImpl(pool);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

@@ -1,30 +1,31 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.CredentialRepoHardcodeImpl;
 import by.itacademy.sologub.Student;
 import by.itacademy.sologub.StudentRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class StudentServiceImpl implements StudentService {
-    private static StudentServiceImpl StudentService;
-    private final StudentRepo repo;
+@Service
+public class StudentServiceImpl extends AbstractService implements StudentService {
+    private static final String PREFIX = "studentRepo";
+    private final Map<String, StudentRepo> repoMap;
+    private volatile StudentRepo repo;
 
-    private StudentServiceImpl(StudentRepo StudentRepo) {
-        this.repo = StudentRepo;
+    @Autowired
+    public StudentServiceImpl(Map<String, StudentRepo> repoMap) {
+        this.repoMap = repoMap;
     }
 
-    public static StudentServiceImpl getInstance(StudentRepo StudentRepo) {
-        if (StudentService == null) {
-            synchronized (StudentServiceImpl.class) {
-                if (StudentService == null) {
-                    StudentService = new StudentServiceImpl(StudentRepo);
-                }
-            }
-        }
-        return StudentService;
+    @PostConstruct
+    public void init() {
+        repo = repoMap.get(PREFIX + StringUtils.capitalize(type) + SUFFIX);
     }
 
     @Override

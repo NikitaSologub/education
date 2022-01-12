@@ -4,27 +4,29 @@ import by.itacademy.sologub.Mark;
 import by.itacademy.sologub.MarkRepo;
 import by.itacademy.sologub.Subject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
-public class MarkServiceImpl implements MarkService {
-    private static MarkServiceImpl teacherService;
-    private final MarkRepo repo;
+@Service
+public class MarkServiceImpl extends AbstractService implements MarkService {
+    private static final String PREFIX = "markRepo";
+    private final Map<String, MarkRepo> repoMap;
+    private volatile MarkRepo repo;
 
-    private MarkServiceImpl(MarkRepo markRepo) {
-        this.repo = markRepo;
+    @Autowired
+    public MarkServiceImpl(Map<String, MarkRepo> repoMap) {
+        this.repoMap = repoMap;
     }
 
-    public static MarkServiceImpl getInstance(MarkRepo markRepo) {
-        if (teacherService == null) {
-            synchronized (MarkServiceImpl.class) {
-                if (teacherService == null) {
-                    teacherService = new MarkServiceImpl(markRepo);
-                }
-            }
-        }
-        return teacherService;
+    @PostConstruct
+    public void init() {
+        repo = repoMap.get(PREFIX + StringUtils.capitalize(type) + SUFFIX);
     }
 
     @Override

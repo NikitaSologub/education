@@ -1,6 +1,8 @@
 package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,28 +16,18 @@ import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 
 @Slf4j
-public class MarkRepoHardcodedImpl implements MarkRepo {
+@Repository
+public class MarkRepoMemoryImpl implements MarkRepo {
     static int CURRENT_MAX_MARK_ID = 304;
-    private static volatile MarkRepoHardcodedImpl instance;
-    private static volatile StudentRepoHardcodedImpl studentRepo;
-    private static volatile SubjectRepoHardcodedImpl subjectRepo;
+    private final StudentRepoMemoryImpl studentRepo;
+    private final SubjectRepoMemoryImpl subjectRepo;
     private final Map<Integer, Mark> repo;
 
-    private MarkRepoHardcodedImpl(StudentRepoHardcodedImpl studentRepo, SubjectRepoHardcodedImpl subjectRepo) {
+    @Autowired
+    public MarkRepoMemoryImpl(StudentRepoMemoryImpl studentRepo, SubjectRepoMemoryImpl subjectRepo) {
         repo = new ConcurrentHashMap<>();
-        MarkRepoHardcodedImpl.studentRepo = studentRepo;
-        MarkRepoHardcodedImpl.subjectRepo = subjectRepo;
-    }
-
-    public static MarkRepoHardcodedImpl getInstance(StudentRepoHardcodedImpl studentRepo, SubjectRepoHardcodedImpl subjectRepo) {
-        if (instance == null) {
-            synchronized (MarkRepoHardcodedImpl.class) {
-                if (instance == null) {
-                    instance = new MarkRepoHardcodedImpl(studentRepo, subjectRepo);
-                }
-            }
-        }
-        return instance;
+        this.studentRepo = studentRepo;
+        this.subjectRepo = subjectRepo;
     }
 
     @Override

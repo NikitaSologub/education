@@ -3,6 +3,8 @@ package by.itacademy.sologub;
 import by.itacademy.sologub.role.Role;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,22 +26,11 @@ import static by.itacademy.sologub.constants.SqlQuery.DELETE_ALL_SALARIES_BY_TEA
 import static by.itacademy.sologub.constants.SqlQuery.EXCLUDE_TEACHER_FROM_ALL_GROUPS_BY_TEACHER_ID;
 
 @Slf4j
+@Repository
 public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> implements TeacherRepo {
-    private static volatile TeacherRepoPostgresImpl teacherRepo;
-
-    private TeacherRepoPostgresImpl(ComboPooledDataSource pool) {
+    @Autowired
+    public TeacherRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
-    }
-
-    public static TeacherRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
-        if (teacherRepo == null) {
-            synchronized (TeacherRepoPostgresImpl.class) {
-                if (teacherRepo == null) {
-                    teacherRepo = new TeacherRepoPostgresImpl(pool);
-                }
-            }
-        }
-        return teacherRepo;
     }
 
     @Override
@@ -59,7 +50,7 @@ public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> i
 
     @Override
     public boolean deleteTeacher(String login) {
-        Teacher teacher = teacherRepo.getTeacherIfExistsOrGetSpecialValue(login);
+        Teacher teacher = getTeacherIfExistsOrGetSpecialValue(login);
         return deleteTeacher(teacher);
     }
 

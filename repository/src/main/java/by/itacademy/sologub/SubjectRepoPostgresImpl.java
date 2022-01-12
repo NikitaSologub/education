@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,22 +27,11 @@ import static by.itacademy.sologub.constants.SqlQuery.SET_SUBJECT;
 import static by.itacademy.sologub.constants.SqlQuery.UPDATE_SUBJECT_BY_ID;
 
 @Slf4j
+@Repository
 public class SubjectRepoPostgresImpl extends AbstractPostgresRepo<Subject> implements SubjectRepo {
-    private static volatile SubjectRepoPostgresImpl instance;
-
-    private SubjectRepoPostgresImpl(ComboPooledDataSource pool) {
+    @Autowired
+    public SubjectRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
-    }
-
-    public static SubjectRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
-        if (instance == null) {
-            synchronized (SubjectRepoPostgresImpl.class) {
-                if (instance == null) {
-                    instance = new SubjectRepoPostgresImpl(pool);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

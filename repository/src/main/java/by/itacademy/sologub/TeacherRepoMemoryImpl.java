@@ -1,6 +1,8 @@
 package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.Set;
 
@@ -9,23 +11,13 @@ import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
 
 @Slf4j
-public class TeacherRepoHardcodedImpl extends AbstractUserHardcodedRepo<Teacher> implements TeacherRepo {
+@Repository
+public class TeacherRepoMemoryImpl extends AbstractUserMemoryRepo<Teacher> implements TeacherRepo {
     static int CURRENT_MAX_TEACHER_ID = 19051;
-    private static volatile TeacherRepoHardcodedImpl instance;
 
-    private TeacherRepoHardcodedImpl(CredentialRepoHardcodeImpl credentialRepo) {
+    @Autowired
+    public TeacherRepoMemoryImpl(CredentialRepoMemoryImpl credentialRepo) {
         super(credentialRepo);
-    }
-
-    public static TeacherRepoHardcodedImpl getInstance(CredentialRepoHardcodeImpl credentialRepo) {
-        if (instance == null) {
-            synchronized (TeacherRepoHardcodedImpl.class) {
-                if (instance == null) {
-                    instance = new TeacherRepoHardcodedImpl(credentialRepo);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

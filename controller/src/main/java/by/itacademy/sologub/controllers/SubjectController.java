@@ -3,96 +3,100 @@ package by.itacademy.sologub.controllers;
 import by.itacademy.sologub.Subject;
 import by.itacademy.sologub.services.SubjectService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
-import static by.itacademy.sologub.constants.Constant.ADMIN_SUBJECTS_PAGE;
-import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
+import static by.itacademy.sologub.constants.Constant.ADMIN_SUBJECTS_VIEW;
+import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.SUBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_CONTROLLER;
 
-@WebServlet(SUBJECT_CONTROLLER)
+@Controller
+@RequestMapping(SUBJECT_CONTROLLER)
 @Slf4j
-public class SubjectController extends BaseController {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String msg = "Вы на странице предметов";
-        refreshSubjectsListAndForward(msg, req, resp);
+public class SubjectController extends AbstractController {
+    private final SubjectService service;
+
+    @Autowired
+    public SubjectController(SubjectService service) {
+        this.service = service;
     }
 
-    private void refreshSubjectsListAndForward(String msg, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SubjectService service = (SubjectService) getServletContext().getAttribute(FACADE_SERVICE);
-        List<Subject> list = service.getSubjectsList();
-
-        log.debug("set предметов (добавляем к запросу){}", list);
-        req.setAttribute(SUBJECTS_SET, list);
-        forward(ADMIN_SUBJECTS_PAGE, msg, req, resp);
+    @GetMapping
+    public ModelAndView doGet() {
+        return refreshModelAndView("Вы на странице предметов");
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SubjectService service = (SubjectService) getServletContext().getAttribute(FACADE_SERVICE);
-        Subject s = extractSubjectFromFormWithoutId(req);
-        boolean result = service.putSubjectIfNotExists(s);
+    @PostMapping
+    public ModelAndView doPost(@RequestParam(TITLE) String title) {
+        Subject s = new Subject()
+                .withTitle(title);
 
         String msg;
-        if (result) {
+        if (service.putSubjectIfNotExists(s)) {
             msg = "Subject " + s + " успешно добавлен";
             log.info("Subject {} успешно добавлена", s);
         } else {
             msg = "Не удалось добавить Subject " + s;
             log.info("Не удалось добавить Subject {}", s);
         }
-        refreshSubjectsListAndForward(msg, req, resp);
+        return refreshModelAndView(msg);
     }
 
-    Subject extractSubjectFromForm(HttpServletRequest req) {
-        return extractSubjectFromFormWithoutId(req)
-                .withId(Integer.parseInt(req.getParameter(ID)));
-    }
+    @PutMapping
+    public ModelAndView doPut(@RequestParam(ID) int id, @RequestParam(TITLE) String title, HttpServletRequest req) {
+        Subject s = new Subject()
+                .withId(id)
+                .withTitle(title);
 
-    Subject extractSubjectFromFormWithoutId(HttpServletRequest req) {
-        return new Subject()
-                .withTitle(req.getParameter(TITLE));
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SubjectService service = (SubjectService) getServletContext().getAttribute(FACADE_SERVICE);
-        Subject s = extractSubjectFromForm(req);
-        boolean result = service.changeSubjectsParametersIfExists(s);
         String msg;
-        if (result) {
+        if (service.changeSubjectsParametersIfExists(s)) {
             msg = "Subject " + s + " успешно изменён";
             log.info("Subject {} успешно изменён", s);
         } else {
             msg = "Не удалось изменить Subject " + s;
             log.info("Не удалось изменить Subject {}", s);
         }
-        refreshSubjectsListAndForward(msg, req, resp);
+        resetMethod(req);
+        return refreshModelAndView(msg);
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SubjectService service = (SubjectService) getServletContext().getAttribute(FACADE_SERVICE);
-        Subject s = extractSubjectFromForm(req);
-        System.out.println(s);
-        boolean result = service.deleteSubject(s);
+    @DeleteMapping
+    public ModelAndView doDelete(@RequestParam(ID) int id, @RequestParam(TITLE) String title, HttpServletRequest req) {
+        Subject s = new Subject()
+                .withId(id)
+                .withTitle(title);
+
         String msg;
-        if (result) {
+        if (service.deleteSubject(s)) {
             msg = "Subject по id " + s.getId() + " успешно удалён";
             log.info("Subject по id={} успешно удалён", s.getId());
         } else {
             msg = "Не удалось удалить Subject с id = " + s.getId();
             log.info("Не удалось удалить Subject с id = {}", s.getId());
         }
-        refreshSubjectsListAndForward(msg, req, resp);
+        resetMethod(req);
+        return refreshModelAndView(msg);
+    }
+
+    private ModelAndView refreshModelAndView(String msg) {
+        ModelAndView mav = new ModelAndView(ADMIN_SUBJECTS_VIEW);
+        List<Subject> list = service.getSubjectsList();
+        log.debug("set предметов (добавляем к запросу){}", list);
+        mav.getModel().put(SUBJECTS_SET, list);
+        mav.getModel().put(MESSAGE, msg);
+        return mav;
     }
 }

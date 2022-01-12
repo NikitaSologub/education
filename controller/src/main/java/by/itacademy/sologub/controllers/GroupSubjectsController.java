@@ -2,102 +2,101 @@ package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.Group;
 import by.itacademy.sologub.Subject;
-import by.itacademy.sologub.SubjectRepo;
-import by.itacademy.sologub.services.FacadeService;
 import by.itacademy.sologub.services.GroupService;
+import by.itacademy.sologub.services.SubjectService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.GROUP;
-import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_SUBJECTS_PAGE;
+import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_SUBJECTS_VIEW;
 import static by.itacademy.sologub.constants.Constant.CURRENT_GROUP_OBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.GROUP_ID;
 import static by.itacademy.sologub.constants.Constant.GROUP_SUBJECTS_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.OBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_ID;
-import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
 
-@WebServlet(GROUP_SUBJECTS_CONTROLLER)
+@Controller
+@RequestMapping(GROUP_SUBJECTS_CONTROLLER)
 @Slf4j
-public class GroupSubjectsController extends BaseController {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        refreshViewAndForward("мы на странице группы по управлению предметами", req, res);
+public class GroupSubjectsController extends AbstractController {
+    private final GroupService groupService;
+    private final SubjectService subjectService;
+
+    @Autowired
+    public GroupSubjectsController(GroupService groupService, SubjectService subjectService) {
+        this.groupService = groupService;
+        this.subjectService = subjectService;
     }
 
-    private void refreshViewAndForward(String msg, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        Group g = getGroupById(req);
-
-        req.setAttribute(GROUP, g);
-        req.setAttribute(CURRENT_GROUP_OBJECTS_SET, g.getSubjects());
-        req.setAttribute(OBJECTS_SET, getAllSubjectsToRequest());
-
-        forward(ADMIN_GROUP_SUBJECTS_PAGE, msg, req, res);
+    @GetMapping
+    public ModelAndView doGet(@RequestParam(GROUP_ID) int groupId) {
+        return refreshModelAndView(groupId, "Мы на странице группы по управлению предметами");
     }
 
-    private Set<Subject> getAllSubjectsToRequest() {
-        SubjectRepo service = (SubjectRepo) getServletContext().getAttribute(FACADE_SERVICE);
-        return new HashSet<>(service.getSubjectsList());
-    }
-
-    private Group getGroupById(HttpServletRequest req) {
-        FacadeService facade = (FacadeService) getServletContext().getAttribute(FACADE_SERVICE);
-
-        int groupId = Integer.parseInt(req.getParameter(GROUP_ID));
-        Group g = facade.getGroupById(groupId);
-        log.debug("Вернули группу по groupId={} c параметрами {}", groupId, g);
-
-        Set<Subject> subjects = facade.getSubjectsByGroupId(groupId);
-        log.debug("Вернули Set subjects по groupId={} c параметрами {}", groupId, subjects);
-
-        g.setSubjects(subjects);
-        return g;
-    }
-
-    private Subject getSubjectById(HttpServletRequest req) {
-        SubjectRepo service = (SubjectRepo) getServletContext().getAttribute(FACADE_SERVICE);
-        int subjectId = Integer.parseInt(req.getParameter(SUBJECT_ID));
-        return service.getSubjectIfExistsOrGetSpecialValue(subjectId);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
-        Group group = getGroupById(req);
-        Subject newS = getSubjectById(req);
+    @PostMapping
+    public ModelAndView doPost(@RequestParam(GROUP_ID) int groupId, @RequestParam(SUBJECT_ID) int subjectId) {
+        Group group = getGroupByIdWithSubjects(groupId);
+        Subject newS = subjectService.getSubjectIfExistsOrGetSpecialValue(subjectId);
 
         String msg;
-        if (service.addSubjectInGroup(group, newS)) {
+        if (groupService.addSubjectInGroup(group, newS)) {
             msg = "Предмет " + newS.getTitle() + " успешно добавлен в группу " + group.getTitle();
             log.debug("Предмет {} добавлен в группу {}", newS.getTitle(), group.getTitle());
         } else {
             msg = "Не удалось добавить предмет " + newS.getTitle() + " в группу " + group.getTitle();
             log.debug("Не удалось добавить предмет {} в группу {}", newS.getTitle(), group.getTitle());
         }
-        refreshViewAndForward(msg, req, res);
+        return refreshModelAndView(groupId, msg);
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        GroupService service = (GroupService) getServletContext().getAttribute(FACADE_SERVICE);
-        Group group = getGroupById(req);
-        Subject oldS = getSubjectById(req);
+    @DeleteMapping
+    public ModelAndView doDelete(@RequestParam(GROUP_ID) int groupId, @RequestParam(SUBJECT_ID) int subjectId,
+                                 HttpServletRequest req) {
+        Group group = getGroupByIdWithSubjects(groupId);
+        Subject oldS = subjectService.getSubjectIfExistsOrGetSpecialValue(subjectId);
 
         String msg;
-        if (service.removeSubjectFromGroup(group, oldS)) {
+        if (groupService.removeSubjectFromGroup(group, oldS)) {
             msg = "Предмет " + oldS.getTitle() + " успешно удалён из группы " + group.getTitle();
             log.debug("Предмет {} удален из группы {}", oldS.getTitle(), group.getTitle());
         } else {
             msg = "Не удалось удалить предмет " + oldS.getTitle() + " из группы " + group.getTitle();
             log.debug("Не удалось удалить предмет {} из группы {}", oldS.getTitle(), group.getTitle());
         }
-        refreshViewAndForward(msg, req, res);
+        resetMethod(req);
+        return refreshModelAndView(groupId, msg);
+    }
+
+    private ModelAndView refreshModelAndView(int groupId, String msg) {
+        ModelAndView mav = new ModelAndView(ADMIN_GROUP_SUBJECTS_VIEW);
+        Group g = getGroupByIdWithSubjects(groupId);
+
+        mav.getModel().put(GROUP, g);
+        mav.getModel().put(CURRENT_GROUP_OBJECTS_SET, g.getSubjects());
+        mav.getModel().put(OBJECTS_SET, new HashSet<>(subjectService.getSubjectsList()));
+        mav.getModel().put(MESSAGE, msg);
+        return mav;
+    }
+
+    private Group getGroupByIdWithSubjects(int groupId) {
+        Group g = groupService.getGroupById(groupId);
+        log.debug("Вернули группу по groupId={} c параметрами {}", groupId, g);
+
+        Set<Subject> subjects = subjectService.getSubjectsByGroupId(groupId);
+        g.setSubjects(subjects);
+        log.debug("Вернули Set subjects по groupId={} c параметрами {}", groupId, subjects);
+        return g;
     }
 }

@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -15,24 +17,14 @@ import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 
 @Slf4j
+@Repository
 public class SubjectRepoHibernateImpl extends AbstractCrudRepoJpa<Subject> implements SubjectRepo {
-    private static volatile SubjectRepoHibernateImpl instance;
     private static volatile GroupRepoHibernateImpl groupRepo;
 
-    private SubjectRepoHibernateImpl(SessionFactory sf, GroupRepoHibernateImpl gr) {
+    @Autowired
+    public SubjectRepoHibernateImpl(SessionFactory sf, GroupRepoHibernateImpl gr) {
         super(sf, Subject.class);
         groupRepo = gr;
-    }
-
-    public static SubjectRepoHibernateImpl getInstance(SessionFactory sf, GroupRepoHibernateImpl gr) {
-        if (instance == null) {
-            synchronized (SubjectRepoHibernateImpl.class) {
-                if (instance == null) {
-                    instance = new SubjectRepoHibernateImpl(sf, gr);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override
@@ -88,7 +80,7 @@ public class SubjectRepoHibernateImpl extends AbstractCrudRepoJpa<Subject> imple
             em.clear(); //2 отсоединим все от текущего PersistenceContext и удалим из кэша 1-го уровня
             deleteAllMarksBySubjectId(em,subject.getId());//3 удалим все Marks перед удалением Subject на которую они глядят
             em.remove(subject); //4 непосредственное удаление нужного Subject
-            result = em.contains(subject); //5 проверяем результат операции
+            result = !em.contains(subject); //5 проверяем результат операции
             transaction.commit();
         } catch (PersistenceException e) {
             log.error("Не удалось удалить информацию по запросу", e);

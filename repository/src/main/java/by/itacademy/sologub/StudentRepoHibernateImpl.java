@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,24 +15,14 @@ import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
 
 @Slf4j
+@Repository
 public class StudentRepoHibernateImpl extends AbstractCrudRepoJpa<Student> implements StudentRepo {
-    private static volatile StudentRepoHibernateImpl instance;
     private static volatile GroupRepoHibernateImpl groupRepo;
 
-    private StudentRepoHibernateImpl(SessionFactory sf, GroupRepoHibernateImpl gr) {
+    @Autowired
+    public StudentRepoHibernateImpl(SessionFactory sf, GroupRepoHibernateImpl gr) {
         super(sf, Student.class);
         groupRepo = gr;
-    }
-
-    public static StudentRepoHibernateImpl getInstance(SessionFactory sf, GroupRepoHibernateImpl gr) {
-        if (instance == null) {
-            synchronized (StudentRepoHibernateImpl.class) {
-                if (instance == null) {
-                    instance = new StudentRepoHibernateImpl(sf, gr);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

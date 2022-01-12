@@ -8,23 +8,26 @@ import by.itacademy.sologub.services.AdminService;
 import by.itacademy.sologub.services.StudentService;
 import by.itacademy.sologub.services.TeacherService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.PASSWORD;
-import static by.itacademy.sologub.constants.Constant.ADMIN_FRONT_PAGE;
-import static by.itacademy.sologub.constants.Constant.FACADE_SERVICE;
+import static by.itacademy.sologub.constants.Constant.ADMIN_FRONT_VIEW;
+import static by.itacademy.sologub.constants.Constant.ERROR_MESSAGE;
 import static by.itacademy.sologub.constants.Constant.LOGIN_CONTROLLER;
-import static by.itacademy.sologub.constants.Constant.LOGIN_PAGE;
+import static by.itacademy.sologub.constants.Constant.LOGIN_VIEW;
+import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.SESSION_ENTITY;
-import static by.itacademy.sologub.constants.Constant.STUDENT_FRONT_PAGE;
-import static by.itacademy.sologub.constants.Constant.TEACHER_FRONT_PAGE;
+import static by.itacademy.sologub.constants.Constant.STUDENT_FRONT_VIEW;
+import static by.itacademy.sologub.constants.Constant.TEACHER_FRONT_VIEW;
 import static by.itacademy.sologub.constants.ConstantObject.ADMIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
@@ -32,20 +35,32 @@ import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRO
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
 
-@WebServlet(LOGIN_CONTROLLER)
+@Controller
+@RequestMapping(LOGIN_CONTROLLER)
 @Slf4j
-public class LoginController extends BaseController {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        log.info("Попытка входа через недопустимый протокол");
-        forwardError(LOGIN_PAGE, "Вам нельзя переходить по URL /LoginController", req, res);
+public class LoginController {
+    private final AdminService adminService;
+    private final TeacherService teacherService;
+    private final StudentService studentService;
+
+    @Autowired
+    public LoginController(AdminService adminService, TeacherService teacherService, StudentService studentService) {
+        this.adminService = adminService;
+        this.teacherService = teacherService;
+        this.studentService = studentService;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        String login = req.getParameter(LOGIN);
-        String password = req.getParameter(PASSWORD);
+    @GetMapping
+    public ModelAndView doGet() {
+        ModelAndView mav = new ModelAndView(LOGIN_VIEW);
+        log.info("Попытка входа через недопустимый протокол");
+        mav.getModel().put(ERROR_MESSAGE, "Вам нельзя переходить по URL " + LOGIN_CONTROLLER);
+        return mav;
+    }
 
+    @PostMapping
+    public ModelAndView doPost(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
+                               HttpSession session) {
         if (login != null) {
             login = login.trim();//todo - убрать (переработать)
         }
@@ -54,78 +69,78 @@ public class LoginController extends BaseController {
         }
         log.info("Пользователь {} пытается войти в систему. Пароль {}", login, password);
 
-        if (!checkAdminLogIn(login, password, req, res)) {//todo - убрать (переработать)
-            if (!checkTeacherLogIn(login, password, req, res)) {
-                if (!checkStudentLogIn(login, password, req, res)) {
+        Student student = studentService.getStudentIfExistsOrGetSpecialValue(login, password);
+        Teacher teacher = teacherService.getTeacherIfExistsOrGetSpecialValue(login, password);
+        Admin admin = adminService.getAdminIfExistsOrGetSpecialValue(login, password);
+
+        ModelAndView mav = new ModelAndView();
+        if (!checkAdminLogIn(mav, admin, session)) {//todo - убрать (переработать)
+            if (!checkTeacherLogIn(mav, teacher, session)) {
+                if (!checkStudentLogIn(mav, student, session)) {
                     log.info("логина {} нет в системе в доступе отказано.", login);
-                    forwardError(LOGIN_PAGE, "пользователя с таким логином не существует", req, res);
+                    mav.getModel().put(ERROR_MESSAGE, "пользователя с таким логином не существует");
+                    mav.setViewName(LOGIN_VIEW);
                 }
             }
         }
+        return mav;
     }
 
-    //todo - убрать (сделать один универсальный метод)
-    boolean checkAdminLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        AdminService service = (AdminService) getServletContext().getAttribute(FACADE_SERVICE);
-        Admin admin = service.getAdminIfExistsOrGetSpecialValue(login, password);
-
+    private boolean checkAdminLogIn(ModelAndView mav, Admin admin, HttpSession session) {
         if (admin != null && ADMIN_NOT_EXISTS != admin) {
             if (ADMIN_PASSWORD_WRONG != admin) {
-                createSessionAndSetAttribute(admin, req);
+                createSessionAndSetAttribute(admin, session);
                 log.info("Логин и пароль админа совпали. Админ входит в систему. Форвард на ADMIN_FRONT_PAGE");
-                forward(ADMIN_FRONT_PAGE, "добро пожаловать ADMIN", req, res);
+                mav.getModel().put(MESSAGE, "добро пожаловать ADMIN");
+                mav.setViewName(ADMIN_FRONT_VIEW);
                 return true;
             } else {
-                forwardError(LOGIN_PAGE, "Введён неверный пароль.", req, res);
                 log.info("Логин совпал а пароль не верен. ADMIN- в доступе отказано. Форвард на LOGIN_PAGE");
+                mav.getModel().put(ERROR_MESSAGE, "Введён неверный пароль.");
+                mav.setViewName(LOGIN_VIEW);
             }
         }
-        log.info("админа с логином={} не существует в системе", login);
+        log.info("админа с таким логином не существует в системе");
         return false;
     }
 
-    //todo - убрать (сделать один универсальный метод)
-    boolean checkTeacherLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        TeacherService service = (TeacherService) getServletContext().getAttribute(FACADE_SERVICE);
-        Teacher teacher = service.getTeacherIfExistsOrGetSpecialValue(login, password);
-
+    private boolean checkTeacherLogIn(ModelAndView mav, Teacher teacher, HttpSession session) {
         if (teacher != null && TEACHER_NOT_EXISTS != teacher) {
             if (TEACHER_PASSWORD_WRONG != teacher) {
-                createSessionAndSetAttribute(teacher, req);
+                createSessionAndSetAttribute(teacher, session);
                 log.info("Логин и пароль учителя совпали. Учитель входит в систему. Форвард на TEACHER_FRONT_PAGE");
-                forward(TEACHER_FRONT_PAGE, "добро пожаловать TEACHER", req, res);
+                mav.getModel().put(MESSAGE, "добро пожаловать TEACHER");
+                mav.setViewName(TEACHER_FRONT_VIEW);
                 return true;
             } else {
                 log.info("Логин совпал а пароль не верен. TEACHER- в доступе отказано. Форвард на LOGIN_PAGE");
-                forwardError(LOGIN_PAGE, "Введён неверный пароль.", req, res);
+                mav.getModel().put(ERROR_MESSAGE, "Введён неверный пароль.");
+                mav.setViewName(LOGIN_VIEW);
             }
         }
-        log.info("учителя с логином={} не существует в системе", login);
+        log.info("учителя с таким логином не существует в системе");
         return false;
     }
 
-    //todo - убрать (сделать один универсальный метод)
-    boolean checkStudentLogIn(String login, String password, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        StudentService service = (StudentService) getServletContext().getAttribute(FACADE_SERVICE);
-        Student student = service.getStudentIfExistsOrGetSpecialValue(login, password);
-
+    private boolean checkStudentLogIn(ModelAndView mav, Student student, HttpSession session) {
         if (student != null && STUDENT_NOT_EXISTS != student) {
             if (STUDENT_PASSWORD_WRONG != student) {
-                createSessionAndSetAttribute(student, req);
-                forward(STUDENT_FRONT_PAGE, "добро пожаловать STUDENT", req, res);
+                createSessionAndSetAttribute(student, session);
                 log.info("Логин и пароль студента совпали. Студент входит в систему. Форвард на STUDENT_FRONT_PAGE");
+                mav.getModel().put(MESSAGE, "добро пожаловать STUDENT");
+                mav.setViewName(STUDENT_FRONT_VIEW);
                 return true;
             } else {
                 log.info("Логин совпал а пароль не верен. STUDENT- в доступе отказано. Форвард на LOGIN_PAGE");
-                forwardError(LOGIN_PAGE, "Введён неверный пароль.", req, res);
+                mav.getModel().put(ERROR_MESSAGE, "Введён неверный пароль.");
+                mav.setViewName(LOGIN_VIEW);
             }
         }
-        log.info("студента с логином={} не существует в системе", login);
+        log.info("студента с таким логином не существует в системе");
         return false;
     }
 
-    void createSessionAndSetAttribute(User user, HttpServletRequest req) {
-        HttpSession session = req.getSession();
+    private void createSessionAndSetAttribute(User user, HttpSession session) {
         session.setAttribute(SESSION_ENTITY, user);
         log.info("пользователь {} положен в сессию.", user);
     }

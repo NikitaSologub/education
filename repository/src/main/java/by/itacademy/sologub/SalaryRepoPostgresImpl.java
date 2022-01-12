@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -25,10 +27,10 @@ import static by.itacademy.sologub.constants.SqlQuery.SET_SALARY_BY_TEACHER_ID;
 import static by.itacademy.sologub.constants.SqlQuery.UPDATE_SALARY_BY_ID;
 
 @Slf4j
+@Repository
 public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> implements SalaryRepo {
-    private static volatile SalaryRepoPostgresImpl instance;
-
-    private SalaryRepoPostgresImpl(ComboPooledDataSource pool) {
+    @Autowired
+    public SalaryRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
     }
 
@@ -38,17 +40,6 @@ public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> impleme
                 .withId(rs.getInt(ID))
                 .withCoins(rs.getInt(COINS_AMOUNT_DB_FIELD))
                 .withDate(rs.getDate(DATE).toLocalDate());
-    }
-
-    public static SalaryRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
-        if (instance == null) {
-            synchronized (SalaryRepoPostgresImpl.class) {
-                if (instance == null) {
-                    instance = new SalaryRepoPostgresImpl(pool);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

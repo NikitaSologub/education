@@ -6,27 +6,29 @@ import by.itacademy.sologub.Student;
 import by.itacademy.sologub.Subject;
 import by.itacademy.sologub.Teacher;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
-public class GroupServiceImpl implements GroupService {
-    private static GroupServiceImpl teacherService;
-    private final GroupRepo repo;
+@Service
+public class GroupServiceImpl extends AbstractService implements GroupService {
+    private static final String PREFIX = "groupRepo";
+    private final Map<String, GroupRepo> repoMap;
+    private volatile GroupRepo repo = null;
 
-    private GroupServiceImpl(GroupRepo groupRepo) {
-        this.repo = groupRepo;
+    @Autowired
+    public GroupServiceImpl(Map<String, GroupRepo> repoMap) {
+        this.repoMap = repoMap;
     }
 
-    public static GroupServiceImpl getInstance(GroupRepo groupRepo) {
-        if (teacherService == null) {
-            synchronized (GroupServiceImpl.class) {
-                if (teacherService == null) {
-                    teacherService = new GroupServiceImpl(groupRepo);
-                }
-            }
-        }
-        return teacherService;
+    @PostConstruct
+    public void init() {
+        repo = repoMap.get(PREFIX + StringUtils.capitalize(type) + SUFFIX);
     }
 
     @Override

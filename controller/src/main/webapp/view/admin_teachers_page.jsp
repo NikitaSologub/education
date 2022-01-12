@@ -5,7 +5,7 @@
     <title>Admin teachers page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="<c:url value='/css/general_style.css'/>"/>
-    <link rel="shortcut icon" href="img/book_favicon.png" type="image/png">
+    <link rel="shortcut icon" href="../img/book_favicon.png" type="image/png">
 </head>
 <body>
 <h1>ADMIN - TEACHER SALARIES PAGE!</h1>
@@ -58,6 +58,7 @@
                 <td>
                     <form action="SalaryController" method="get">
                         <input name="login" type="hidden" value="${teacher.credential.login}">
+                        <input type="hidden" name="teacherId" value="${teacher.id}">
                         <button type="submit">На страницу зарплат</button>
                     </form>
                 </td>

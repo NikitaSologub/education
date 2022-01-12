@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
@@ -9,27 +11,16 @@ import static by.itacademy.sologub.constants.ConstantObject.CREDENTIAL_NOT_EXIST
 import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
 
 @Slf4j
+@Repository
 public class CredentialRepoHibernateImpl extends AbstractCrudRepoJpa<Credential> implements CredentialRepo {
-    private static volatile CredentialRepoHibernateImpl instance;
-
-    private CredentialRepoHibernateImpl(SessionFactory sf) {
+    @Autowired
+    public CredentialRepoHibernateImpl(SessionFactory sf) {
         super(sf, Credential.class);
     }
 
     @Override
     protected Credential getEmptyObj() {
         return CREDENTIAL_NOT_EXISTS;
-    }
-
-    public static CredentialRepoHibernateImpl getInstance(SessionFactory sf) {
-        if (instance == null) {
-            synchronized (CredentialRepoHibernateImpl.class) {
-                if (instance == null) {
-                    instance = new CredentialRepoHibernateImpl(sf);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override

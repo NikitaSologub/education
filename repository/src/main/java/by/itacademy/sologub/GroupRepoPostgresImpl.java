@@ -2,6 +2,8 @@ package by.itacademy.sologub;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,22 +46,11 @@ import static by.itacademy.sologub.constants.SqlQuery.INCLUDE_SUBJECT_IN_GROUP_B
 import static by.itacademy.sologub.constants.SqlQuery.SET_GROUP_RETURNING_GROUP_ID;
 
 @Slf4j
+@Repository
 public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implements GroupRepo {
-    private static volatile GroupRepoPostgresImpl instance;
-
-    private GroupRepoPostgresImpl(ComboPooledDataSource pool) {
+    @Autowired
+    public GroupRepoPostgresImpl(ComboPooledDataSource pool) {
         super(pool);
-    }
-
-    public static GroupRepoPostgresImpl getInstance(ComboPooledDataSource pool) {
-        if (instance == null) {
-            synchronized (GroupRepoPostgresImpl.class) {
-                if (instance == null) {
-                    instance = new GroupRepoPostgresImpl(pool);
-                }
-            }
-        }
-        return instance;
     }
 
     @Override
