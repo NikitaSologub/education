@@ -21,6 +21,12 @@ import java.beans.PropertyVetoException;
 @EnableWebMvc
 @Configuration
 public class ApplicationConfig implements WebMvcConfigurer {
+    private static final String VIEW_PREFIX = "/view/";
+    private static final String VIEW_POSTFIX = ".jsp";
+    private static final String CSS_PATH = "/css/**";
+    private static final String CSS_LOCATION = "/css/";
+    private static final String IMG_PATH = "/img/**";
+    private static final String IMG_LOCATION = "/img/";
     @Value("${driver}")
     String driver;
     @Value("${url}")
@@ -32,18 +38,18 @@ public class ApplicationConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/css/**")
-                .addResourceLocations("/css/");
-        registry.addResourceHandler("/img/**")
-                .addResourceLocations("/img/");
+        registry.addResourceHandler(CSS_PATH)
+                .addResourceLocations(CSS_LOCATION);
+        registry.addResourceHandler(IMG_PATH)
+                .addResourceLocations(IMG_LOCATION);
     }
 
     @Bean
     public InternalResourceViewResolver internalResourceViewResolver(@Autowired ApplicationContext ctx) {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setApplicationContext(ctx);
-        resolver.setPrefix("/view/");
-        resolver.setSuffix(".jsp");
+        resolver.setPrefix(VIEW_PREFIX);
+        resolver.setSuffix(VIEW_POSTFIX);
         return resolver;
     }
 
