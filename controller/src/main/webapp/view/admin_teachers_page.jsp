@@ -34,7 +34,7 @@
                 <td><c:out value="${teacher.dateOfBirth}"/></td>
                 <td>
                     <form action="TeacherController" method="post">
-                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="hidden_method" value="delete">
                         <input type="hidden" name="id" value=${teacher.id}>
                         <input type="hidden" name="login" value="${teacher.credential.login}">
                         <input type="hidden" name="credentialId" value=${teacher.credential.id}>
@@ -43,7 +43,7 @@
                 </td>
                 <td>
                     <form action="TeacherController" method="post">
-                        <input type="hidden" name="action" value="put">
+                        <input type="hidden" name="hidden_method" value="put">
                         <input type="hidden" name="id" value=${teacher.id}>
                         <input type="hidden" name="credentialId" value=${teacher.credential.id}>
                         <input type="hidden" name="login" value="${teacher.credential.login}">
@@ -57,7 +57,7 @@
                 </td>
                 <td>
                     <form action="SalaryController" method="get">
-                        <input name="login" type="hidden" value="${teacher.credential.login}">
+                        <input type="hidden" name="login" value="${teacher.credential.login}">
                         <input type="hidden" name="teacherId" value="${teacher.id}">
                         <button type="submit">На страницу зарплат</button>
                     </form>

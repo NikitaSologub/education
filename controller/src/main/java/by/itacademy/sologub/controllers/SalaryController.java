@@ -26,7 +26,7 @@ import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.TEACHER;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SALARIES_VIEW;
-import static by.itacademy.sologub.constants.Constant.AVERAGE;
+import static by.itacademy.sologub.constants.Constant.AVERAGE_SALARY;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.SALARY_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
@@ -107,7 +107,7 @@ public class SalaryController extends AbstractController {
     @PatchMapping
     public ModelAndView doPatch(@RequestParam(LOGIN) String login, @RequestParam(ID) int id, HttpServletRequest req) {
         ModelAndView mav = new ModelAndView();
-        mav.getModel().put(AVERAGE, averageSalaryService.getAverageSalary(id));
+        mav.getModel().put(AVERAGE_SALARY, averageSalaryService.getAverageSalary(id));
         resetMethod(req);
         return refreshTeacherAndForward(login, "Средняя зарплата учителя по итогам всех месяцев работы ", mav);
     }

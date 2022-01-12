@@ -31,7 +31,7 @@ ${requestScope.student.patronymic} | ${requestScope.student.dateOfBirth}
                 <td><c:out value="${mark.date}"/></td>
                 <td>
                     <form action="<c:url value="MarkController"/>" method="post">
-                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="hidden_method" value="delete">
                         <input type="hidden" name="markId" value=${mark.id}>
                         <input type="hidden" name="login" value="${requestScope.student.credential.login}">
                         <input type="hidden" name="studentId" value=${requestScope.student.id}>
@@ -40,7 +40,7 @@ ${requestScope.student.patronymic} | ${requestScope.student.dateOfBirth}
                 </td>
                 <td>
                     <form action="<c:url value="MarkController"/>" method="post">
-                        <input type="hidden" name="action" value="put">
+                        <input type="hidden" name="hidden_method" value="put">
                         <input type="hidden" name="markId" value=${mark.id}>
                         <input type="hidden" name="subjectId" value=${mark.subject.id}>
                         <input type="hidden" name="subjectTitle" value=${mark.subject.title}>
@@ -64,8 +64,6 @@ ${requestScope.student.patronymic} | ${requestScope.student.dateOfBirth}
     <label for="sub">Введите предмет по которому поставить оценку: </label><br>
     <c:forEach var="subject" items="${requestScope.subjectsSet}">
         <input type="radio" id="sub" name="subjectId" value="${subject.id}"/>${subject.title}<br/>
-        <%--        <input type="hidden" name="${subject.title}${subject.id}" value="${subject.title}">--%>
-        <%--было бы круто автоматически генерировать еще и title и не ходить в базу а сразу создать new Subject()--%>
     </c:forEach>
     <input type="reset">
     <button type="submit">Создать оценку и добавить ученику ${requestScope.student.credential.login}</button>

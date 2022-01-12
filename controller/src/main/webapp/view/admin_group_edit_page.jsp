@@ -30,7 +30,7 @@
                 <td><c:out value="${t.patronymic}"/></td>
                 <td>
                     <form action="<c:url value="GroupEditController"/>" method="post">
-                        <input type="hidden" name="action" value="put">
+                        <input type="hidden" name="hidden_method" value="put">
                         <input type="hidden" name="groupId" value=${requestScope.group.id}>
                         <input type="hidden" name="teacherId" value=${t.id}>
                         <input type="hidden" name="teacherLogin" value=${t.credential.login}>
@@ -54,7 +54,7 @@
 
 Убрать учителя с должности руководителя группы (Оставить место вакантным)
 <form action="<c:url value="GroupEditController"/>" method="post">
-    <input type="hidden" name="action" value="delete">
+    <input type="hidden" name="hidden_method" value="delete">
     <input type="hidden" name="groupId" value=${requestScope.group.id}>
     <input type="hidden" name="teacherLogin" value=${requestScope.teacher.id}>
     <button type="submit">Разжаловать учителя</button>

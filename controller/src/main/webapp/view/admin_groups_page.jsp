@@ -28,22 +28,22 @@
                 <td><c:out value="${group.description}"/></td>
                 <td>
                     <form action="<c:url value="GroupController"/>" method="post">
-                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="hidden_method" value="delete">
                         <input type="hidden" name="id" value=${group.id}>
                         <button type="submit">Удалить</button>
                     </form>
                     <form action="<c:url value="GroupEditController"/>" method="get">
-                        <input name="groupId" type="hidden" value="${group.id}">
-                        <input name="teacherId" type="hidden" value="${group.teacher.id}">
-                        <input name="teacherLogin" type="hidden" value="${group.teacher.credential.login}">
+                        <input type="hidden" name="groupId" value="${group.id}">
+                        <input type="hidden" name="teacherId" value="${group.teacher.id}">
+                        <input type="hidden" name="teacherLogin" value="${group.teacher.credential.login}">
                         <button type="submit">Редактировать</button>
                     </form>
                     <form action="<c:url value="GroupSubjectsController"/>" method="get">
-                        <input name="groupId" type="hidden" value="${group.id}">
+                        <input type="hidden" name="groupId" value="${group.id}">
                         <button type="submit">К предметам</button>
                     </form>
                     <form action="<c:url value="GroupStudentsController"/>" method="get">
-                        <input name="groupId" type="hidden" value="${group.id}">
+                        <input type="hidden" name="groupId" value="${group.id}">
                         <button type="submit">К студентам</button>
                     </form>
                 </td>

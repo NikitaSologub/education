@@ -49,7 +49,7 @@ public final class Constant {
 
     //attributes
     public static final String SESSION_ENTITY = "sessionEntity";
-    public static final String HIDDEN_METHOD_PARAMETER = "action";
+    public static final String HIDDEN_METHOD_PARAMETER = "hidden_method";
     public static final String MESSAGE = "message";
     public static final String ERROR_MESSAGE = "errorMessage";
     public static final String REQUEST_ENCODING = "requestEncoding";
@@ -63,7 +63,7 @@ public final class Constant {
     public static final String PERSONS_SET = "personsSet";
     public static final String CURRENT_GROUP_OBJECTS_SET = "currentGroupObjectsSet";
     public static final String GROUP_LIST = "groupList";
-    public static final String AVERAGE = "average";
+    public static final String AVERAGE_SALARY = "average";
 
     //request parameters
     public static final String GROUP_ID = "groupId";

@@ -34,7 +34,7 @@
                 <td><c:out value="${student.dateOfBirth}"/></td>
                 <td>
                     <form action="StudentController" method="post">
-                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="hidden_method" value="delete">
                         <input type="hidden" name="id" value=${student.id}>
                         <input type="hidden" name="login" value="${student.credential.login}">
                         <input type="hidden" name="credentialId" value=${student.credential.id}>
@@ -43,11 +43,10 @@
                 </td>
                 <td>
                     <form action="StudentController" method="post">
-                        <input type="hidden" name="action" value="put">
+                        <input type="hidden" name="hidden_method" value="put">
                         <input type="hidden" name="id" value=${student.id}>
                         <input type="hidden" name="credentialId" value=${student.credential.id}>
                         <input type="hidden" name="login" value="${student.credential.login}">
-<%--                        Username: ${student.credential.login}--%>
                         Password: <input type="password" name="password" value="${student.credential.password}">
                         Firstname: <input type="text" name="firstname" value="${student.firstname}">
                         Lastname: <input type="text" name="lastname" value="${student.lastname}">

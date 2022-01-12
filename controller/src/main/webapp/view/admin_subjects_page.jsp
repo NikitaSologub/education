@@ -24,7 +24,7 @@
                 <td><c:out value="${subject.title}"/></td>
                 <td>
                     <form action="<c:url value="SubjectController"/>" method="post">
-                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="hidden_method" value="delete">
                         <input type="hidden" name="id" value=${subject.id}>
                         <input type="hidden" name="title" value=${subject.title}>
                         <button type="submit">Удалить предмет</button>
@@ -32,7 +32,7 @@
                 </td>
                 <td>
                     <form action="<c:url value="SubjectController"/>" method="post">
-                        <input type="hidden" name="action" value="put">
+                        <input type="hidden" name="hidden_method" value="put">
                         <input type="hidden" name="id" value=${subject.id}>
                         Введите новое название:<input type="text" name="title" value=${subject.title}><br/>
                         <button type="submit">Изменить название дисциплины</button>
