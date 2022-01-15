@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,17 +17,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static by.itacademy.sologub.constants.Attributes.DESCRIPTION;
-import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_GROUPS_VIEW;
-import static by.itacademy.sologub.constants.Constant.GROUP_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.GROUP_ID;
 import static by.itacademy.sologub.constants.Constant.GROUP_LIST;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 
 @Controller
-@RequestMapping(GROUP_CONTROLLER)
+@RequestMapping("groups")
 @Slf4j
-public class GroupController extends AbstractController {
+public class GroupController extends JspHiddenMethodController {
     private final GroupService groupService;
 
     @Autowired
@@ -35,12 +35,12 @@ public class GroupController extends AbstractController {
     }
 
     @GetMapping
-    public ModelAndView doGet() {
+    public ModelAndView getView() {
         return refreshGroupsAndForward("Вы на странице учебных групп");
     }
 
     @PostMapping
-    public ModelAndView doPost(@RequestParam(TITLE) String title, @RequestParam(DESCRIPTION) String description) {
+    public ModelAndView createGroup(@RequestParam(TITLE) String title, @RequestParam(DESCRIPTION) String description) {
         Group g = new Group()
                 .withTitle(title)
                 .withDescription(description);
@@ -56,8 +56,8 @@ public class GroupController extends AbstractController {
         return refreshGroupsAndForward(msg);
     }
 
-    @DeleteMapping
-    public ModelAndView doDelete(@RequestParam(ID) int id, HttpServletRequest req) {
+    @DeleteMapping("/{groupId}")
+    public ModelAndView deleteGroup(@PathVariable(GROUP_ID) int id, HttpServletRequest req) {
         String msg;
         if (groupService.deleteGroupIfExists(id)) {
             msg = "Группа по id " + id + " успешно удалена";

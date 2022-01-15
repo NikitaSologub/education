@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,15 +23,15 @@ import static by.itacademy.sologub.constants.Attributes.GROUP;
 import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_STUDENTS_VIEW;
 import static by.itacademy.sologub.constants.Constant.CURRENT_GROUP_OBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.GROUP_ID;
-import static by.itacademy.sologub.constants.Constant.GROUP_STUDENTS_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.OBJECTS_SET;
+import static by.itacademy.sologub.constants.Constant.STUDENT_ID;
 import static by.itacademy.sologub.constants.Constant.STUDENT_LOGIN;
 
 @Controller
-@RequestMapping(GROUP_STUDENTS_CONTROLLER)
+@RequestMapping("/groups/{groupId}/students")
 @Slf4j
-public class GroupStudentsController extends AbstractController {
+public class GroupStudentsController extends JspHiddenMethodController {
     private final GroupService groupService;
     private final StudentService studentService;
 
@@ -41,14 +42,16 @@ public class GroupStudentsController extends AbstractController {
     }
 
     @GetMapping
-    public ModelAndView doGet(@RequestParam(GROUP_ID) int groupId) {
+    public ModelAndView getView(@PathVariable(GROUP_ID) int groupId) {
         return refreshViewAndForward(groupId, "вы на странице управления студентами группы");
     }
 
-    @PostMapping
-    public ModelAndView doPost(@RequestParam(GROUP_ID) int groupId, @RequestParam(STUDENT_LOGIN) String studentLogin) {
+    @PostMapping("/{studentId}")
+    public ModelAndView includeStudentToGroupByIds(@PathVariable(GROUP_ID) int groupId, @PathVariable(STUDENT_ID) int studentId,
+                                                   @RequestParam(STUDENT_LOGIN) String studentLogin) {
         Group group = getGroupByIdWithStudents(groupId);
         Student newS = studentService.getStudentIfExistsOrGetSpecialValue(studentLogin);
+//        Student newS = studentService.getStudentIfExistsOrGetSpecialValue(studentId);
 
         String msg;
         if (groupService.addStudentInGroup(group, newS)) {
@@ -61,11 +64,12 @@ public class GroupStudentsController extends AbstractController {
         return refreshViewAndForward(groupId, msg);
     }
 
-    @DeleteMapping
-    public ModelAndView doDelete(@RequestParam(GROUP_ID) int groupId, @RequestParam(STUDENT_LOGIN) String studentLogin,
-                                 HttpServletRequest req) {
+    @DeleteMapping("/{studentId}")
+    public ModelAndView excludeStudentFromGroupByIds(@PathVariable(GROUP_ID) int groupId, @PathVariable(STUDENT_ID) int studentId,
+                                                     @RequestParam(STUDENT_LOGIN) String studentLogin, HttpServletRequest req) {
         Group group = getGroupByIdWithStudents(groupId);
         Student oldS = studentService.getStudentIfExistsOrGetSpecialValue(studentLogin);
+//        Student oldS = studentService.getStudentIfExistsOrGetSpecialValue(studentId);
 
         String msg;
         if (groupService.removeStudentFromGroup(group, oldS)) {

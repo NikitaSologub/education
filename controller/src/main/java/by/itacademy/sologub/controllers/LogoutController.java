@@ -16,7 +16,7 @@ import static by.itacademy.sologub.constants.Constant.LOGOUT_CONTROLLER;
 @Slf4j
 public class LogoutController {
     @GetMapping
-    protected ModelAndView doGet(HttpSession session) {
+    protected ModelAndView invalidateSessionAndGetView(HttpSession session) {
         session.invalidate();
         log.info("Инвалидируем сессию");
         return new ModelAndView(LOGIN_VIEW);

@@ -29,10 +29,8 @@
                 <td><c:out value="${t.firstname}"/></td>
                 <td><c:out value="${t.patronymic}"/></td>
                 <td>
-                    <form action="<c:url value="GroupEditController"/>" method="post">
+                    <form action="<c:url value="/groups/${requestScope.group.id}/teachers/${t.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="put">
-                        <input type="hidden" name="groupId" value=${requestScope.group.id}>
-                        <input type="hidden" name="teacherId" value=${t.id}>
                         <input type="hidden" name="teacherLogin" value=${t.credential.login}>
                         <button type="submit">Назначить</button>
                     </form>
@@ -43,8 +41,7 @@
 </h6>
 
 Изменить Название и/или описание группы
-<form action="<c:url value="GroupEditController"/>" method="post">
-    <input type="hidden" name="groupId" value=${requestScope.group.id}>
+<form action="<c:url value="/groups/${requestScope.group.id}/edit"/>" method="post">
     <input type="hidden" name="teacherId" value=${requestScope.teacher.id}>
     <input type="hidden" name="teacherLogin" value=${requestScope.teacher.credential.login}>
     Введите новое название:<input type="text" name="title" value=${requestScope.group.title}><br/>
@@ -53,9 +50,8 @@
 </form>
 
 Убрать учителя с должности руководителя группы (Оставить место вакантным)
-<form action="<c:url value="GroupEditController"/>" method="post">
+<form action="<c:url value="/groups/${requestScope.group.id}/teachers/${requestScope.teacher.id}"/>" method="post">
     <input type="hidden" name="hidden_method" value="delete">
-    <input type="hidden" name="groupId" value=${requestScope.group.id}>
     <input type="hidden" name="teacherLogin" value=${requestScope.teacher.id}>
     <button type="submit">Разжаловать учителя</button>
 </form>

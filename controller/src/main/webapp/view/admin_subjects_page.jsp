@@ -23,17 +23,15 @@
                 <td><c:out value="${subject.id}"/></td>
                 <td><c:out value="${subject.title}"/></td>
                 <td>
-                    <form action="<c:url value="SubjectController"/>" method="post">
+                    <form action="<c:url value="/subjects/${subject.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="delete">
-                        <input type="hidden" name="id" value=${subject.id}>
                         <input type="hidden" name="title" value=${subject.title}>
                         <button type="submit">Удалить предмет</button>
                     </form>
                 </td>
                 <td>
-                    <form action="<c:url value="SubjectController"/>" method="post">
+                    <form action="<c:url value="/subjects/${subject.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="put">
-                        <input type="hidden" name="id" value=${subject.id}>
                         Введите новое название:<input type="text" name="title" value=${subject.title}><br/>
                         <button type="submit">Изменить название дисциплины</button>
                     </form>
@@ -44,7 +42,7 @@
 </h6>
 <br>
 Добавить новый предмет:
-<form action="<c:url value="SubjectController"/>" method="post">
+<form action="<c:url value="/subjects"/>" method="post">
     Введите название дисциплины: <label> <input type="text" name="title"/> </label><br/>
     <input type="reset">
     <button type="submit">Создать предмет</button>

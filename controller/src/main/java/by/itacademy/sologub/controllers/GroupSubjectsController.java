@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,15 +22,14 @@ import static by.itacademy.sologub.constants.Attributes.GROUP;
 import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_SUBJECTS_VIEW;
 import static by.itacademy.sologub.constants.Constant.CURRENT_GROUP_OBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.GROUP_ID;
-import static by.itacademy.sologub.constants.Constant.GROUP_SUBJECTS_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.OBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_ID;
 
 @Controller
-@RequestMapping(GROUP_SUBJECTS_CONTROLLER)
+@RequestMapping("groups/{groupId}/subjects")
 @Slf4j
-public class GroupSubjectsController extends AbstractController {
+public class GroupSubjectsController extends JspHiddenMethodController {
     private final GroupService groupService;
     private final SubjectService subjectService;
 
@@ -41,12 +40,12 @@ public class GroupSubjectsController extends AbstractController {
     }
 
     @GetMapping
-    public ModelAndView doGet(@RequestParam(GROUP_ID) int groupId) {
+    public ModelAndView getView(@PathVariable(GROUP_ID) int groupId) {
         return refreshModelAndView(groupId, "Мы на странице группы по управлению предметами");
     }
 
-    @PostMapping
-    public ModelAndView doPost(@RequestParam(GROUP_ID) int groupId, @RequestParam(SUBJECT_ID) int subjectId) {
+    @PostMapping("/{subjectId}")
+    public ModelAndView includeSubjectToGroupByIds(@PathVariable(GROUP_ID) int groupId, @PathVariable(SUBJECT_ID) int subjectId) {
         Group group = getGroupByIdWithSubjects(groupId);
         Subject newS = subjectService.getSubjectIfExistsOrGetSpecialValue(subjectId);
 
@@ -61,9 +60,9 @@ public class GroupSubjectsController extends AbstractController {
         return refreshModelAndView(groupId, msg);
     }
 
-    @DeleteMapping
-    public ModelAndView doDelete(@RequestParam(GROUP_ID) int groupId, @RequestParam(SUBJECT_ID) int subjectId,
-                                 HttpServletRequest req) {
+    @DeleteMapping("/{subjectId}")
+    public ModelAndView excludeSubjectFromGroupByIds(@PathVariable(GROUP_ID) int groupId, @PathVariable(SUBJECT_ID) int subjectId,
+                                                     HttpServletRequest req) {
         Group group = getGroupByIdWithSubjects(groupId);
         Subject oldS = subjectService.getSubjectIfExistsOrGetSpecialValue(subjectId);
 

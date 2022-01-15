@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +31,11 @@ import static by.itacademy.sologub.constants.Constant.CREDENTIAL_ID;
 import static by.itacademy.sologub.constants.Constant.DATE_OF_BIRTH;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.PERSONS_SET;
-import static by.itacademy.sologub.constants.Constant.STUDENT_CONTROLLER;
 
 @Controller
-@RequestMapping(STUDENT_CONTROLLER)
+@RequestMapping("students")
 @Slf4j
-public class StudentController extends AbstractController {
+public class StudentController extends JspHiddenMethodController {
     private final StudentService studentService;
 
     @Autowired
@@ -44,14 +44,14 @@ public class StudentController extends AbstractController {
     }
 
     @GetMapping
-    public ModelAndView doGet() {
+    public ModelAndView getView() {
         return refreshAndForward("Вы на странице " + ADMIN_STUDENTS_VIEW);
     }
 
     @PostMapping
-    public ModelAndView doPost(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
-                               @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
-                               @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth) {
+    public ModelAndView createStudent(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
+                                      @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
+                                      @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth) {
         Student student = new Student()
                 .withCredential(new Credential()
                         .withLogin(login)
@@ -72,12 +72,12 @@ public class StudentController extends AbstractController {
         return refreshAndForward(msg);
     }
 
-    @PutMapping
-    public ModelAndView doPut(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
-                              @RequestParam(ID) int id, @RequestParam(CREDENTIAL_ID) int credentialId,
-                              @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
-                              @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth,
-                              HttpServletRequest req) {
+    @PutMapping("/{id}")
+    public ModelAndView updateStudent(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
+                                      @PathVariable(ID) int id, @RequestParam(CREDENTIAL_ID) int credentialId,
+                                      @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
+                                      @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth,
+                                      HttpServletRequest req) {
         Student student = new Student()
                 .withId(id)
                 .withCredential(new Credential()
@@ -101,8 +101,8 @@ public class StudentController extends AbstractController {
         return refreshAndForward(msg);
     }
 
-    @DeleteMapping
-    public ModelAndView doDelete(HttpServletRequest req, @RequestParam(LOGIN) String login) {
+    @DeleteMapping("/{id}")
+    public ModelAndView deleteStudent(@RequestParam(LOGIN) String login, @PathVariable(ID) int id, HttpServletRequest req) {
         String msg;
         if (studentService.deleteStudent(login)) {
             msg = Role.STUDENT + " " + login + " успешно удалён";

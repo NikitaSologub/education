@@ -33,18 +33,16 @@
                 <td><c:out value="${teacher.patronymic}"/></td>
                 <td><c:out value="${teacher.dateOfBirth}"/></td>
                 <td>
-                    <form action="TeacherController" method="post">
+                    <form action="<c:url value="/teachers/${teacher.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="delete">
-                        <input type="hidden" name="id" value=${teacher.id}>
                         <input type="hidden" name="login" value="${teacher.credential.login}">
                         <input type="hidden" name="credentialId" value=${teacher.credential.id}>
                         <button type="submit">Удалить учителя</button>
                     </form>
                 </td>
                 <td>
-                    <form action="TeacherController" method="post">
+                    <form action="<c:url value="/teachers/${teacher.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="put">
-                        <input type="hidden" name="id" value=${teacher.id}>
                         <input type="hidden" name="credentialId" value=${teacher.credential.id}>
                         <input type="hidden" name="login" value="${teacher.credential.login}">
                         Password: <input type="password" name="password" value="${teacher.credential.password}">
@@ -56,9 +54,8 @@
                     </form>
                 </td>
                 <td>
-                    <form action="SalaryController" method="get">
+                    <form action="<c:url value="/teachers/${teacher.id}/salaries"/>" method="get">
                         <input type="hidden" name="login" value="${teacher.credential.login}">
-                        <input type="hidden" name="teacherId" value="${teacher.id}">
                         <button type="submit">На страницу зарплат</button>
                     </form>
                 </td>
@@ -67,7 +64,7 @@
     </table>
 </h6>
 Добавить нового учителя
-<form action="<c:url value="TeacherController"/>" method="post">
+<form action="<c:url value="/teachers"/>" method="post">
     Username: <label> <input type="text" name="login"/> </label><br/>
     Password: <label> <input type="password" name="password"/> </label><br/>
     Firstname: <label> <input type="text" name="firstname"/> </label><br/>

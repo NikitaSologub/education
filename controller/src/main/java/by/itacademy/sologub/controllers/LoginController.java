@@ -10,7 +10,6 @@ import by.itacademy.sologub.services.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,17 +49,9 @@ public class LoginController {
         this.studentService = studentService;
     }
 
-    @GetMapping
-    public ModelAndView doGet() {
-        ModelAndView mav = new ModelAndView(LOGIN_VIEW);
-        log.info("Попытка входа через недопустимый протокол");
-        mav.getModel().put(ERROR_MESSAGE, "Вам нельзя переходить по URL " + LOGIN_CONTROLLER);
-        return mav;
-    }
-
     @PostMapping
-    public ModelAndView doPost(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
-                               HttpSession session) {
+    public ModelAndView logIn(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
+                              HttpSession session) {
         if (login != null) {
             login = login.trim();//todo - убрать (переработать)
         }

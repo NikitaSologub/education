@@ -30,22 +30,18 @@ ${requestScope.student.patronymic} | ${requestScope.student.dateOfBirth}
                 <td><c:out value="${mark.point}"/></td>
                 <td><c:out value="${mark.date}"/></td>
                 <td>
-                    <form action="<c:url value="MarkController"/>" method="post">
+                    <form action="<c:url value="/students/${requestScope.student.id}/marks/${mark.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="delete">
-                        <input type="hidden" name="markId" value=${mark.id}>
                         <input type="hidden" name="login" value="${requestScope.student.credential.login}">
-                        <input type="hidden" name="studentId" value=${requestScope.student.id}>
                         <button type="submit">Удалить оценку</button>
                     </form>
                 </td>
                 <td>
-                    <form action="<c:url value="MarkController"/>" method="post">
+                    <form action="<c:url value="/students/${requestScope.student.id}/marks/${mark.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="put">
-                        <input type="hidden" name="markId" value=${mark.id}>
                         <input type="hidden" name="subjectId" value=${mark.subject.id}>
                         <input type="hidden" name="subjectTitle" value=${mark.subject.title}>
                         <input type="hidden" name="login" value="${requestScope.student.credential.login}">
-                        <input type="hidden" name="studentId" value=${requestScope.student.id}>
                         mark point:<input type="number" name="point" min="0" max="100" value=${mark.point}><br/>
                         mark date:<input type="date" name="date" value=${mark.date}><br/>
                         <button type="submit">Изменить оценку ученику</button>
@@ -56,8 +52,7 @@ ${requestScope.student.patronymic} | ${requestScope.student.dateOfBirth}
     </table>
 </h6>
 Добавить новую оценку ученику:
-<form action="<c:url value="MarkController"/>" method="post">
-    <input type="hidden" name="studentId" value=${requestScope.student.id}>
+<form action="<c:url value="/students/${requestScope.student.id}/marks"/>" method="post">
     <input type="hidden" name="login" value="${requestScope.student.credential.login}">
     Введите оценку (0-100) баллов: <label> <input type="number" name="point" value="0" min="0" max="100"/> </label><br/>
     Введите дату получения оценки: <label> <input type="date" name="date" value="2021-01-01"/> </label><br/>

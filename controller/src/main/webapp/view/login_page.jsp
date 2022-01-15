@@ -10,7 +10,7 @@
 <body class="basic">
 <h1>Welcome in login page!</h1>
 <h1>Please login</h1>
-<form action="<c:url value="/LoginController"/>" method="post">
+<form action="<c:url value="/login"/>" method="post">
     Username: <label>
     <input type="text" name="login" required placeholder="ваш логин"/>
 </label><br/>

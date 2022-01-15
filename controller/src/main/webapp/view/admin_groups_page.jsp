@@ -27,23 +27,19 @@
                 <td><c:out value="${group.teacher.lastname} ${group.teacher.firstname} ${group.teacher.patronymic}"/></td>
                 <td><c:out value="${group.description}"/></td>
                 <td>
-                    <form action="<c:url value="GroupController"/>" method="post">
+                    <form action="<c:url value="/groups/${group.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="delete">
-                        <input type="hidden" name="id" value=${group.id}>
                         <button type="submit">Удалить</button>
                     </form>
-                    <form action="<c:url value="GroupEditController"/>" method="get">
-                        <input type="hidden" name="groupId" value="${group.id}">
+                    <form action="<c:url value="/groups/${group.id}"/>" method="get">
                         <input type="hidden" name="teacherId" value="${group.teacher.id}">
                         <input type="hidden" name="teacherLogin" value="${group.teacher.credential.login}">
                         <button type="submit">Редактировать</button>
                     </form>
-                    <form action="<c:url value="GroupSubjectsController"/>" method="get">
-                        <input type="hidden" name="groupId" value="${group.id}">
+                    <form action="<c:url value="/groups/${group.id}/subjects"/>" method="get">
                         <button type="submit">К предметам</button>
                     </form>
-                    <form action="<c:url value="GroupStudentsController"/>" method="get">
-                        <input type="hidden" name="groupId" value="${group.id}">
+                    <form action="<c:url value="/groups/${group.id}/students"/>" method="get">
                         <button type="submit">К студентам</button>
                     </form>
                 </td>
@@ -53,7 +49,7 @@
 </h6>
 <br>
 Добавить новую группу без учителя:
-<form action="<c:url value="GroupController"/>" method="post">
+<form action="<c:url value="/groups"/>" method="post">
     Введите название группы: <label> <input type="text" name="title"/> </label><br/>
     Введите описание группы: <label> <input type="text" name="description"/> </label><br/>
     <input type="reset">

@@ -33,18 +33,16 @@
                 <td><c:out value="${student.patronymic}"/></td>
                 <td><c:out value="${student.dateOfBirth}"/></td>
                 <td>
-                    <form action="StudentController" method="post">
+                    <form action="<c:url value="/students/${student.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="delete">
-                        <input type="hidden" name="id" value=${student.id}>
                         <input type="hidden" name="login" value="${student.credential.login}">
                         <input type="hidden" name="credentialId" value=${student.credential.id}>
                         <button type="submit">Удалить студента</button>
                     </form>
                 </td>
                 <td>
-                    <form action="StudentController" method="post">
+                    <form action="<c:url value="/students/${student.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="put">
-                        <input type="hidden" name="id" value=${student.id}>
                         <input type="hidden" name="credentialId" value=${student.credential.id}>
                         <input type="hidden" name="login" value="${student.credential.login}">
                         Password: <input type="password" name="password" value="${student.credential.password}">
@@ -56,7 +54,7 @@
                     </form>
                 </td>
                 <td>
-                    <form action="<c:url value="MarkController"/>" method="get">
+                    <form action="<c:url value="/students/${student.id}/marks"/>" method="get">
                         <input type="hidden" name="login" value="${student.credential.login}">
                         <input type="hidden" name="studentId" value="${student.id}">
                         <input type="hidden" name="credentialId" value="${student.credential.id}">
@@ -68,7 +66,7 @@
     </table>
 </h6>
 Добавить нового студента
-<form action="<c:url value="StudentController"/>" method="post">
+<form action="<c:url value="/students"/>" method="post">
     Username: <label> <input type="text" name="login"/> </label><br/>
     Password: <label> <input type="password" name="password"/> </label><br/>
     Firstname: <label> <input type="text" name="firstname"/> </label><br/>

@@ -31,10 +31,8 @@
                 <td><c:out value="${s.lastname} ${s.firstname} ${s.patronymic}"/></td>
                 <td><c:out value="${s.dateOfBirth}"/></td>
                 <td>
-                    <form action="<c:url value="GroupStudentsController"/>" method="post">
+                    <form action="<c:url value="/groups/${requestScope.group.id}/students/${s.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="delete">
-                        <input type="hidden" name="groupId" value=${requestScope.group.id}>
-                        <input type="hidden" name="studentId" value=${s.id}>
                         <input type="hidden" name="studentLogin" value=${s.credential.login}>
                         <button type="submit">Удалить</button>
                     </form>
@@ -61,9 +59,7 @@
                 <td><c:out value="${s.lastname} ${s.firstname} ${s.patronymic}"/></td>
                 <td><c:out value="${s.dateOfBirth}"/></td>
                 <td>
-                    <form action="<c:url value="GroupStudentsController"/>" method="post">
-                        <input type="hidden" name="groupId" value=${requestScope.group.id}>
-                        <input type="hidden" name="studentId" value=${s.id}>
+                    <form action="<c:url value="/groups/${requestScope.group.id}/students/${s.id}"/>" method="post">
                         <input type="hidden" name="studentLogin" value=${s.credential.login}>
                         <button type="submit">Добавить</button>
                     </form>

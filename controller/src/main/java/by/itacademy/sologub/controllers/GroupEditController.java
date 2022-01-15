@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,16 +24,16 @@ import static by.itacademy.sologub.constants.Attributes.GROUP;
 import static by.itacademy.sologub.constants.Attributes.TEACHER;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_GROUP_EDIT_VIEW;
-import static by.itacademy.sologub.constants.Constant.GROUP_EDIT_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.GROUP_ID;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.PERSONS_SET;
+import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
 import static by.itacademy.sologub.constants.Constant.TEACHER_LOGIN;
 
 @Controller
-@RequestMapping(GROUP_EDIT_CONTROLLER)
+@RequestMapping("groups/{groupId}")
 @Slf4j
-public class GroupEditController extends AbstractController {
+public class GroupEditController extends JspHiddenMethodController {
     private final TeacherService teacherService;
     private final GroupService groupService;
 
@@ -43,12 +44,12 @@ public class GroupEditController extends AbstractController {
     }
 
     @GetMapping
-    public ModelAndView doGet(@RequestParam(TEACHER_LOGIN) String teacherLogin, @RequestParam(GROUP_ID) int groupId) {
+    public ModelAndView getView(@RequestParam(TEACHER_LOGIN) String teacherLogin, @PathVariable(GROUP_ID) int groupId) {
         return refreshGroupAndForward(teacherLogin, groupId, "вы на странице редактирования группы");
     }
 
-    @PostMapping()
-    public ModelAndView doPost(@RequestParam(TEACHER_LOGIN) String teacherLogin, @RequestParam(GROUP_ID) int groupId,
+    @PostMapping("/edit")
+    public ModelAndView doPost(@RequestParam(TEACHER_LOGIN) String teacherLogin, @PathVariable(GROUP_ID) int groupId,
                                @RequestParam(TITLE) String newTitle, @RequestParam(DESCRIPTION) String newDescription) {
         Group newGr = groupService.getGroupById(groupId);
         newGr.setTitle(newTitle);
@@ -66,9 +67,9 @@ public class GroupEditController extends AbstractController {
         return refreshGroupAndForward(teacherLogin, groupId, msg);
     }
 
-    @PutMapping
-    public ModelAndView doPut(@RequestParam(TEACHER_LOGIN) String teacherLogin, @RequestParam(GROUP_ID) int groupId,
-                              HttpServletRequest req) {
+    @PutMapping("/teachers/{teacherId}")
+    public ModelAndView appointTeacher(@RequestParam(TEACHER_LOGIN) String teacherLogin, @PathVariable(GROUP_ID) int groupId,
+                                       HttpServletRequest req, @PathVariable(TEACHER_ID) int teacherId) {
         Group group = groupService.getGroupById(groupId);
         Teacher newT = teacherService.getTeacherIfExistsOrGetSpecialValue(teacherLogin);
         group.setTeacher(newT);
@@ -85,9 +86,9 @@ public class GroupEditController extends AbstractController {
         return refreshGroupAndForward(teacherLogin, groupId, msg);
     }
 
-    @DeleteMapping
-    public ModelAndView doDelete(@RequestParam(TEACHER_LOGIN) String teacherLogin, @RequestParam(GROUP_ID) int groupId,
-                                 HttpServletRequest req) {
+    @DeleteMapping("/teachers/{teacherId}")
+    public ModelAndView removeTeacher(@RequestParam(TEACHER_LOGIN) String teacherLogin, @PathVariable(GROUP_ID) int groupId,
+                                      HttpServletRequest req, @PathVariable(TEACHER_ID) int teacherId) {
         Group group = groupService.getGroupById(groupId);
         Teacher oldT = group.getTeacher();
         String login;

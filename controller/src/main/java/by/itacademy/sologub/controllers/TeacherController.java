@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +31,11 @@ import static by.itacademy.sologub.constants.Constant.CREDENTIAL_ID;
 import static by.itacademy.sologub.constants.Constant.DATE_OF_BIRTH;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.PERSONS_SET;
-import static by.itacademy.sologub.constants.Constant.TEACHER_CONTROLLER;
 
 @Controller
-@RequestMapping(TEACHER_CONTROLLER)
+@RequestMapping("teachers")
 @Slf4j
-public class TeacherController extends AbstractController {
+public class TeacherController extends JspHiddenMethodController {
     private final TeacherService teacherService;
 
     @Autowired
@@ -44,14 +44,14 @@ public class TeacherController extends AbstractController {
     }
 
     @GetMapping
-    public ModelAndView doGet() {
+    public ModelAndView getView() {
         return refreshAndForward("Вы на странице " + ADMIN_TEACHERS_VIEW);
     }
 
     @PostMapping
-    public ModelAndView doPost(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
-                               @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
-                               @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth) {
+    public ModelAndView createTeacher(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
+                                      @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
+                                      @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth) {
         Teacher teacher = new Teacher()
                 .withCredential(new Credential()
                         .withLogin(login)
@@ -72,12 +72,12 @@ public class TeacherController extends AbstractController {
         return refreshAndForward(msg);
     }
 
-    @PutMapping
-    public ModelAndView doPut(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
-                              @RequestParam(ID) int id, @RequestParam(CREDENTIAL_ID) int credentialId,
-                              @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
-                              @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth,
-                              HttpServletRequest req) {
+    @PutMapping("/{id}")
+    public ModelAndView updateTeacher(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
+                                      @PathVariable(ID) int id, @RequestParam(CREDENTIAL_ID) int credentialId,
+                                      @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
+                                      @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth,
+                                      HttpServletRequest req) {
         Teacher teacher = new Teacher()
                 .withId(id)
                 .withCredential(new Credential()
@@ -101,8 +101,9 @@ public class TeacherController extends AbstractController {
         return refreshAndForward(msg);
     }
 
-    @DeleteMapping
-    public ModelAndView doDelete(@RequestParam(LOGIN) String login, HttpServletRequest req) {
+    @DeleteMapping("/{id}")
+    public ModelAndView deleteTeacher(@RequestParam(LOGIN) String login, @PathVariable(ID) int id,
+                                      HttpServletRequest req) {
         String msg;
         if (teacherService.deleteTeacher(login)) {
             msg = Role.TEACHER + " " + login + " успешно удалён";

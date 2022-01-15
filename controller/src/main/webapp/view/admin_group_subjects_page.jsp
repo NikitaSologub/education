@@ -27,10 +27,8 @@
                 <td><c:out value="${s.id}"/></td>
                 <td><c:out value="${s.title}"/></td>
                 <td>
-                    <form action="<c:url value="GroupSubjectsController"/>" method="post">
+                    <form action="<c:url value="/groups/${requestScope.group.id}/subjects/${s.id}"/>" method="post">
                         <input type="hidden" name="hidden_method" value="delete">
-                        <input type="hidden" name="groupId" value=${requestScope.group.id}>
-                        <input type="hidden" name="subjectId" value=${s.id}>
                         <button type="submit">Удалить</button>
                     </form>
                 </td>
@@ -52,9 +50,7 @@
                 <td><c:out value="${s.id}"/></td>
                 <td><c:out value="${s.title}"/></td>
                 <td>
-                    <form action="<c:url value="GroupSubjectsController"/>" method="post">
-                        <input type="hidden" name="groupId" value=${requestScope.group.id}>
-                        <input type="hidden" name="subjectId" value=${s.id}>
+                    <form action="<c:url value="/groups/${requestScope.group.id}/subjects/${s.id}"/>" method="post">
                         <button type="submit">Добавить</button>
                     </form>
                 </td>

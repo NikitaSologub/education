@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import static by.itacademy.sologub.constants.Constant.HIDDEN_METHOD_PARAMETER;
 
 @Slf4j
-public abstract class AbstractController {
+public abstract class JspHiddenMethodController {
     protected void resetMethod(HttpServletRequest req) {
         String hiddenParameter = req.getParameter(HIDDEN_METHOD_PARAMETER);
         if (hiddenParameter != null) {

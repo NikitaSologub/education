@@ -12,11 +12,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-import static by.itacademy.sologub.constants.Constant.HIDDEN_METHOD_PARAMETER;
 import static by.itacademy.sologub.constants.Constant.GROUP_CONTROLLER;
-import static by.itacademy.sologub.constants.Constant.GROUP_EDIT_CONTROLLER;
-import static by.itacademy.sologub.constants.Constant.GROUP_STUDENTS_CONTROLLER;
-import static by.itacademy.sologub.constants.Constant.GROUP_SUBJECTS_CONTROLLER;
+import static by.itacademy.sologub.constants.Constant.HIDDEN_METHOD_PARAMETER;
 import static by.itacademy.sologub.constants.Constant.LOGIN_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.LOGOUT_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.MARK_CONTROLLER;
@@ -26,8 +23,7 @@ import static by.itacademy.sologub.constants.Constant.SUBJECT_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.TEACHER_CONTROLLER;
 
 @WebFilter({LOGIN_CONTROLLER, LOGOUT_CONTROLLER, TEACHER_CONTROLLER, STUDENT_CONTROLLER, SALARY_CONTROLLER,
-        GROUP_CONTROLLER, GROUP_STUDENTS_CONTROLLER, GROUP_SUBJECTS_CONTROLLER, GROUP_EDIT_CONTROLLER,
-        SUBJECT_CONTROLLER, MARK_CONTROLLER})
+        GROUP_CONTROLLER, SUBJECT_CONTROLLER, MARK_CONTROLLER})
 @Slf4j
 public class HiddenMethodFieldFilter implements Filter {
 

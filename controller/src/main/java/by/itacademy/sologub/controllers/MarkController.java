@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,17 +28,16 @@ import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.POINT;
 import static by.itacademy.sologub.constants.Attributes.STUDENT;
 import static by.itacademy.sologub.constants.Constant.ADMIN_STUDENTS_MARKS_VIEW;
-import static by.itacademy.sologub.constants.Constant.MARK_CONTROLLER;
 import static by.itacademy.sologub.constants.Constant.MARK_ID;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.STUDENT_ID;
 import static by.itacademy.sologub.constants.Constant.SUBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.SUBJECT_ID;
 
-@RequestMapping(MARK_CONTROLLER)
-@Slf4j
 @Controller
-public class MarkController extends AbstractController {
+@RequestMapping("students/{studentId}/marks")
+@Slf4j
+public class MarkController extends JspHiddenMethodController {
     private final MarkService markService;
     private final StudentService studentService;
     private final SubjectService subjectService;
@@ -50,14 +50,14 @@ public class MarkController extends AbstractController {
     }
 
     @GetMapping
-    public ModelAndView doGet(@RequestParam(LOGIN) String login) {
+    public ModelAndView getView(@RequestParam(LOGIN) String login, @PathVariable(STUDENT_ID) int studentId) {
         return refreshModelAndView(login, "Вы на странице оценок пользователя: " + login);
     }
 
     @PostMapping
-    public ModelAndView doPost(@RequestParam(STUDENT_ID) int studentId, @RequestParam(LOGIN) String login,
-                               @RequestParam(SUBJECT_ID) int subjectId, @RequestParam(POINT) int point,
-                               @RequestParam(DATE) String date) {
+    public ModelAndView createMark(@PathVariable(STUDENT_ID) int studentId, @RequestParam(LOGIN) String login,
+                                   @RequestParam(SUBJECT_ID) int subjectId, @RequestParam(POINT) int point,
+                                   @RequestParam(DATE) String date) {
         Mark m = new Mark()
                 .withSubject(subjectService.getSubjectIfExistsOrGetSpecialValue(subjectId))
                 .withPoint(point)
@@ -74,10 +74,11 @@ public class MarkController extends AbstractController {
         return refreshModelAndView(login, msg);
     }
 
-    @PutMapping
-    public ModelAndView doPut(@RequestParam(MARK_ID) int markId, @RequestParam(POINT) int point,
-                              @RequestParam(DATE) String date, @RequestParam(SUBJECT_ID) int subjectId,
-                              @RequestParam(LOGIN) String login, HttpServletRequest req) {
+    @PutMapping("/{markId}")
+    public ModelAndView updateMark(@PathVariable(MARK_ID) int markId, @PathVariable(STUDENT_ID) int studentId,
+                                   @RequestParam(DATE) String date, @RequestParam(SUBJECT_ID) int subjectId,
+                                   @RequestParam(LOGIN) String login, @RequestParam(POINT) int point,
+                                   HttpServletRequest req) {
         Mark m = new Mark()
                 .withSubject(subjectService.getSubjectIfExistsOrGetSpecialValue(subjectId))
                 .withId(markId)
@@ -96,9 +97,9 @@ public class MarkController extends AbstractController {
         return refreshModelAndView(login, msg);
     }
 
-    @DeleteMapping
-    public ModelAndView doDelete(@RequestParam(LOGIN) String login, @RequestParam(MARK_ID) int markId,
-                                 HttpServletRequest req) {
+    @DeleteMapping("/{markId}")
+    public ModelAndView deleteMark(@PathVariable(MARK_ID) int markId, @PathVariable(STUDENT_ID) int studentId,
+                                   @RequestParam(LOGIN) String login, HttpServletRequest req) {
         String msg;
         if (markService.deleteMark(markId)) {
             msg = "Оценка по id " + markId + " успешно удалена";

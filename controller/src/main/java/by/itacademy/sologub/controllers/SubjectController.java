@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +22,11 @@ import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SUBJECTS_VIEW;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.SUBJECTS_SET;
-import static by.itacademy.sologub.constants.Constant.SUBJECT_CONTROLLER;
 
 @Controller
-@RequestMapping(SUBJECT_CONTROLLER)
+@RequestMapping("subjects")
 @Slf4j
-public class SubjectController extends AbstractController {
+public class SubjectController extends JspHiddenMethodController {
     private final SubjectService service;
 
     @Autowired
@@ -35,12 +35,12 @@ public class SubjectController extends AbstractController {
     }
 
     @GetMapping
-    public ModelAndView doGet() {
+    public ModelAndView getView() {
         return refreshModelAndView("Вы на странице предметов");
     }
 
     @PostMapping
-    public ModelAndView doPost(@RequestParam(TITLE) String title) {
+    public ModelAndView createSubject(@RequestParam(TITLE) String title) {
         Subject s = new Subject()
                 .withTitle(title);
 
@@ -55,8 +55,8 @@ public class SubjectController extends AbstractController {
         return refreshModelAndView(msg);
     }
 
-    @PutMapping
-    public ModelAndView doPut(@RequestParam(ID) int id, @RequestParam(TITLE) String title, HttpServletRequest req) {
+    @PutMapping("/{id}")
+    public ModelAndView updateSubject(@PathVariable(ID) int id, @RequestParam(TITLE) String title, HttpServletRequest req) {
         Subject s = new Subject()
                 .withId(id)
                 .withTitle(title);
@@ -73,8 +73,8 @@ public class SubjectController extends AbstractController {
         return refreshModelAndView(msg);
     }
 
-    @DeleteMapping
-    public ModelAndView doDelete(@RequestParam(ID) int id, @RequestParam(TITLE) String title, HttpServletRequest req) {
+    @DeleteMapping("/{id}")
+    public ModelAndView deleteSubject(@PathVariable(ID) int id, @RequestParam(TITLE) String title, HttpServletRequest req) {
         Subject s = new Subject()
                 .withId(id)
                 .withTitle(title);
