@@ -15,6 +15,19 @@ public final class Constant {
     public static final String SUBJECT_CONTROLLER = "/SubjectController";
     public static final String MARK_CONTROLLER = "/MarkController";
 
+    //urls
+//    public static final String NEW_LOGIN_CONTROLLER = "/login";
+//    public static final String NEW_LOGOUT_CONTROLLER = "/logout";
+//    public static final String NEW_TEACHER_CONTROLLER = "/teachers";
+//    public static final String NEW_STUDENT_CONTROLLER = "/students";
+//    public static final String NEW_SALARY_CONTROLLER = "/salaries";
+//    public static final String NEW_GROUP_CONTROLLER = "/groups";
+//    public static final String NEW_GROUP_STUDENTS_CONTROLLER = "/GroupStudentsController";
+//    public static final String NEW_GROUP_SUBJECTS_CONTROLLER = "/GroupSubjectsController";
+//    public static final String NEW_GROUP_EDIT_CONTROLLER = "/GroupEditController";
+//    public static final String NEW_SUBJECT_CONTROLLER = "/subjects";
+//    public static final String NEW_MARK_CONTROLLER = "/marks";
+
     //jsp urls (добавить view/ перед каждым адресом?)
     public static final String LOGIN_PAGE = "/login_page.jsp";
     public static final String REGISTRATION_PAGE = "/registration_page.jsp";
@@ -72,6 +85,7 @@ public final class Constant {
     public static final String TEACHER_ID = "teacherId";
     public static final String STUDENT_ID = "studentId";
     public static final String MARK_ID = "markId";
+    public static final String SALARY_ID = "salaryId";
     public static final String STUDENT_LOGIN = "studentLogin";
     public static final String CREDENTIAL_ID = "credentialId";
     public static final String DATE_OF_BIRTH = "dateOfBirth";

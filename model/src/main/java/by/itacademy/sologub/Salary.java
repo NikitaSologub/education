@@ -1,5 +1,11 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.serializers.LocalDateDeserializer;
+import by.itacademy.sologub.serializers.LocalDateSerializer;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,6 +19,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +33,8 @@ import java.time.LocalDate;
 public class Salary extends AbstractEntity {
     @Column(name = "coins_amount")
     private int coins;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate date;
 
     public Salary withId(int id) {

@@ -1,5 +1,9 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.serializers.LocalDateDeserializer;
+import by.itacademy.sologub.serializers.LocalDateSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +36,8 @@ public abstract class User extends AbstractEntity {
     private String firstname;
     private String lastname;
     private String patronymic;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
     @OneToOne(targetEntity = Credential.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
