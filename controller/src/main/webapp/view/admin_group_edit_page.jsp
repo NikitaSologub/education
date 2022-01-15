@@ -43,7 +43,6 @@
 Изменить Название и/или описание группы
 <form action="<c:url value="/groups/${requestScope.group.id}/edit"/>" method="post">
     <input type="hidden" name="teacherId" value=${requestScope.teacher.id}>
-    <input type="hidden" name="teacherLogin" value=${requestScope.teacher.credential.login}>
     Введите новое название:<input type="text" name="title" value=${requestScope.group.title}><br/>
     Введите новое описание:<input type="text" name="description" value=${requestScope.group.description}><br/>
     <button type="submit">Изменить параметры группы</button>

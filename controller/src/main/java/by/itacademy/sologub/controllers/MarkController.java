@@ -51,13 +51,12 @@ public class MarkController extends JspHiddenMethodController {
 
     @GetMapping
     public ModelAndView getView(@RequestParam(LOGIN) String login, @PathVariable(STUDENT_ID) int studentId) {
-        return refreshModelAndView(login, "Вы на странице оценок пользователя: " + login);
+        return refreshModelAndView(studentId, "Вы на странице оценок пользователя: " + login);
     }
 
     @PostMapping
-    public ModelAndView createMark(@PathVariable(STUDENT_ID) int studentId, @RequestParam(LOGIN) String login,
-                                   @RequestParam(SUBJECT_ID) int subjectId, @RequestParam(POINT) int point,
-                                   @RequestParam(DATE) String date) {
+    public ModelAndView createMark(@PathVariable(STUDENT_ID) int studentId, @RequestParam(SUBJECT_ID) int subjectId,
+                                   @RequestParam(POINT) int point, @RequestParam(DATE) String date) {
         Mark m = new Mark()
                 .withSubject(subjectService.getSubjectIfExistsOrGetSpecialValue(subjectId))
                 .withPoint(point)
@@ -71,14 +70,13 @@ public class MarkController extends JspHiddenMethodController {
             msg = "Не удалось добавить оценку " + m;
             log.info("Не удалось добавить оценку {}", m);
         }
-        return refreshModelAndView(login, msg);
+        return refreshModelAndView(studentId, msg);
     }
 
     @PutMapping("/{markId}")
     public ModelAndView updateMark(@PathVariable(MARK_ID) int markId, @PathVariable(STUDENT_ID) int studentId,
                                    @RequestParam(DATE) String date, @RequestParam(SUBJECT_ID) int subjectId,
-                                   @RequestParam(LOGIN) String login, @RequestParam(POINT) int point,
-                                   HttpServletRequest req) {
+                                   @RequestParam(POINT) int point, HttpServletRequest req) {
         Mark m = new Mark()
                 .withSubject(subjectService.getSubjectIfExistsOrGetSpecialValue(subjectId))
                 .withId(markId)
@@ -94,12 +92,12 @@ public class MarkController extends JspHiddenMethodController {
             log.debug("Не удалось изменить оценку {}", m);
         }
         resetMethod(req);
-        return refreshModelAndView(login, msg);
+        return refreshModelAndView(studentId, msg);
     }
 
     @DeleteMapping("/{markId}")
     public ModelAndView deleteMark(@PathVariable(MARK_ID) int markId, @PathVariable(STUDENT_ID) int studentId,
-                                   @RequestParam(LOGIN) String login, HttpServletRequest req) {
+                                   HttpServletRequest req) {
         String msg;
         if (markService.deleteMark(markId)) {
             msg = "Оценка по id " + markId + " успешно удалена";
@@ -109,12 +107,12 @@ public class MarkController extends JspHiddenMethodController {
             log.debug("Не удалось удалить оценку с id = {}", markId);
         }
         resetMethod(req);
-        return refreshModelAndView(login, msg);
+        return refreshModelAndView(studentId, msg);
     }
 
-    private ModelAndView refreshModelAndView(String studentLogin, String msg) {
+    private ModelAndView refreshModelAndView(int studentId, String msg) {
         ModelAndView mav = new ModelAndView(ADMIN_STUDENTS_MARKS_VIEW);
-        Student s = studentService.getStudentIfExistsOrGetSpecialValue(studentLogin);
+        Student s = studentService.getStudentIfExistsOrGetSpecialValue(studentId);
         log.debug("студент по логину - " + s + " будет отправлен на страницу");
         s.setMarks(markService.getAllMarksByStudentId(s.getId()));
         log.debug("Оценки которые есть у студента (добавляем к запросу){}", s.getMarks());

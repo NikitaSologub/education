@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +25,6 @@ import static by.itacademy.sologub.constants.Constant.GROUP_ID;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.OBJECTS_SET;
 import static by.itacademy.sologub.constants.Constant.STUDENT_ID;
-import static by.itacademy.sologub.constants.Constant.STUDENT_LOGIN;
 
 @Controller
 @RequestMapping("/groups/{groupId}/students")
@@ -47,11 +45,9 @@ public class GroupStudentsController extends JspHiddenMethodController {
     }
 
     @PostMapping("/{studentId}")
-    public ModelAndView includeStudentToGroupByIds(@PathVariable(GROUP_ID) int groupId, @PathVariable(STUDENT_ID) int studentId,
-                                                   @RequestParam(STUDENT_LOGIN) String studentLogin) {
+    public ModelAndView includeStudentToGroupByIds(@PathVariable(GROUP_ID) int groupId, @PathVariable(STUDENT_ID) int studentId) {
         Group group = getGroupByIdWithStudents(groupId);
-        Student newS = studentService.getStudentIfExistsOrGetSpecialValue(studentLogin);
-//        Student newS = studentService.getStudentIfExistsOrGetSpecialValue(studentId);
+        Student newS = studentService.getStudentIfExistsOrGetSpecialValue(studentId);
 
         String msg;
         if (groupService.addStudentInGroup(group, newS)) {
@@ -65,11 +61,10 @@ public class GroupStudentsController extends JspHiddenMethodController {
     }
 
     @DeleteMapping("/{studentId}")
-    public ModelAndView excludeStudentFromGroupByIds(@PathVariable(GROUP_ID) int groupId, @PathVariable(STUDENT_ID) int studentId,
-                                                     @RequestParam(STUDENT_LOGIN) String studentLogin, HttpServletRequest req) {
+    public ModelAndView excludeStudentFromGroupByIds(@PathVariable(GROUP_ID) int groupId, HttpServletRequest req,
+                                                     @PathVariable(STUDENT_ID) int studentId) {
         Group group = getGroupByIdWithStudents(groupId);
-        Student oldS = studentService.getStudentIfExistsOrGetSpecialValue(studentLogin);
-//        Student oldS = studentService.getStudentIfExistsOrGetSpecialValue(studentId);
+        Student oldS = studentService.getStudentIfExistsOrGetSpecialValue(studentId);
 
         String msg;
         if (groupService.removeStudentFromGroup(group, oldS)) {

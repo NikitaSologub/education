@@ -23,7 +23,6 @@ import java.time.LocalDate;
 
 import static by.itacademy.sologub.constants.Attributes.COINS;
 import static by.itacademy.sologub.constants.Attributes.DATE;
-import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.TEACHER;
 import static by.itacademy.sologub.constants.Constant.ADMIN_SALARIES_VIEW;
 import static by.itacademy.sologub.constants.Constant.AVERAGE_SALARY;
@@ -47,16 +46,13 @@ public class SalaryController extends JspHiddenMethodController {
     }
 
     @GetMapping
-    public ModelAndView getView(@RequestParam(LOGIN) String login, @PathVariable(TEACHER_ID) int teacherId) {
-        log.info("*-*-*-*- попали в метод getView ");
-        log.info("*-*-*-*- login={}",login);
-        log.info("*-*-*-*- teacherId={}",teacherId);
-        return refreshTeacherAndForward(teacherId,login, "Вы на странице зарплат пользователя " + login, new ModelAndView());
+    public ModelAndView getView(@PathVariable(TEACHER_ID) int teacherId) {
+        return refreshTeacherAndForward(teacherId, "Вы на странице зарплат пользователя ", new ModelAndView());
     }
 
     @PostMapping
-    public ModelAndView createSalary(@RequestParam(LOGIN) String login, @RequestParam(COINS) int coins,
-                                     @RequestParam(DATE) String date, @PathVariable(TEACHER_ID) int teacherId) {
+    public ModelAndView createSalary(@RequestParam(COINS) int coins, @RequestParam(DATE) String date,
+                                     @PathVariable(TEACHER_ID) int teacherId) {
         Salary salary = new Salary()
                 .withCoins(coins)
                 .withDate(LocalDate.parse(date));
@@ -69,12 +65,12 @@ public class SalaryController extends JspHiddenMethodController {
             msg = "Не удалось добавить Зарплату " + salary;
             log.info("Не удалось добавить Зарплату {}", salary);
         }
-        return refreshTeacherAndForward(teacherId,login, msg, new ModelAndView());
+        return refreshTeacherAndForward(teacherId, msg, new ModelAndView());
     }
 
     @PutMapping("/{salaryId}")
     public ModelAndView updateSalary(@PathVariable(SALARY_ID) int salaryId, @PathVariable(TEACHER_ID) int teacherId,
-                                     @RequestParam(LOGIN) String login, @RequestParam(COINS) int coins, @RequestParam(DATE) String date,
+                                     @RequestParam(COINS) int coins, @RequestParam(DATE) String date,
                                      HttpServletRequest req) {
         Salary s = new Salary()
                 .withId(salaryId)
@@ -90,12 +86,12 @@ public class SalaryController extends JspHiddenMethodController {
             log.info("Не удалось изменить зарплату {}", s);
         }
         resetMethod(req);
-        return refreshTeacherAndForward(teacherId,login, msg, new ModelAndView());
+        return refreshTeacherAndForward(teacherId, msg, new ModelAndView());
     }
 
     @DeleteMapping("/{salaryId}")
     public ModelAndView deleteSalary(@PathVariable(SALARY_ID) int salaryId, @PathVariable(TEACHER_ID) int teacherId,
-                                     @RequestParam(LOGIN) String login, HttpServletRequest req) {
+                                     HttpServletRequest req) {
         String msg;
         if (salaryService.deleteSalary(salaryId)) {
             msg = "Зарплата по id " + salaryId + " успешно удалена";
@@ -105,21 +101,18 @@ public class SalaryController extends JspHiddenMethodController {
             log.info("Не удалось удалить зарплату с id = {}", salaryId);
         }
         resetMethod(req);
-        return refreshTeacherAndForward(teacherId,login, msg, new ModelAndView());
+        return refreshTeacherAndForward(teacherId, msg, new ModelAndView());
     }
 
     @PatchMapping
-    public ModelAndView getViewAndAverageSalary(@RequestParam(LOGIN) String login, @PathVariable(TEACHER_ID) int teacherId,
-                                                HttpServletRequest req) {
+    public ModelAndView getViewAndAverageSalary(@PathVariable(TEACHER_ID) int teacherId, HttpServletRequest req) {
         ModelAndView mav = new ModelAndView();
         mav.getModel().put(AVERAGE_SALARY, averageSalaryService.getAverageSalary(teacherId));
         resetMethod(req);
-        return refreshTeacherAndForward(teacherId,login, "Средняя зарплата учителя по итогам всех месяцев работы ", mav);
+        return refreshTeacherAndForward(teacherId, "Средняя зарплата учителя по итогам всех месяцев работы ", mav);
     }
 
-    private ModelAndView refreshTeacherAndForward(int teacherId, String teacherLogin, String msg, ModelAndView mav) {
-        log.info("*-*-*-*- попали в метод refreshTeacherAndForward ");
-//        Teacher t = teacherService.getTeacherIfExistsOrGetSpecialValue(teacherLogin);
+    private ModelAndView refreshTeacherAndForward(int teacherId, String msg, ModelAndView mav) {
         Teacher t = teacherService.getTeacherIfExistsOrGetSpecialValue(teacherId);
         t.setSalaries(salaryService.getAllSalariesByTeacherId(t.getId()));
         log.debug("зарплаты которые имет учитель (добавляем к запросу){}", t.getSalaries());

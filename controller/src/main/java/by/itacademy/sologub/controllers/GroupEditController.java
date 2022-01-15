@@ -28,7 +28,6 @@ import static by.itacademy.sologub.constants.Constant.GROUP_ID;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 import static by.itacademy.sologub.constants.Constant.PERSONS_SET;
 import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
-import static by.itacademy.sologub.constants.Constant.TEACHER_LOGIN;
 
 @Controller
 @RequestMapping("groups/{groupId}")
@@ -44,12 +43,12 @@ public class GroupEditController extends JspHiddenMethodController {
     }
 
     @GetMapping
-    public ModelAndView getView(@RequestParam(TEACHER_LOGIN) String teacherLogin, @PathVariable(GROUP_ID) int groupId) {
-        return refreshGroupAndForward(teacherLogin, groupId, "вы на странице редактирования группы");
+    public ModelAndView getView(@PathVariable(GROUP_ID) int groupId, @RequestParam(TEACHER_ID) int teacherId) {
+        return refreshGroupAndForward(teacherId, groupId, "вы на странице редактирования группы");
     }
 
     @PostMapping("/edit")
-    public ModelAndView doPost(@RequestParam(TEACHER_LOGIN) String teacherLogin, @PathVariable(GROUP_ID) int groupId,
+    public ModelAndView doPost(@PathVariable(GROUP_ID) int groupId, @RequestParam(TEACHER_ID) int teacherId,
                                @RequestParam(TITLE) String newTitle, @RequestParam(DESCRIPTION) String newDescription) {
         Group newGr = groupService.getGroupById(groupId);
         newGr.setTitle(newTitle);
@@ -64,14 +63,14 @@ public class GroupEditController extends JspHiddenMethodController {
             msg = "Новые параметры " + newGr.getTitle() + " и " + newGr.getDescription() + " не изменены";
             log.debug("Параметры группы {} не изменены", newGr);
         }
-        return refreshGroupAndForward(teacherLogin, groupId, msg);
+        return refreshGroupAndForward(teacherId, groupId, msg);
     }
 
     @PutMapping("/teachers/{teacherId}")
-    public ModelAndView appointTeacher(@RequestParam(TEACHER_LOGIN) String teacherLogin, @PathVariable(GROUP_ID) int groupId,
-                                       HttpServletRequest req, @PathVariable(TEACHER_ID) int teacherId) {
+    public ModelAndView appointTeacher(@PathVariable(GROUP_ID) int groupId, @PathVariable(TEACHER_ID) int teacherId,
+                                       HttpServletRequest req) {
         Group group = groupService.getGroupById(groupId);
-        Teacher newT = teacherService.getTeacherIfExistsOrGetSpecialValue(teacherLogin);
+        Teacher newT = teacherService.getTeacherIfExistsOrGetSpecialValue(teacherId);
         group.setTeacher(newT);
 
         String msg;
@@ -83,12 +82,12 @@ public class GroupEditController extends JspHiddenMethodController {
             log.debug("Параметры группы не изменены. Новый учитель {} не назначен руководителем", newT);
         }
         resetMethod(req);
-        return refreshGroupAndForward(teacherLogin, groupId, msg);
+        return refreshGroupAndForward(teacherId, groupId, msg);
     }
 
     @DeleteMapping("/teachers/{teacherId}")
-    public ModelAndView removeTeacher(@RequestParam(TEACHER_LOGIN) String teacherLogin, @PathVariable(GROUP_ID) int groupId,
-                                      HttpServletRequest req, @PathVariable(TEACHER_ID) int teacherId) {
+    public ModelAndView removeTeacher(@PathVariable(GROUP_ID) int groupId, @PathVariable(TEACHER_ID) int teacherId,
+                                      HttpServletRequest req) {
         Group group = groupService.getGroupById(groupId);
         Teacher oldT = group.getTeacher();
         String login;
@@ -108,18 +107,18 @@ public class GroupEditController extends JspHiddenMethodController {
             log.debug("Параметры группы не изменены. Новый учитель {} не назначен руководителем", oldT);
         }
         resetMethod(req);
-        return refreshGroupAndForward(teacherLogin, groupId, msg);
+        return refreshGroupAndForward(teacherId, groupId, msg);
     }
 
-    private ModelAndView refreshGroupAndForward(String login, int id, String msg) {
+    private ModelAndView refreshGroupAndForward(int teacherId, int id, String msg) {
         ModelAndView mav = new ModelAndView(ADMIN_GROUP_EDIT_VIEW);
         Set<Teacher> teacherSet = teacherService.getTeachersSet();
-        Teacher t = teacherService.getTeacherIfExistsOrGetSpecialValue(login);
+        Teacher teacher = teacherService.getTeacherIfExistsOrGetSpecialValue(teacherId);
         Group group = groupService.getGroupById(id);
-        log.debug("Группа {} текущий учитель {} и set всх учителей {}", group, t, teacherSet);
+        log.debug("Группа {} текущий учитель {} и set всх учителей {}", group, teacher, teacherSet);
 
         mav.getModel().put(PERSONS_SET, teacherSet);
-        mav.getModel().put(TEACHER, t);
+        mav.getModel().put(TEACHER, teacher);
         mav.getModel().put(GROUP, group);
         mav.getModel().put(MESSAGE, msg);
         return mav;

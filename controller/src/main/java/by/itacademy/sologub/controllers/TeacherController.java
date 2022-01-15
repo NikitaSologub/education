@@ -102,10 +102,11 @@ public class TeacherController extends JspHiddenMethodController {
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView deleteTeacher(@RequestParam(LOGIN) String login, @PathVariable(ID) int id,
-                                      HttpServletRequest req) {
+    public ModelAndView deleteTeacher(@PathVariable(ID) int id, @RequestParam(LOGIN) String login, HttpServletRequest req) {
+        Teacher teacher = teacherService.getTeacherIfExistsOrGetSpecialValue(id);
+
         String msg;
-        if (teacherService.deleteTeacher(login)) {
+        if (teacherService.deleteTeacher(teacher)) {
             msg = Role.TEACHER + " " + login + " успешно удалён";
             log.info("{} {} успешно удалён", Role.TEACHER, login);
         } else {

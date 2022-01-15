@@ -33,7 +33,6 @@
                     </form>
                     <form action="<c:url value="/groups/${group.id}"/>" method="get">
                         <input type="hidden" name="teacherId" value="${group.teacher.id}">
-                        <input type="hidden" name="teacherLogin" value="${group.teacher.credential.login}">
                         <button type="submit">Редактировать</button>
                     </form>
                     <form action="<c:url value="/groups/${group.id}/subjects"/>" method="get">

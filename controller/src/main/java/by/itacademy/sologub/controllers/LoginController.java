@@ -65,7 +65,7 @@ public class LoginController {
         Admin admin = adminService.getAdminIfExistsOrGetSpecialValue(login, password);
 
         ModelAndView mav = new ModelAndView();
-        if (!checkAdminLogIn(mav, admin, session)) {//todo - убрать (переработать)
+        if (!checkAdminLogIn(mav, admin, session)) {//todo - (переработать) чтобы возвращало неправильно введёе пароль
             if (!checkTeacherLogIn(mav, teacher, session)) {
                 if (!checkStudentLogIn(mav, student, session)) {
                     log.info("логина {} нет в системе в доступе отказано.", login);

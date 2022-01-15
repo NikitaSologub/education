@@ -46,11 +46,11 @@ public class SubjectController extends JspHiddenMethodController {
 
         String msg;
         if (service.putSubjectIfNotExists(s)) {
-            msg = "Subject " + s + " успешно добавлен";
-            log.info("Subject {} успешно добавлена", s);
+            msg = "Subject " + title + " успешно добавлен";
+            log.info("Subject {} успешно добавлена", title);
         } else {
-            msg = "Не удалось добавить Subject " + s;
-            log.info("Не удалось добавить Subject {}", s);
+            msg = "Не удалось добавить Subject " + title;
+            log.info("Не удалось добавить Subject {}", title);
         }
         return refreshModelAndView(msg);
     }
@@ -63,11 +63,11 @@ public class SubjectController extends JspHiddenMethodController {
 
         String msg;
         if (service.changeSubjectsParametersIfExists(s)) {
-            msg = "Subject " + s + " успешно изменён";
-            log.info("Subject {} успешно изменён", s);
+            msg = "Subject " + title + " успешно изменён";
+            log.info("Subject {} успешно изменён", title);
         } else {
-            msg = "Не удалось изменить Subject " + s;
-            log.info("Не удалось изменить Subject {}", s);
+            msg = "Не удалось изменить Subject " + title;
+            log.info("Не удалось изменить Subject {}", title);
         }
         resetMethod(req);
         return refreshModelAndView(msg);
@@ -81,11 +81,11 @@ public class SubjectController extends JspHiddenMethodController {
 
         String msg;
         if (service.deleteSubject(s)) {
-            msg = "Subject по id " + s.getId() + " успешно удалён";
-            log.info("Subject по id={} успешно удалён", s.getId());
+            msg = "Subject по id " + id + " успешно удалён";
+            log.info("Subject по id={} успешно удалён", id);
         } else {
-            msg = "Не удалось удалить Subject с id = " + s.getId();
-            log.info("Не удалось удалить Subject с id = {}", s.getId());
+            msg = "Не удалось удалить Subject с id = " + id;
+            log.info("Не удалось удалить Subject с id = {}", id);
         }
         resetMethod(req);
         return refreshModelAndView(msg);
