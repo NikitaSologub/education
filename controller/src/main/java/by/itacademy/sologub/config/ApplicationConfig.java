@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -22,6 +23,7 @@ import java.beans.PropertyVetoException;
 @PropertySource("classpath:db_config.properties")
 @EnableWebMvc
 @Configuration
+@EnableAspectJAutoProxy
 public class ApplicationConfig implements WebMvcConfigurer {
     private static final String VIEW_PREFIX = "/view/";
     private static final String VIEW_POSTFIX = ".jsp";
