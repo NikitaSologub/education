@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
@@ -26,7 +25,7 @@ import static by.itacademy.sologub.constants.Constant.SUBJECTS_SET;
 @Controller
 @RequestMapping("subjects")
 @Slf4j
-public class SubjectController extends JspHiddenMethodController {
+public class SubjectController {
     private final SubjectService service;
 
     @Autowired
@@ -56,7 +55,7 @@ public class SubjectController extends JspHiddenMethodController {
     }
 
     @PutMapping("/{id}")
-    public ModelAndView updateSubject(@PathVariable(ID) int id, @RequestParam(TITLE) String title, HttpServletRequest req) {
+    public ModelAndView updateSubject(@PathVariable(ID) int id, @RequestParam(TITLE) String title) {
         Subject s = new Subject()
                 .withId(id)
                 .withTitle(title);
@@ -69,12 +68,11 @@ public class SubjectController extends JspHiddenMethodController {
             msg = "Не удалось изменить Subject " + title;
             log.info("Не удалось изменить Subject {}", title);
         }
-        resetMethod(req);
         return refreshModelAndView(msg);
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView deleteSubject(@PathVariable(ID) int id, @RequestParam(TITLE) String title, HttpServletRequest req) {
+    public ModelAndView deleteSubject(@PathVariable(ID) int id, @RequestParam(TITLE) String title) {
         Subject s = new Subject()
                 .withId(id)
                 .withTitle(title);
@@ -87,7 +85,6 @@ public class SubjectController extends JspHiddenMethodController {
             msg = "Не удалось удалить Subject с id = " + id;
             log.info("Не удалось удалить Subject с id = {}", id);
         }
-        resetMethod(req);
         return refreshModelAndView(msg);
     }
 

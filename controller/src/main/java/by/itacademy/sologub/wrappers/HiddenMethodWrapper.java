@@ -1,4 +1,4 @@
-package by.itacademy.sologub.filters.wrappers;
+package by.itacademy.sologub.wrappers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;

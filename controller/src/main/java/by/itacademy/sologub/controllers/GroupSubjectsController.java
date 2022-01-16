@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +28,7 @@ import static by.itacademy.sologub.constants.Constant.SUBJECT_ID;
 @Controller
 @RequestMapping("groups/{groupId}/subjects")
 @Slf4j
-public class GroupSubjectsController extends JspHiddenMethodController {
+public class GroupSubjectsController {
     private final GroupService groupService;
     private final SubjectService subjectService;
 
@@ -61,8 +60,7 @@ public class GroupSubjectsController extends JspHiddenMethodController {
     }
 
     @DeleteMapping("/{subjectId}")
-    public ModelAndView excludeSubjectFromGroupByIds(@PathVariable(GROUP_ID) int groupId, @PathVariable(SUBJECT_ID) int subjectId,
-                                                     HttpServletRequest req) {
+    public ModelAndView excludeSubjectFromGroupByIds(@PathVariable(GROUP_ID) int groupId, @PathVariable(SUBJECT_ID) int subjectId) {
         Group group = getGroupByIdWithSubjects(groupId);
         Subject oldS = subjectService.getSubjectIfExistsOrGetSpecialValue(subjectId);
 
@@ -74,7 +72,6 @@ public class GroupSubjectsController extends JspHiddenMethodController {
             msg = "Не удалось удалить предмет " + oldS.getTitle() + " из группы " + group.getTitle();
             log.debug("Не удалось удалить предмет {} из группы {}", oldS.getTitle(), group.getTitle());
         }
-        resetMethod(req);
         return refreshModelAndView(groupId, msg);
     }
 

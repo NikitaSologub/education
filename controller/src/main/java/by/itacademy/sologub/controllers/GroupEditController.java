@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.DESCRIPTION;
@@ -32,7 +31,7 @@ import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
 @Controller
 @RequestMapping("groups/{groupId}")
 @Slf4j
-public class GroupEditController extends JspHiddenMethodController {
+public class GroupEditController {
     private final TeacherService teacherService;
     private final GroupService groupService;
 
@@ -67,8 +66,7 @@ public class GroupEditController extends JspHiddenMethodController {
     }
 
     @PutMapping("/teachers/{teacherId}")
-    public ModelAndView appointTeacher(@PathVariable(GROUP_ID) int groupId, @PathVariable(TEACHER_ID) int teacherId,
-                                       HttpServletRequest req) {
+    public ModelAndView appointTeacher(@PathVariable(GROUP_ID) int groupId, @PathVariable(TEACHER_ID) int teacherId) {
         Group group = groupService.getGroupById(groupId);
         Teacher newT = teacherService.getTeacherIfExistsOrGetSpecialValue(teacherId);
         group.setTeacher(newT);
@@ -81,13 +79,11 @@ public class GroupEditController extends JspHiddenMethodController {
             msg = "Не получилось назначить " + newT.getCredential().getLogin() + "новым руководителем";
             log.debug("Параметры группы не изменены. Новый учитель {} не назначен руководителем", newT);
         }
-        resetMethod(req);
         return refreshGroupAndForward(teacherId, groupId, msg);
     }
 
     @DeleteMapping("/teachers/{teacherId}")
-    public ModelAndView removeTeacher(@PathVariable(GROUP_ID) int groupId, @PathVariable(TEACHER_ID) int teacherId,
-                                      HttpServletRequest req) {
+    public ModelAndView removeTeacher(@PathVariable(GROUP_ID) int groupId, @PathVariable(TEACHER_ID) int teacherId) {
         Group group = groupService.getGroupById(groupId);
         Teacher oldT = group.getTeacher();
         String login;
@@ -106,7 +102,6 @@ public class GroupEditController extends JspHiddenMethodController {
             msg = "Не получилось снять " + login + " с поста руководителя группы";
             log.debug("Параметры группы не изменены. Новый учитель {} не назначен руководителем", oldT);
         }
-        resetMethod(req);
         return refreshGroupAndForward(teacherId, groupId, msg);
     }
 

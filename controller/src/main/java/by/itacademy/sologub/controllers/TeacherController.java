@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -35,7 +34,7 @@ import static by.itacademy.sologub.constants.Constant.PERSONS_SET;
 @Controller
 @RequestMapping("teachers")
 @Slf4j
-public class TeacherController extends JspHiddenMethodController {
+public class TeacherController {
     private final TeacherService teacherService;
 
     @Autowired
@@ -76,8 +75,7 @@ public class TeacherController extends JspHiddenMethodController {
     public ModelAndView updateTeacher(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
                                       @PathVariable(ID) int id, @RequestParam(CREDENTIAL_ID) int credentialId,
                                       @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
-                                      @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth,
-                                      HttpServletRequest req) {
+                                      @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth) {
         Teacher teacher = new Teacher()
                 .withId(id)
                 .withCredential(new Credential()
@@ -97,12 +95,11 @@ public class TeacherController extends JspHiddenMethodController {
             msg = "Не удалось изменить " + Role.TEACHER + " " + login;
             log.info("Не удалось изменить {} {}", Role.TEACHER, login);
         }
-        resetMethod(req);
         return refreshAndForward(msg);
     }
 
     @DeleteMapping("/{id}")
-    public ModelAndView deleteTeacher(@PathVariable(ID) int id, @RequestParam(LOGIN) String login, HttpServletRequest req) {
+    public ModelAndView deleteTeacher(@PathVariable(ID) int id, @RequestParam(LOGIN) String login) {
         Teacher teacher = teacherService.getTeacherIfExistsOrGetSpecialValue(id);
 
         String msg;
@@ -113,7 +110,6 @@ public class TeacherController extends JspHiddenMethodController {
             msg = "Не удалось удалить " + Role.TEACHER + " " + login;
             log.info("Не удалось удалить {} {}", Role.TEACHER, login);
         }
-        resetMethod(req);
         return refreshAndForward(msg);
     }
 

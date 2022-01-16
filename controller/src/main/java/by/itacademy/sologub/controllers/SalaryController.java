@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 
 import static by.itacademy.sologub.constants.Attributes.COINS;
@@ -33,7 +32,7 @@ import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
 @Controller
 @RequestMapping("teachers/{teacherId}/salaries")
 @Slf4j
-public class SalaryController extends JspHiddenMethodController {
+public class SalaryController {
     private final TeacherService teacherService;
     private final SalaryService salaryService;
     private final AverageSalaryService averageSalaryService;
@@ -47,7 +46,7 @@ public class SalaryController extends JspHiddenMethodController {
 
     @GetMapping
     public ModelAndView getView(@PathVariable(TEACHER_ID) int teacherId) {
-        return refreshTeacherAndForward(teacherId, "Вы на странице зарплат пользователя ", new ModelAndView());
+        return refreshTeacherAndForward(teacherId, "Вы на странице зарплат пользователя ");
     }
 
     @PostMapping
@@ -65,13 +64,12 @@ public class SalaryController extends JspHiddenMethodController {
             msg = "Не удалось добавить Зарплату " + salary;
             log.info("Не удалось добавить Зарплату {}", salary);
         }
-        return refreshTeacherAndForward(teacherId, msg, new ModelAndView());
+        return refreshTeacherAndForward(teacherId, msg);
     }
 
     @PutMapping("/{salaryId}")
     public ModelAndView updateSalary(@PathVariable(SALARY_ID) int salaryId, @PathVariable(TEACHER_ID) int teacherId,
-                                     @RequestParam(COINS) int coins, @RequestParam(DATE) String date,
-                                     HttpServletRequest req) {
+                                     @RequestParam(COINS) int coins, @RequestParam(DATE) String date) {
         Salary s = new Salary()
                 .withId(salaryId)
                 .withCoins(coins)
@@ -85,13 +83,11 @@ public class SalaryController extends JspHiddenMethodController {
             msg = "Не удалось изменить зарплату " + s;
             log.info("Не удалось изменить зарплату {}", s);
         }
-        resetMethod(req);
-        return refreshTeacherAndForward(teacherId, msg, new ModelAndView());
+        return refreshTeacherAndForward(teacherId, msg);
     }
 
     @DeleteMapping("/{salaryId}")
-    public ModelAndView deleteSalary(@PathVariable(SALARY_ID) int salaryId, @PathVariable(TEACHER_ID) int teacherId,
-                                     HttpServletRequest req) {
+    public ModelAndView deleteSalary(@PathVariable(SALARY_ID) int salaryId, @PathVariable(TEACHER_ID) int teacherId) {
         String msg;
         if (salaryService.deleteSalary(salaryId)) {
             msg = "Зарплата по id " + salaryId + " успешно удалена";
@@ -100,19 +96,18 @@ public class SalaryController extends JspHiddenMethodController {
             msg = "Не удалось удалить зарплату с id = " + salaryId;
             log.info("Не удалось удалить зарплату с id = {}", salaryId);
         }
-        resetMethod(req);
-        return refreshTeacherAndForward(teacherId, msg, new ModelAndView());
+        return refreshTeacherAndForward(teacherId, msg);
     }
 
     @PatchMapping
-    public ModelAndView getViewAndAverageSalary(@PathVariable(TEACHER_ID) int teacherId, HttpServletRequest req) {
-        ModelAndView mav = new ModelAndView();
+    public ModelAndView getViewAndAverageSalary(@PathVariable(TEACHER_ID) int teacherId) {
+        ModelAndView mav = refreshTeacherAndForward(teacherId, "Средняя зарплата учителя по итогам всех месяцев работы ");
         mav.getModel().put(AVERAGE_SALARY, averageSalaryService.getAverageSalary(teacherId));
-        resetMethod(req);
-        return refreshTeacherAndForward(teacherId, "Средняя зарплата учителя по итогам всех месяцев работы ", mav);
+        return mav;
     }
 
-    private ModelAndView refreshTeacherAndForward(int teacherId, String msg, ModelAndView mav) {
+    private ModelAndView refreshTeacherAndForward(int teacherId, String msg) {
+        ModelAndView mav = new ModelAndView(ADMIN_SALARIES_VIEW);
         Teacher t = teacherService.getTeacherIfExistsOrGetSpecialValue(teacherId);
         t.setSalaries(salaryService.getAllSalariesByTeacherId(t.getId()));
         log.debug("зарплаты которые имет учитель (добавляем к запросу){}", t.getSalaries());

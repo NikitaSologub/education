@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static by.itacademy.sologub.constants.Attributes.DESCRIPTION;
@@ -26,7 +25,7 @@ import static by.itacademy.sologub.constants.Constant.MESSAGE;
 @Controller
 @RequestMapping("groups")
 @Slf4j
-public class GroupController extends JspHiddenMethodController {
+public class GroupController {
     private final GroupService groupService;
 
     @Autowired
@@ -57,7 +56,7 @@ public class GroupController extends JspHiddenMethodController {
     }
 
     @DeleteMapping("/{groupId}")
-    public ModelAndView deleteGroup(@PathVariable(GROUP_ID) int id, HttpServletRequest req) {
+    public ModelAndView deleteGroup(@PathVariable(GROUP_ID) int id) {
         String msg;
         if (groupService.deleteGroupIfExists(id)) {
             msg = "Группа по id " + id + " успешно удалена";
@@ -66,7 +65,6 @@ public class GroupController extends JspHiddenMethodController {
             msg = "Не удалось удалить группу с id = " + id;
             log.info("Не удалось удалить группу с id = {}", id);
         }
-        resetMethod(req);
         return refreshGroupsAndForward(msg);
     }
 

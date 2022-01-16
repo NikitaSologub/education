@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +36,7 @@ import static by.itacademy.sologub.constants.Constant.SUBJECT_ID;
 @Controller
 @RequestMapping("students/{studentId}/marks")
 @Slf4j
-public class MarkController extends JspHiddenMethodController {
+public class MarkController {
     private final MarkService markService;
     private final StudentService studentService;
     private final SubjectService subjectService;
@@ -76,7 +75,7 @@ public class MarkController extends JspHiddenMethodController {
     @PutMapping("/{markId}")
     public ModelAndView updateMark(@PathVariable(MARK_ID) int markId, @PathVariable(STUDENT_ID) int studentId,
                                    @RequestParam(DATE) String date, @RequestParam(SUBJECT_ID) int subjectId,
-                                   @RequestParam(POINT) int point, HttpServletRequest req) {
+                                   @RequestParam(POINT) int point) {
         Mark m = new Mark()
                 .withSubject(subjectService.getSubjectIfExistsOrGetSpecialValue(subjectId))
                 .withId(markId)
@@ -91,13 +90,11 @@ public class MarkController extends JspHiddenMethodController {
             msg = "Не удалось изменить оценку " + m;
             log.debug("Не удалось изменить оценку {}", m);
         }
-        resetMethod(req);
         return refreshModelAndView(studentId, msg);
     }
 
     @DeleteMapping("/{markId}")
-    public ModelAndView deleteMark(@PathVariable(MARK_ID) int markId, @PathVariable(STUDENT_ID) int studentId,
-                                   HttpServletRequest req) {
+    public ModelAndView deleteMark(@PathVariable(MARK_ID) int markId, @PathVariable(STUDENT_ID) int studentId) {
         String msg;
         if (markService.deleteMark(markId)) {
             msg = "Оценка по id " + markId + " успешно удалена";
@@ -106,7 +103,6 @@ public class MarkController extends JspHiddenMethodController {
             msg = "Не удалось удалить оценку с id = " + markId;
             log.debug("Не удалось удалить оценку с id = {}", markId);
         }
-        resetMethod(req);
         return refreshModelAndView(studentId, msg);
     }
 

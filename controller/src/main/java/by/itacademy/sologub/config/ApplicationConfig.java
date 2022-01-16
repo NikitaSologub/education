@@ -1,5 +1,6 @@
 package by.itacademy.sologub.config;
 
+import by.itacademy.sologub.interceptors.HiddenMethodInterceptor;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -42,6 +44,16 @@ public class ApplicationConfig implements WebMvcConfigurer {
                 .addResourceLocations(CSS_LOCATION);
         registry.addResourceHandler(IMG_PATH)
                 .addResourceLocations(IMG_LOCATION);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(loggingInterceptor());
+    }
+
+    @Bean
+    HiddenMethodInterceptor loggingInterceptor() {
+        return new HiddenMethodInterceptor();
     }
 
     @Bean

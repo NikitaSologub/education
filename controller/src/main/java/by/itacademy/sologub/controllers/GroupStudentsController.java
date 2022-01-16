@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +28,7 @@ import static by.itacademy.sologub.constants.Constant.STUDENT_ID;
 @Controller
 @RequestMapping("/groups/{groupId}/students")
 @Slf4j
-public class GroupStudentsController extends JspHiddenMethodController {
+public class GroupStudentsController {
     private final GroupService groupService;
     private final StudentService studentService;
 
@@ -61,8 +60,7 @@ public class GroupStudentsController extends JspHiddenMethodController {
     }
 
     @DeleteMapping("/{studentId}")
-    public ModelAndView excludeStudentFromGroupByIds(@PathVariable(GROUP_ID) int groupId, HttpServletRequest req,
-                                                     @PathVariable(STUDENT_ID) int studentId) {
+    public ModelAndView excludeStudentFromGroupByIds(@PathVariable(GROUP_ID) int groupId, @PathVariable(STUDENT_ID) int studentId) {
         Group group = getGroupByIdWithStudents(groupId);
         Student oldS = studentService.getStudentIfExistsOrGetSpecialValue(studentId);
 
@@ -74,7 +72,6 @@ public class GroupStudentsController extends JspHiddenMethodController {
             msg = "Не удалось удалить ученика " + oldS.getLastname() + " из группы " + group.getTitle();
             log.debug("Не удалось удалить ученика {} из группы {}", oldS.getLastname(), group.getTitle());
         }
-        resetMethod(req);
         return refreshViewAndForward(groupId, msg);
     }
 
