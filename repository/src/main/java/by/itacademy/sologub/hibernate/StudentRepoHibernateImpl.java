@@ -1,5 +1,9 @@
-package by.itacademy.sologub;
+package by.itacademy.sologub.hibernate;
 
+import by.itacademy.sologub.Group;
+import by.itacademy.sologub.Mark;
+import by.itacademy.sologub.Student;
+import by.itacademy.sologub.StudentRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

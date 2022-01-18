@@ -1,5 +1,7 @@
-package by.itacademy.sologub;
+package by.itacademy.sologub.memory;
 
+import by.itacademy.sologub.Credential;
+import by.itacademy.sologub.User;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;

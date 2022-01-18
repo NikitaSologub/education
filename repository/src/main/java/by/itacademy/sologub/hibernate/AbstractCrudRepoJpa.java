@@ -1,5 +1,6 @@
-package by.itacademy.sologub;
+package by.itacademy.sologub.hibernate;
 
+import by.itacademy.sologub.AbstractEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 

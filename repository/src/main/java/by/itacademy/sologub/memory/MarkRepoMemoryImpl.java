@@ -1,5 +1,9 @@
-package by.itacademy.sologub;
+package by.itacademy.sologub.memory;
 
+import by.itacademy.sologub.Mark;
+import by.itacademy.sologub.MarkRepo;
+import by.itacademy.sologub.Student;
+import by.itacademy.sologub.Subject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

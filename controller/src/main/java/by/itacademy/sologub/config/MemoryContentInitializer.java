@@ -1,20 +1,20 @@
 package by.itacademy.sologub.config;
 
 import by.itacademy.sologub.Admin;
-import by.itacademy.sologub.AdminRepoMemoryImpl;
+import by.itacademy.sologub.memory.AdminRepoMemoryImpl;
 import by.itacademy.sologub.Credential;
 import by.itacademy.sologub.Group;
-import by.itacademy.sologub.GroupRepoMemoryImpl;
+import by.itacademy.sologub.memory.GroupRepoMemoryImpl;
 import by.itacademy.sologub.Mark;
-import by.itacademy.sologub.MarkRepoMemoryImpl;
+import by.itacademy.sologub.memory.MarkRepoMemoryImpl;
 import by.itacademy.sologub.Salary;
-import by.itacademy.sologub.SalaryRepoMemoryImpl;
+import by.itacademy.sologub.memory.SalaryRepoMemoryImpl;
 import by.itacademy.sologub.Student;
-import by.itacademy.sologub.StudentRepoMemoryImpl;
+import by.itacademy.sologub.memory.StudentRepoMemoryImpl;
 import by.itacademy.sologub.Subject;
-import by.itacademy.sologub.SubjectRepoMemoryImpl;
+import by.itacademy.sologub.memory.SubjectRepoMemoryImpl;
 import by.itacademy.sologub.Teacher;
-import by.itacademy.sologub.TeacherRepoMemoryImpl;
+import by.itacademy.sologub.memory.TeacherRepoMemoryImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
