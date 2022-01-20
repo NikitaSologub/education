@@ -18,12 +18,12 @@ import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.ConstantObject.LOGIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_CREDENTIAL_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_CREDENTIAL_BY_LOGIN;
-import static by.itacademy.sologub.constants.SqlQuery.GET_CREDENTIAL_BY_LOGIN;
-import static by.itacademy.sologub.constants.SqlQuery.SET_CREDENTIAL_AND_GET_ID;
-import static by.itacademy.sologub.constants.SqlQuery.SET_CREDENTIAL_IF_NOT_EXISTS;
-import static by.itacademy.sologub.constants.SqlQuery.UPDATE_CREDENTIAL;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.DELETE_CREDENTIAL_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.DELETE_CREDENTIAL_BY_LOGIN;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_CREDENTIAL_BY_LOGIN;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_CREDENTIAL_AND_GET_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_CREDENTIAL_IF_NOT_EXISTS;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_CREDENTIAL;
 
 @Slf4j
 @Repository

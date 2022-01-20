@@ -20,13 +20,13 @@ import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.SUBJECT;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_SUBJECT_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.EXCLUDE_SUBJECT_FROM_ALL_GROUPS_BY_SUBJECT_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECTS_LIST;
-import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECTS_LIST_BY_GROUP_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_SUBJECT_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.SET_SUBJECT;
-import static by.itacademy.sologub.constants.SqlQuery.UPDATE_SUBJECT_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.DELETE_SUBJECT_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.EXCLUDE_SUBJECT_FROM_ALL_GROUPS_BY_SUBJECT_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_SUBJECTS_LIST;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_SUBJECTS_LIST_BY_GROUP_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_SUBJECT_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_SUBJECT;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_SUBJECT_BY_ID;
 
 @Slf4j
 @Repository

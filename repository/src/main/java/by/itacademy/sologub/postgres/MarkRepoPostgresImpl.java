@@ -23,13 +23,13 @@ import static by.itacademy.sologub.constants.Attributes.POINT;
 import static by.itacademy.sologub.constants.Attributes.SUBJECT_ID_DB_FIELD;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_MARK;
-import static by.itacademy.sologub.constants.SqlQuery.GET_MARKS_BY_STUDENT_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_MARKS_BY_STUDENT_ID_AND_SUBJECT_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_MARKS_BY_SUBJECT_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_MARK_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.SET_MARK;
-import static by.itacademy.sologub.constants.SqlQuery.UPDATE_MARK;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.DELETE_MARK;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_MARKS_BY_STUDENT_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_MARKS_BY_STUDENT_ID_AND_SUBJECT_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_MARKS_BY_SUBJECT_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_MARK_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_MARK;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_MARK;
 
 @Slf4j
 @Repository

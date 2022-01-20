@@ -21,12 +21,12 @@ import static by.itacademy.sologub.constants.Attributes.DATE;
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.SALARY;
 import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_SALARY_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_SALARIES_LIST_AFTER_DATE_BY_TEACHER_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_SALARIES_LIST_BY_TEACHER_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_SALARY_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.SET_SALARY_BY_TEACHER_ID;
-import static by.itacademy.sologub.constants.SqlQuery.UPDATE_SALARY_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.DELETE_SALARY_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_SALARIES_LIST_AFTER_DATE_BY_TEACHER_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_SALARIES_LIST_BY_TEACHER_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_SALARY_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_SALARY_BY_TEACHER_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_SALARY_BY_ID;
 
 @Slf4j
 @Repository

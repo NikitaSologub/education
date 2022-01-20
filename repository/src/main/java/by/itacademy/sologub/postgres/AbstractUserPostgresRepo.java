@@ -14,15 +14,15 @@ import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.Attributes.ID_NOT_EXISTS;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_CREDENTIAL_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_USER_BY_CREDENTIAL_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_USERS_LIST;
-import static by.itacademy.sologub.constants.SqlQuery.GET_USER_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_USER_BY_LOGIN;
-import static by.itacademy.sologub.constants.SqlQuery.INSERT_USER;
-import static by.itacademy.sologub.constants.SqlQuery.SET_CREDENTIAL_AND_GET_ID;
-import static by.itacademy.sologub.constants.SqlQuery.UPDATE_CREDENTIAL_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.UPDATE_USER_BY_CREDENTIAL_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.DELETE_CREDENTIAL_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.DELETE_USER_BY_CREDENTIAL_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_USERS_LIST;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_USER_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_USER_BY_LOGIN;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.INSERT_USER;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_CREDENTIAL_AND_GET_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_CREDENTIAL_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_USER_BY_CREDENTIAL_ID;
 
 @Slf4j
 public abstract class AbstractUserPostgresRepo<T extends User> extends AbstractPostgresRepo<T> {

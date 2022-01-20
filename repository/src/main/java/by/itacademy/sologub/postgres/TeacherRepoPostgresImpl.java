@@ -25,8 +25,8 @@ import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_ALL_SALARIES_BY_TEACHER_ID;
-import static by.itacademy.sologub.constants.SqlQuery.EXCLUDE_TEACHER_FROM_ALL_GROUPS_BY_TEACHER_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.DELETE_ALL_SALARIES_BY_TEACHER_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.EXCLUDE_TEACHER_FROM_ALL_GROUPS_BY_TEACHER_ID;
 
 @Slf4j
 @Repository

@@ -26,7 +26,7 @@ import static by.itacademy.sologub.constants.Attributes.PASSWORD;
 import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
-import static by.itacademy.sologub.constants.SqlQuery.GET_STUDENT_SET_BY_GROUP_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_STUDENT_SET_BY_GROUP_ID;
 
 @Slf4j
 @Repository

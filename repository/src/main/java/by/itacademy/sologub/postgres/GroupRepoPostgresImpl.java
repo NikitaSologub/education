@@ -38,19 +38,19 @@ import static by.itacademy.sologub.constants.Attributes.TEACHER;
 import static by.itacademy.sologub.constants.Attributes.TEACHER_ID_DB_FIELD;
 import static by.itacademy.sologub.constants.Attributes.TITLE;
 import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
-import static by.itacademy.sologub.constants.SqlQuery.CHANGE_GROUP_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.DELETE_GROUP_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.EXCLUDE_ALL_STUDENTS_FROM_GROUP_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.EXCLUDE_ALL_SUBJECTS_FROM_GROUP_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.EXCLUDE_STUDENT_FROM_GROUP_BY_IDS;
-import static by.itacademy.sologub.constants.SqlQuery.EXCLUDE_SUBJECT_FROM_GROUP_BY_IDS;
-import static by.itacademy.sologub.constants.SqlQuery.GET_GROUPS_LIST_BY_STUDENT_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_GROUPS_LIST_BY_TEACHER_ID;
-import static by.itacademy.sologub.constants.SqlQuery.GET_GROUPS_LIST_WITH_TEACHERS;
-import static by.itacademy.sologub.constants.SqlQuery.GET_GROUP_BY_ID;
-import static by.itacademy.sologub.constants.SqlQuery.INCLUDE_STUDENT_IN_GROUP_BY_IDS;
-import static by.itacademy.sologub.constants.SqlQuery.INCLUDE_SUBJECT_IN_GROUP_BY_IDS;
-import static by.itacademy.sologub.constants.SqlQuery.SET_GROUP_RETURNING_GROUP_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.CHANGE_GROUP_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.DELETE_GROUP_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.EXCLUDE_ALL_STUDENTS_FROM_GROUP_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.EXCLUDE_ALL_SUBJECTS_FROM_GROUP_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.EXCLUDE_STUDENT_FROM_GROUP_BY_IDS;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.EXCLUDE_SUBJECT_FROM_GROUP_BY_IDS;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_GROUPS_LIST_BY_STUDENT_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_GROUPS_LIST_BY_TEACHER_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_GROUPS_LIST_WITH_TEACHERS;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_GROUP_BY_ID;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.INCLUDE_STUDENT_IN_GROUP_BY_IDS;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.INCLUDE_SUBJECT_IN_GROUP_BY_IDS;
+import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_GROUP_RETURNING_GROUP_ID;
 
 @Slf4j
 @Repository

@@ -1,4 +1,4 @@
-package by.itacademy.sologub.constants;
+package by.itacademy.sologub.postgres.queries;
 
 public final class SqlQuery {
     //credential postgres sql
