@@ -42,12 +42,12 @@ public class GroupEditController {
     }
 
     @GetMapping
-    public ModelAndView getView(@PathVariable(GROUP_ID) int groupId, @RequestParam(TEACHER_ID) int teacherId) {
+    public ModelAndView getView(@PathVariable(GROUP_ID) int groupId, @RequestParam(name = TEACHER_ID,defaultValue = "0") int teacherId) {
         return refreshGroupAndForward(teacherId, groupId, "вы на странице редактирования группы");
     }
 
     @PostMapping("/edit")
-    public ModelAndView doPost(@PathVariable(GROUP_ID) int groupId, @RequestParam(TEACHER_ID) int teacherId,
+    public ModelAndView doPost(@PathVariable(GROUP_ID) int groupId, @RequestParam(name = TEACHER_ID,defaultValue = "0") int teacherId,
                                @RequestParam(TITLE) String newTitle, @RequestParam(DESCRIPTION) String newDescription) {
         Group newGr = groupService.getGroupById(groupId);
         newGr.setTitle(newTitle);
