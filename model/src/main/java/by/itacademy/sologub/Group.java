@@ -27,6 +27,7 @@ import java.util.Set;
 @ToString(callSuper = true)
 @NamedQueries({
         @NamedQuery(name = "getGroupById", query = "select g from Group g where g.id=:id"),
+        @NamedQuery(name = "setNullWhereTeacherId", query = "update Group g set g.teacher=null where g.teacher.id=:id"),
         @NamedQuery(name = "deleteGroupById", query = "delete from Group g where g.id=:id")})
 @Entity
 @Table(name = "group", schema = "public")

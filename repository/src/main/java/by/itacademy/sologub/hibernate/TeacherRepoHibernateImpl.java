@@ -8,6 +8,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -82,16 +85,47 @@ public class TeacherRepoHibernateImpl extends AbstractCrudRepoJpa<Teacher> imple
 
     @Override
     public boolean deleteTeacher(String login) {
+        System.out.println("+-+-" + "1/1");
         Teacher t = getTeacherIfExistsOrGetSpecialValue(login);
         if (TEACHER_NOT_EXISTS == t) {
             log.debug("Не получилось удалить обьект Teacher по {}={}", LOGIN, login);
             return false;
         }
+        System.out.println("+-+-" + "1/2");
         return deleteTeacher(t);
     }
 
     @Override
     public boolean deleteTeacher(Teacher teacher) {
-        return remove(teacher);
+        System.out.println("+-+-" + "1");
+        if (teacher == null || teacher.getId() <= 0) return false;
+        EntityManager manager = getEntityManager();
+        EntityTransaction transaction = manager.getTransaction();
+        boolean result = false;
+        try {
+            transaction.begin();
+            System.out.println("+-+-" + "2");
+            int groupNum = manager.createNamedQuery("setNullWhereTeacherId")
+                    .setParameter(ID, teacher.getId())
+                    .executeUpdate();
+            log.debug("Перед удалением учителя с id={} сняли с должности в {} группах", teacher.getId(), groupNum);
+            System.out.println("+-+-" + "3");
+            manager.remove(teacher);
+            result = !manager.contains(teacher);
+            log.debug("Результат удаления{} = {} ", teacher, result);
+            System.out.println("+-+-" + "4");
+            transaction.commit();
+            System.out.println("+-+-" + "5");
+        } catch (PersistenceException e) {
+            log.error("Не получилось удалить " + teacher + " в БД", e);
+            System.out.println("+-+-" + "6");
+            transaction.rollback();
+        } finally {
+            System.out.println("+-+-" + "7");
+            manager.close();
+        }
+        System.out.println("+-+-" + "8");
+        return result;
+//        return remove(teacher);
     }
 }
