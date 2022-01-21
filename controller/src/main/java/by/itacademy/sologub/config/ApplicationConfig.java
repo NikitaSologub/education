@@ -1,6 +1,6 @@
 package by.itacademy.sologub.config;
 
-import by.itacademy.sologub.interceptors.HiddenMethodInterceptor;
+import by.itacademy.sologub.controllers.interceptors.HiddenMethodInterceptor;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
