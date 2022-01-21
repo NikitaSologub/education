@@ -1,5 +1,7 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.model.Teacher;
+
 import java.util.Set;
 
 public interface TeacherRepo {

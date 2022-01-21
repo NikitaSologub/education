@@ -1,6 +1,6 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.Subject;
+import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.SubjectRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

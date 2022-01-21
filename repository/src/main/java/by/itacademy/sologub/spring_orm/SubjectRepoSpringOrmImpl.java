@@ -1,7 +1,7 @@
 package by.itacademy.sologub.spring_orm;
 
-import by.itacademy.sologub.Group;
-import by.itacademy.sologub.Subject;
+import by.itacademy.sologub.model.Group;
+import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.SubjectRepo;
 import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
 import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;

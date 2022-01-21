@@ -1,7 +1,7 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.Mark;
-import by.itacademy.sologub.Subject;
+import by.itacademy.sologub.model.Mark;
+import by.itacademy.sologub.model.Subject;
 
 import java.util.Set;
 

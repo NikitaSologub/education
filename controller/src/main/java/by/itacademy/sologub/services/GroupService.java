@@ -1,9 +1,9 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.Group;
-import by.itacademy.sologub.Student;
-import by.itacademy.sologub.Subject;
-import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.model.Group;
+import by.itacademy.sologub.model.Student;
+import by.itacademy.sologub.model.Subject;
+import by.itacademy.sologub.model.Teacher;
 
 import java.util.List;
 

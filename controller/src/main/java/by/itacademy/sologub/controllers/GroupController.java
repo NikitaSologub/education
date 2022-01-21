@@ -1,6 +1,6 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.Group;
+import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.services.GroupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

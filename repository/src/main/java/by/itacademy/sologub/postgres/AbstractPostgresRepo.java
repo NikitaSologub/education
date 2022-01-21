@@ -1,6 +1,6 @@
 package by.itacademy.sologub.postgres;
 
-import by.itacademy.sologub.AbstractEntity;
+import by.itacademy.sologub.model.AbstractEntity;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
 

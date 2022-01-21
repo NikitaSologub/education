@@ -1,7 +1,7 @@
 package by.itacademy.sologub.memory;
 
-import by.itacademy.sologub.AbstractEntity;
-import by.itacademy.sologub.Credential;
+import by.itacademy.sologub.model.AbstractEntity;
+import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.CredentialRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

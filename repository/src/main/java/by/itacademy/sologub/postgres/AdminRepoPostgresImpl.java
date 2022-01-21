@@ -1,8 +1,8 @@
 package by.itacademy.sologub.postgres;
 
-import by.itacademy.sologub.Admin;
+import by.itacademy.sologub.model.Admin;
 import by.itacademy.sologub.AdminRepo;
-import by.itacademy.sologub.Credential;
+import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.role.Role;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;

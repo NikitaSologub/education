@@ -1,7 +1,7 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.Salary;
-import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.model.Salary;
+import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.services.AverageSalaryService;
 import by.itacademy.sologub.services.SalaryService;
 import by.itacademy.sologub.services.TeacherService;

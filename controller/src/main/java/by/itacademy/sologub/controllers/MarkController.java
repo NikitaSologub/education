@@ -1,8 +1,8 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.Mark;
-import by.itacademy.sologub.Student;
-import by.itacademy.sologub.Subject;
+import by.itacademy.sologub.model.Mark;
+import by.itacademy.sologub.model.Student;
+import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.services.MarkService;
 import by.itacademy.sologub.services.StudentService;
 import by.itacademy.sologub.services.SubjectService;

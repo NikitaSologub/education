@@ -1,10 +1,10 @@
 package by.itacademy.sologub.hibernate;
 
-import by.itacademy.sologub.Group;
+import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.GroupRepo;
-import by.itacademy.sologub.Student;
-import by.itacademy.sologub.Subject;
-import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.model.Student;
+import by.itacademy.sologub.model.Subject;
+import by.itacademy.sologub.model.Teacher;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

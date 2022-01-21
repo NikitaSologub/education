@@ -1,8 +1,8 @@
 package by.itacademy.sologub.memory;
 
-import by.itacademy.sologub.Salary;
+import by.itacademy.sologub.model.Salary;
 import by.itacademy.sologub.SalaryRepo;
-import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.model.Teacher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

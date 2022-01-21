@@ -1,5 +1,7 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.model.Salary;
+
 import java.time.LocalDate;
 import java.util.Set;
 

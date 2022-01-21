@@ -1,6 +1,6 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.model.Teacher;
 
 import java.util.Set;
 

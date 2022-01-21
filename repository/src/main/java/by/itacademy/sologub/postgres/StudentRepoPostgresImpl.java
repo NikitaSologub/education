@@ -1,7 +1,7 @@
 package by.itacademy.sologub.postgres;
 
-import by.itacademy.sologub.Credential;
-import by.itacademy.sologub.Student;
+import by.itacademy.sologub.model.Credential;
+import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.StudentRepo;
 import by.itacademy.sologub.role.Role;
 import com.mchange.v2.c3p0.ComboPooledDataSource;

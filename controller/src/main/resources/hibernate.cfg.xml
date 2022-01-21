@@ -19,15 +19,15 @@
         <property name="hibernate.c3p0.min_size">2</property>
         <property name="hibernate.c3p0.max_statements">100</property>
 
-        <mapping class="by.itacademy.sologub.Student"/>
-        <mapping class="by.itacademy.sologub.Admin"/>
-        <mapping class="by.itacademy.sologub.Teacher"/>
-        <mapping class="by.itacademy.sologub.Group"/>
-        <mapping class="by.itacademy.sologub.Salary"/>
-        <mapping class="by.itacademy.sologub.Mark"/>
-        <mapping class="by.itacademy.sologub.Subject"/>
+        <mapping class="by.itacademy.sologub.model.Student"/>
+        <mapping class="by.itacademy.sologub.model.Admin"/>
+        <mapping class="by.itacademy.sologub.model.Teacher"/>
+        <mapping class="by.itacademy.sologub.model.Group"/>
+        <mapping class="by.itacademy.sologub.model.Salary"/>
+        <mapping class="by.itacademy.sologub.model.Mark"/>
+        <mapping class="by.itacademy.sologub.model.Subject"/>
 <!--        <mapping class="by.itacademy.sologub.role.Role"/>-->
-        <mapping class="by.itacademy.sologub.Credential"/>
-        <mapping class="by.itacademy.sologub.User"/>
+        <mapping class="by.itacademy.sologub.model.Credential"/>
+        <mapping class="by.itacademy.sologub.model.User"/>
     </session-factory>
 </hibernate-configuration>

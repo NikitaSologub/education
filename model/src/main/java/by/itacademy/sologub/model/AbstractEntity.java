@@ -1,4 +1,4 @@
-package by.itacademy.sologub;
+package by.itacademy.sologub.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

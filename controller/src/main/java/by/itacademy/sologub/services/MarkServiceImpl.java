@@ -1,8 +1,8 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.Mark;
+import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.MarkRepo;
-import by.itacademy.sologub.Subject;
+import by.itacademy.sologub.model.Subject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

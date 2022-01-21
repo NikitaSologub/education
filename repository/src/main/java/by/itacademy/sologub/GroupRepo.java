@@ -1,5 +1,10 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.model.Group;
+import by.itacademy.sologub.model.Student;
+import by.itacademy.sologub.model.Subject;
+import by.itacademy.sologub.model.Teacher;
+
 import java.util.List;
 
 public interface GroupRepo {
@@ -19,7 +24,7 @@ public interface GroupRepo {
 
     boolean removeStudentFromGroup(Group group,Student student);
 
-    boolean addSubjectInGroup(Group group,Subject subject);
+    boolean addSubjectInGroup(Group group, Subject subject);
 
     boolean removeSubjectFromGroup(Group group,Subject subject);
 

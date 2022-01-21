@@ -1,8 +1,8 @@
 package by.itacademy.sologub.rest_controllers;
 
-import by.itacademy.sologub.AbstractEntity;
-import by.itacademy.sologub.Mark;
-import by.itacademy.sologub.Student;
+import by.itacademy.sologub.model.AbstractEntity;
+import by.itacademy.sologub.model.Mark;
+import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.services.MarkService;
 import by.itacademy.sologub.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;

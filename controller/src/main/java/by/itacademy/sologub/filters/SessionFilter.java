@@ -1,9 +1,9 @@
 package by.itacademy.sologub.filters;
 
-import by.itacademy.sologub.Admin;
-import by.itacademy.sologub.Student;
-import by.itacademy.sologub.Teacher;
-import by.itacademy.sologub.User;
+import by.itacademy.sologub.model.Admin;
+import by.itacademy.sologub.model.Student;
+import by.itacademy.sologub.model.Teacher;
+import by.itacademy.sologub.model.User;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.Filter;

@@ -1,6 +1,6 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.Salary;
+import by.itacademy.sologub.model.Salary;
 
 import java.time.LocalDate;
 import java.util.Set;

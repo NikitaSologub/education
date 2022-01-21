@@ -1,7 +1,7 @@
 package by.itacademy.sologub.memory;
 
-import by.itacademy.sologub.Group;
-import by.itacademy.sologub.Student;
+import by.itacademy.sologub.model.Group;
+import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.StudentRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

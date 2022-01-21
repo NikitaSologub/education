@@ -1,5 +1,8 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.model.Mark;
+import by.itacademy.sologub.model.Subject;
+
 import java.util.Set;
 
 public interface MarkRepo {

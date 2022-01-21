@@ -1,7 +1,7 @@
 package by.itacademy.sologub.spring_orm;
 
-import by.itacademy.sologub.Salary;
-import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.model.Salary;
+import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.TeacherRepo;
 import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
 import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;

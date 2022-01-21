@@ -1,7 +1,7 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.Credential;
-import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.model.Credential;
+import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.role.Role;
 import by.itacademy.sologub.services.TeacherService;
 import lombok.extern.slf4j.Slf4j;

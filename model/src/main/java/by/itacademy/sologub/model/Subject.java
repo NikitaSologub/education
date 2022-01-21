@@ -1,4 +1,4 @@
-package by.itacademy.sologub;
+package by.itacademy.sologub.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

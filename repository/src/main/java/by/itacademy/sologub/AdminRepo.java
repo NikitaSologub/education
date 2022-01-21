@@ -1,5 +1,7 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.model.Admin;
+
 import java.util.Set;
 
 public interface AdminRepo {

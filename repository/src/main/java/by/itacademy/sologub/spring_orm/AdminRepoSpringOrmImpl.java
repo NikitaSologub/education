@@ -1,6 +1,6 @@
 package by.itacademy.sologub.spring_orm;
 
-import by.itacademy.sologub.Admin;
+import by.itacademy.sologub.model.Admin;
 import by.itacademy.sologub.AdminRepo;
 import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
 import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;

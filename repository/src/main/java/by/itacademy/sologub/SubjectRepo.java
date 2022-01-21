@@ -1,5 +1,7 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.model.Subject;
+
 import java.util.List;
 import java.util.Set;
 

@@ -1,12 +1,12 @@
 package by.itacademy.sologub.postgres;
 
-import by.itacademy.sologub.AbstractEntity;
-import by.itacademy.sologub.Credential;
-import by.itacademy.sologub.Group;
+import by.itacademy.sologub.model.AbstractEntity;
+import by.itacademy.sologub.model.Credential;
+import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.GroupRepo;
-import by.itacademy.sologub.Student;
-import by.itacademy.sologub.Subject;
-import by.itacademy.sologub.Teacher;
+import by.itacademy.sologub.model.Student;
+import by.itacademy.sologub.model.Subject;
+import by.itacademy.sologub.model.Teacher;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

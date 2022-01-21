@@ -1,9 +1,9 @@
 package by.itacademy.sologub.spring_orm;
 
-import by.itacademy.sologub.Mark;
+import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.MarkRepo;
-import by.itacademy.sologub.Student;
-import by.itacademy.sologub.Subject;
+import by.itacademy.sologub.model.Student;
+import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
 import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;
 import lombok.extern.slf4j.Slf4j;

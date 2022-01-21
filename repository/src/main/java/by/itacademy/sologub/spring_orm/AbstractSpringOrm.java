@@ -1,6 +1,6 @@
 package by.itacademy.sologub.spring_orm;
 
-import by.itacademy.sologub.AbstractEntity;
+import by.itacademy.sologub.model.AbstractEntity;
 import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

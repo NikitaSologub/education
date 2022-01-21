@@ -1,9 +1,9 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.Admin;
-import by.itacademy.sologub.Student;
-import by.itacademy.sologub.Teacher;
-import by.itacademy.sologub.User;
+import by.itacademy.sologub.model.Admin;
+import by.itacademy.sologub.model.Student;
+import by.itacademy.sologub.model.Teacher;
+import by.itacademy.sologub.model.User;
 import by.itacademy.sologub.services.AdminService;
 import by.itacademy.sologub.services.StudentService;
 import by.itacademy.sologub.services.TeacherService;

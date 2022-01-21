@@ -1,6 +1,6 @@
 package by.itacademy.sologub.spring_orm;
 
-import by.itacademy.sologub.Credential;
+import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
 import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;

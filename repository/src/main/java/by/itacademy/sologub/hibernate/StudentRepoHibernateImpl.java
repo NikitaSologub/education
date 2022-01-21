@@ -1,8 +1,8 @@
 package by.itacademy.sologub.hibernate;
 
-import by.itacademy.sologub.Group;
-import by.itacademy.sologub.Mark;
-import by.itacademy.sologub.Student;
+import by.itacademy.sologub.model.Group;
+import by.itacademy.sologub.model.Mark;
+import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.StudentRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;

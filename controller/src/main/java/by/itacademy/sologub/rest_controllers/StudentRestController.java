@@ -1,7 +1,7 @@
 package by.itacademy.sologub.rest_controllers;
 
-import by.itacademy.sologub.AbstractEntity;
-import by.itacademy.sologub.Student;
+import by.itacademy.sologub.model.AbstractEntity;
+import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

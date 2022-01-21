@@ -1,4 +1,4 @@
-package by.itacademy.sologub;
+package by.itacademy.sologub.model;
 
 import by.itacademy.sologub.serializers.LocalDateDeserializer;
 import by.itacademy.sologub.serializers.LocalDateSerializer;
