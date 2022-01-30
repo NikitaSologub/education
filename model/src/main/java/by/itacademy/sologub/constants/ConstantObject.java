@@ -1,16 +1,30 @@
 package by.itacademy.sologub.constants;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.model.Admin;
+import by.itacademy.sologub.model.Credential;
+import by.itacademy.sologub.model.Group;
+import by.itacademy.sologub.model.Mark;
+import by.itacademy.sologub.model.Salary;
+import by.itacademy.sologub.model.Student;
+import by.itacademy.sologub.model.Subject;
+import by.itacademy.sologub.model.Teacher;
 
 import java.time.LocalDate;
-import java.time.Month;
 
 public final class ConstantObject {
-    public static final Credential ADMIN_CREDENTIAL;
-    public static final Admin ADMIN_USER;
+    private static final String NO_TITLE = "NO_TITLE";
+    private static final String NO_DESCRIPTION = "NO_DESCRIPTION";
+    private static final String LOGIN_IS_NOT_EXISTS = "LOGIN_IS_NOT_EXISTS";
+    private static final String ID_IS_NOT_EXISTS = "ID_IS_NOT_EXISTS";
+    private static final String PASSWORD_IS_WRONG = "PASSWORD_IS_WRONG";
+    private static final String SUBJECT_IS_NOT_EXISTS = "SUBJECT_IS_NOT_EXISTS";
 
+    public static final Credential CREDENTIAL_NOT_EXISTS;
     public static final Credential LOGIN_NOT_EXISTS;
     public static final Credential PASSWORD_WRONG;
+
+    public static final Admin ADMIN_NOT_EXISTS;
+    public static final Admin ADMIN_PASSWORD_WRONG;
 
     public static final Teacher TEACHER_NOT_EXISTS;
     public static final Teacher TEACHER_PASSWORD_WRONG;
@@ -20,30 +34,24 @@ public final class ConstantObject {
 
     public static final Salary SALARY_NOT_EXISTS;
     public static final Mark MARK_NOT_EXISTS;
+    public static final Subject SUBJECT_NOT_EXISTS;
+    public static final Group GROUP_NOT_EXISTS;
 
     static {
-        ADMIN_CREDENTIAL = new Credential();
-        ADMIN_CREDENTIAL.setId(0);
-        ADMIN_CREDENTIAL.setLogin("ADMIN");
-        ADMIN_CREDENTIAL.setPassword("234");
+        CREDENTIAL_NOT_EXISTS = new Credential();
+        CREDENTIAL_NOT_EXISTS.setId(-1);
+        CREDENTIAL_NOT_EXISTS.setLogin(ID_IS_NOT_EXISTS);
+        CREDENTIAL_NOT_EXISTS.setPassword(ID_IS_NOT_EXISTS);
 
         LOGIN_NOT_EXISTS = new Credential();
         LOGIN_NOT_EXISTS.setId(-1);
-        LOGIN_NOT_EXISTS.setLogin("LOGIN_NOT_EXISTS");
-        LOGIN_NOT_EXISTS.setPassword("LOGIN_NOT_EXISTS");
+        LOGIN_NOT_EXISTS.setLogin(LOGIN_IS_NOT_EXISTS);
+        LOGIN_NOT_EXISTS.setPassword(LOGIN_IS_NOT_EXISTS);
 
         PASSWORD_WRONG = new Credential();
         PASSWORD_WRONG.setId(-2);
-        PASSWORD_WRONG.setLogin("PASSWORD_WRONG");
-        PASSWORD_WRONG.setPassword("PASSWORD_WRONG");
-
-        ADMIN_USER = new Admin();
-        ADMIN_USER.setId(ADMIN_CREDENTIAL.getId());
-        ADMIN_USER.setCredential(ADMIN_CREDENTIAL);
-        ADMIN_USER.setFirstname("Никита");
-        ADMIN_USER.setLastname("Сологуб");
-        ADMIN_USER.setPatronymic("Олегович");
-        ADMIN_USER.setDateOfBirth(LocalDate.of(1992, Month.APRIL, 23));
+        PASSWORD_WRONG.setLogin(PASSWORD_IS_WRONG);
+        PASSWORD_WRONG.setPassword(PASSWORD_IS_WRONG);
 
         TEACHER_NOT_EXISTS = new Teacher();
         TEACHER_NOT_EXISTS.setId(-4);
@@ -61,15 +69,31 @@ public final class ConstantObject {
         STUDENT_PASSWORD_WRONG.setId(-7);
         STUDENT_PASSWORD_WRONG.setCredential(PASSWORD_WRONG);
 
+        ADMIN_NOT_EXISTS = new Admin();
+        ADMIN_NOT_EXISTS.setId(-6);
+        ADMIN_NOT_EXISTS.setCredential(LOGIN_NOT_EXISTS);
+
+        ADMIN_PASSWORD_WRONG = new Admin();
+        ADMIN_PASSWORD_WRONG.setId(-7);
+        ADMIN_PASSWORD_WRONG.setCredential(PASSWORD_WRONG);
+
         SALARY_NOT_EXISTS = new Salary();
         SALARY_NOT_EXISTS.setId(-1);
         SALARY_NOT_EXISTS.setCoins(0);
         SALARY_NOT_EXISTS.setDate(LocalDate.now());
-        SALARY_NOT_EXISTS.setTeacherId(-100);
 
         MARK_NOT_EXISTS = new Mark();
         MARK_NOT_EXISTS.setId(-1);
         MARK_NOT_EXISTS.setPoint(-100);
-        MARK_NOT_EXISTS.setStudentId(-100);
+
+        SUBJECT_NOT_EXISTS = new Subject();
+        SUBJECT_NOT_EXISTS.setId(-1);
+        SUBJECT_NOT_EXISTS.setTitle(SUBJECT_IS_NOT_EXISTS);
+
+        GROUP_NOT_EXISTS = new Group();
+        GROUP_NOT_EXISTS.setId(-1);
+        GROUP_NOT_EXISTS.setTeacher(TEACHER_NOT_EXISTS);
+        GROUP_NOT_EXISTS.setTitle(NO_TITLE);
+        GROUP_NOT_EXISTS.setDescription(NO_DESCRIPTION);
     }
 }

@@ -1,102 +1,124 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.Credential;
-import by.itacademy.sologub.Teacher;
-import by.itacademy.sologub.TeacherRepo;
+import by.itacademy.sologub.model.Credential;
+import by.itacademy.sologub.model.Teacher;
+import by.itacademy.sologub.role.Role;
+import by.itacademy.sologub.services.TeacherService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Set;
 
-import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.Attributes.FIRSTNAME;
+import static by.itacademy.sologub.constants.Attributes.ID;
+import static by.itacademy.sologub.constants.Attributes.LASTNAME;
+import static by.itacademy.sologub.constants.Attributes.LOGIN;
+import static by.itacademy.sologub.constants.Attributes.PASSWORD;
+import static by.itacademy.sologub.constants.Attributes.PATRONYMIC;
+import static by.itacademy.sologub.constants.Constant.ADMIN_TEACHERS_VIEW;
+import static by.itacademy.sologub.constants.Constant.CREDENTIAL_ID;
+import static by.itacademy.sologub.constants.Constant.DATE_OF_BIRTH;
+import static by.itacademy.sologub.constants.Constant.MESSAGE;
+import static by.itacademy.sologub.constants.Constant.PERSONS_SET;
 
-@WebServlet(TEACHER_CONTROLLER)
+@Controller
+@RequestMapping("teachers")
 @Slf4j
-public class TeacherController extends BaseController {
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        Teacher teacher = extractTeacherFromForm(req);
-        boolean result = repo.putTeacherIfNotExists(teacher);
+public class TeacherController {
+    private final TeacherService teacherService;
 
-        String msg;
-        if (result) {
-            msg = "Учитель " + req.getParameter(LOGIN) + " успешно добавлен";
-            log.info("Учитель {} успешно добавлен", req.getParameter(LOGIN));
-        } else {
-            msg = "Не удалось добавить Учителя " + req.getParameter(LOGIN);
-            log.info("Не удалось добавить учителя {}", req.getParameter(LOGIN));
-        }
-        forward(ADMIN_TEACHERS_PAGE, msg, req, resp);
+    @Autowired
+    public TeacherController(TeacherService teacherService) {
+        this.teacherService = teacherService;
     }
 
-    Teacher extractTeacherFromForm(HttpServletRequest req) {
+    @GetMapping
+    public ModelAndView getView() {
+        return refreshAndForward("Вы на странице " + ADMIN_TEACHERS_VIEW);
+    }
+
+    @PostMapping
+    public ModelAndView createTeacher(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
+                                      @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
+                                      @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth) {
         Teacher teacher = new Teacher()
                 .withCredential(new Credential()
-                        .withLogin(req.getParameter(LOGIN))
-                        .withPassword(req.getParameter(PASSWORD)))
-                .withFirstname(req.getParameter(FIRSTNAME))
-                .withLastname(req.getParameter(LASTNAME))
-                .withPatronymic(req.getParameter(PATRONYMIC))
-                .withDateOfBirth(LocalDate.parse(req.getParameter(DATE_OF_BIRTH)));
+                        .withLogin(login)
+                        .withPassword(password))
+                .withFirstname(firstname)
+                .withLastname(lastname)
+                .withPatronymic(patronymic)
+                .withDateOfBirth(LocalDate.parse(dateOfBirth));
 
-        log.debug("Из запроса извлечён обьект учителя (без id и credential_id) {}", teacher);
-        return teacher;
-    }
-
-    Teacher extractTeacherFromFormWithIds(HttpServletRequest req){
-        Teacher teacher = extractTeacherFromForm(req);
-        teacher.setId(Integer.parseInt(req.getParameter(ID)));
-        teacher.getCredential().setId(Integer.parseInt(req.getParameter(CREDENTIAL_ID)));
-        log.debug("Из запроса извлечён обьект учителя {}", teacher);
-        return teacher;
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        Teacher newTeacherValues = extractTeacherFromFormWithIds(req);
-        boolean result = repo.changeTeachersParametersIfExists(newTeacherValues);
         String msg;
-        if (result) {
-            msg = "Учитель " + req.getParameter(LOGIN) + " успешно изменён";
-            log.info("Учитель {} успешно изменён", req.getParameter(LOGIN));
+        if (teacherService.putTeacherIfNotExists(teacher)) {
+            msg = Role.TEACHER + " " + login + " успешно добавлен";
+            log.info("{} {} успешно добавлен", Role.TEACHER, login);
         } else {
-            msg = "Не удалось изменить учителя " + req.getParameter(LOGIN);
-            log.info("Не удалось изменить учителя {}", req.getParameter(LOGIN));
+            msg = "Не удалось добавить " + Role.TEACHER + " " + login;
+            log.info("Не удалось добавить {} {}", Role.TEACHER, login);
         }
-        forward(ADMIN_TEACHERS_PAGE, msg, req, resp);
+        return refreshAndForward(msg);
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        TeacherRepo repo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
-        boolean result = repo.deleteTeacher(req.getParameter(LOGIN));
+    @PutMapping("/{id}")
+    public ModelAndView updateTeacher(@RequestParam(LOGIN) String login, @RequestParam(PASSWORD) String password,
+                                      @PathVariable(ID) int id, @RequestParam(CREDENTIAL_ID) int credentialId,
+                                      @RequestParam(FIRSTNAME) String firstname, @RequestParam(LASTNAME) String lastname,
+                                      @RequestParam(PATRONYMIC) String patronymic, @RequestParam(DATE_OF_BIRTH) String dateOfBirth) {
+        Teacher teacher = new Teacher()
+                .withId(id)
+                .withCredential(new Credential()
+                        .withId(credentialId)
+                        .withLogin(login)
+                        .withPassword(password))
+                .withFirstname(firstname)
+                .withLastname(lastname)
+                .withPatronymic(patronymic)
+                .withDateOfBirth(LocalDate.parse(dateOfBirth));
+
         String msg;
-        if (result) {
-            msg = "Учитель " + req.getParameter(LOGIN) + " успешно удалён";
-            log.info("Учитель {} успешно удалён", req.getParameter(LOGIN));
+        if (teacherService.changeTeachersParametersIfExists(teacher)) {
+            msg = Role.TEACHER + " " + login + " успешно изменён";
+            log.info("{} {} успешно изменён", Role.TEACHER, login);
         } else {
-            msg = "Не удалось удалить чителя " + req.getParameter(LOGIN);
-            log.info("Не удалось удалить учителя {}", req.getParameter(LOGIN));
+            msg = "Не удалось изменить " + Role.TEACHER + " " + login;
+            log.info("Не удалось изменить {} {}", Role.TEACHER, login);
         }
-        forward(ADMIN_TEACHERS_PAGE, msg, req, resp);
+        return refreshAndForward(msg);
     }
 
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (DELETE.equals(req.getParameter(ACTION))) {
-            doDelete(req, resp);
-            return;
-        } else if (PUT.equals(req.getParameter(ACTION))) {
-            doPut(req, resp);
-            return;
+    @DeleteMapping("/{id}")
+    public ModelAndView deleteTeacher(@PathVariable(ID) int id, @RequestParam(LOGIN) String login) {
+        Teacher teacher = teacherService.getTeacherIfExistsOrGetSpecialValue(id);
+
+        String msg;
+        if (teacherService.deleteTeacher(teacher)) {
+            msg = Role.TEACHER + " " + login + " успешно удалён";
+            log.info("{} {} успешно удалён", Role.TEACHER, login);
+        } else {
+            msg = "Не удалось удалить " + Role.TEACHER + " " + login;
+            log.info("Не удалось удалить {} {}", Role.TEACHER, login);
         }
-        super.service(req, resp);
+        return refreshAndForward(msg);
+    }
+
+    private ModelAndView refreshAndForward(String msg) {
+        ModelAndView mav = new ModelAndView(ADMIN_TEACHERS_VIEW);
+        Set<Teacher> set = teacherService.getTeachersSet();
+        log.debug("Set {} (добавляем к запросу){}", Role.TEACHER, set);
+        mav.getModel().put(PERSONS_SET, set);
+        mav.getModel().put(MESSAGE, msg);
+        return mav;
     }
 }

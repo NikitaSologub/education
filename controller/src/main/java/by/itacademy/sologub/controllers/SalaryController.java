@@ -1,114 +1,120 @@
 package by.itacademy.sologub.controllers;
 
-import by.itacademy.sologub.*;
+import by.itacademy.sologub.model.Salary;
+import by.itacademy.sologub.model.Teacher;
+import by.itacademy.sologub.services.AverageSalaryService;
+import by.itacademy.sologub.services.SalaryService;
+import by.itacademy.sologub.services.TeacherService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.time.LocalDate;
 
-import static by.itacademy.sologub.constants.Constant.*;
-import static by.itacademy.sologub.constants.Attributes.*;
+import static by.itacademy.sologub.constants.Attributes.COINS;
+import static by.itacademy.sologub.constants.Attributes.DATE;
+import static by.itacademy.sologub.constants.Attributes.TEACHER;
+import static by.itacademy.sologub.constants.Constant.ADMIN_SALARIES_VIEW;
+import static by.itacademy.sologub.constants.Constant.AVERAGE_SALARY;
+import static by.itacademy.sologub.constants.Constant.MESSAGE;
+import static by.itacademy.sologub.constants.Constant.SALARY_ID;
+import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
 
-@WebServlet(SALARY_CONTROLLER)
+@Controller
+@RequestMapping("teachers/{teacherId}/salaries")
 @Slf4j
-public class SalaryController extends BaseController {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String msg = "Вы на странице зарплат пользователя " + req.getParameter(LOGIN);
-        refreshTeacherAndForward(msg, req, resp);
+public class SalaryController {
+    private final TeacherService teacherService;
+    private final SalaryService salaryService;
+    private final AverageSalaryService averageSalaryService;
+
+    @Autowired
+    public SalaryController(TeacherService teacherService, SalaryService salaryService, AverageSalaryService avgService) {
+        this.teacherService = teacherService;
+        this.salaryService = salaryService;
+        this.averageSalaryService = avgService;
     }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SalaryRepo repo = (SalaryRepo) getServletContext().getAttribute(SALARY_REPO);
-        Salary salary = extractSalaryFromFormWithoutId(req);
-        boolean result = repo.putSalary(salary);
+    @GetMapping
+    public ModelAndView getView(@PathVariable(TEACHER_ID) int teacherId) {
+        return refreshTeacherAndForward(teacherId, "Вы на странице зарплат пользователя ");
+    }
+
+    @PostMapping
+    public ModelAndView createSalary(@RequestParam(COINS) int coins, @RequestParam(DATE) String date,
+                                     @PathVariable(TEACHER_ID) int teacherId) {
+        Salary salary = new Salary()
+                .withCoins(coins)
+                .withDate(LocalDate.parse(date));
 
         String msg;
-        if (result) {
+        if (salaryService.putSalaryToTeacher(salary, teacherId)) {
             msg = "Зарплата " + salary + " успешно добавлена";
             log.info("Зарплата {} успешно добавлена", salary);
         } else {
             msg = "Не удалось добавить Зарплату " + salary;
             log.info("Не удалось добавить Зарплату {}", salary);
         }
-        refreshTeacherAndForward(msg, req, resp);
+        return refreshTeacherAndForward(teacherId, msg);
     }
 
-    private void refreshTeacherAndForward(String msg, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SalaryRepo salaryRepo = (SalaryRepo) getServletContext().getAttribute(SALARY_REPO);
-        TeacherRepo teacherRepo = (TeacherRepo) getServletContext().getAttribute(TEACHER_REPO);
+    @PutMapping("/{salaryId}")
+    public ModelAndView updateSalary(@PathVariable(SALARY_ID) int salaryId, @PathVariable(TEACHER_ID) int teacherId,
+                                     @RequestParam(COINS) int coins, @RequestParam(DATE) String date) {
+        Salary s = new Salary()
+                .withId(salaryId)
+                .withCoins(coins)
+                .withDate(LocalDate.parse(date));
 
-        Teacher t = teacherRepo.getTeacherIfExistsOrGetSpecialValue(req.getParameter(LOGIN));
-        t.setSalaries(salaryRepo.getAllSalariesByTeacherId(t.getId()));
-        log.debug("зарплаты которые имет учитель (добавляем к запросу){}", t.getSalaries());
-        req.setAttribute(TEACHER, t);
-
-        forward(ADMIN_SALARIES_PAGE, msg, req, resp);
-    }
-
-    Salary extractSalaryFromForm(HttpServletRequest req) {
-        Salary s = extractSalaryFromFormWithoutId(req);
-        s.setId(Integer.parseInt(req.getParameter(ID)));
-        log.debug("Из запроса извлечён обьект зп {}", s);
-        return s;
-    }
-
-    Salary extractSalaryFromFormWithoutId(HttpServletRequest req) {
-        Salary salary = new Salary()
-                .withCoins(Integer.parseInt(req.getParameter(COINS)))
-                .withDate(LocalDate.parse(req.getParameter(DATE)))
-                .withTeacherId(Integer.parseInt(req.getParameter(TEACHER_ID)));
-        log.debug("Из запроса извлечён обьект зп (без id) {}", salary);
-        return salary;
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SalaryRepo repo = (SalaryRepo) getServletContext().getAttribute(SALARY_REPO);
-        Salary s = extractSalaryFromForm(req);
-
-        boolean result = repo.changeSalary(s);
         String msg;
-        if (result) {
+        if (salaryService.changeSalary(s)) {
             msg = "Зарплата " + s + " успешно изменена";
             log.info("Зарплата {} успешно изменена", s);
         } else {
             msg = "Не удалось изменить зарплату " + s;
             log.info("Не удалось изменить зарплату {}", s);
         }
-        refreshTeacherAndForward(msg, req, resp);
+        return refreshTeacherAndForward(teacherId, msg);
     }
 
-    @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        SalaryRepo repo = (SalaryRepo) getServletContext().getAttribute(SALARY_REPO);
-        int id = Integer.parseInt(req.getParameter(ID));
-        boolean result = repo.deleteSalary(id);
+    @DeleteMapping("/{salaryId}")
+    public ModelAndView deleteSalary(@PathVariable(SALARY_ID) int salaryId, @PathVariable(TEACHER_ID) int teacherId) {
         String msg;
-        if (result) {
-            msg = "Зарплата по id " + id + " успешно удалена";
-            log.info("Зарплата по id={} успешно удалена", id);
+        if (salaryService.deleteSalary(salaryId)) {
+            msg = "Зарплата по id " + salaryId + " успешно удалена";
+            log.info("Зарплата по id={} успешно удалена", salaryId);
         } else {
-            msg = "Не удалось удалить зарплату с id = " + id;
-            log.info("Не удалось удалить зарплату с id = {}", id);
+            msg = "Не удалось удалить зарплату с id = " + salaryId;
+            log.info("Не удалось удалить зарплату с id = {}", salaryId);
         }
-        refreshTeacherAndForward(msg, req, resp);
+        return refreshTeacherAndForward(teacherId, msg);
     }
 
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (DELETE.equals(req.getParameter(ACTION))) {
-            doDelete(req, resp);
-            return;
-        } else if (PUT.equals(req.getParameter(ACTION))) {
-            doPut(req, resp);
-            return;
-        }
-        super.service(req, resp);
+    @PatchMapping
+    public ModelAndView getViewAndAverageSalary(@PathVariable(TEACHER_ID) int teacherId) {
+        ModelAndView mav = refreshTeacherAndForward(teacherId, "Средняя зарплата учителя по итогам всех месяцев работы ");
+        mav.getModel().put(AVERAGE_SALARY, averageSalaryService.getAverageSalary(teacherId));
+        return mav;
+    }
+
+    private ModelAndView refreshTeacherAndForward(int teacherId, String msg) {
+        ModelAndView mav = new ModelAndView(ADMIN_SALARIES_VIEW);
+        Teacher t = teacherService.getTeacherIfExistsOrGetSpecialValue(teacherId);
+        t.setSalaries(salaryService.getAllSalariesByTeacherId(t.getId()));
+        log.debug("зарплаты которые имет учитель (добавляем к запросу){}", t.getSalaries());
+
+        mav.getModel().put(TEACHER, t);
+        mav.getModel().put(MESSAGE, msg);
+        mav.setViewName(ADMIN_SALARIES_VIEW);
+        return mav;
     }
 }
