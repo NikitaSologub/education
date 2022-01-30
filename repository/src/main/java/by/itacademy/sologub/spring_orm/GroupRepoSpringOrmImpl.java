@@ -1,15 +1,14 @@
 package by.itacademy.sologub.spring_orm;
 
-import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.GroupRepo;
+import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.model.Teacher;
-import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
-import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,15 +16,16 @@ import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 
 @Slf4j
+@Transactional
 @Repository
 public class GroupRepoSpringOrmImpl extends AbstractSpringOrm<Group> implements GroupRepo {
     @Autowired
-    protected GroupRepoSpringOrmImpl(EntityManagerHelper helper) {
-        super(helper, Group.class, GROUP_NOT_EXISTS);
+    protected GroupRepoSpringOrmImpl() {
+        super(Group.class, GROUP_NOT_EXISTS);
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public List<Group> getGroups() {
         List<Group> groups = findAll();
         log.info("возвращаем список всех гупп {}", groups);
@@ -43,55 +43,48 @@ public class GroupRepoSpringOrmImpl extends AbstractSpringOrm<Group> implements 
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Group getGroupById(int id) {
         return getByNamedQueryIntArgument("getGroupById", id, ID);
     }
 
     @Override
-    @JpaTransaction
     public boolean putGroupIfNotExists(Group group) {
         return inputIfNotExists(group);
     }
 
     @Override
-    @JpaTransaction
     public boolean changeGroupsParametersIfExists(Group group) {
         return updateIfExists(group);
     }
 
     @Override
-    @JpaTransaction
     public boolean addStudentInGroup(Group group, Student student) {
         group.addStudent(student);
         return updateIfExists(group);
     }
 
     @Override
-    @JpaTransaction
     public boolean removeStudentFromGroup(Group group, Student student) {
         group.removeStudent(student);
         return updateIfExists(group);
     }
 
     @Override
-    @JpaTransaction
     public boolean addSubjectInGroup(Group group, Subject subject) {
         group.addSubject(subject);
         return updateIfExists(group);
     }
 
     @Override
-    @JpaTransaction
     public boolean removeSubjectFromGroup(Group group, Subject subject) {
         group.removeSubject(subject);
         return updateIfExists(group);
     }
 
     @Override
-    @JpaTransaction
     public boolean deleteGroupIfExists(int groupId) {
-        boolean result = helper.getEntityManager()
+        boolean result = em
                 .createNamedQuery("deleteGroupById")
                 .setParameter(ID, groupId)
                 .executeUpdate() > 0;

@@ -1,17 +1,14 @@
 package by.itacademy.sologub.spring_orm;
 
-import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.MarkRepo;
+import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.model.Subject;
-import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
-import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,11 +17,12 @@ import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 
 @Slf4j
+@Transactional
 @Repository
 public class MarkRepoSpringOrmImpl extends AbstractSpringOrm<Mark> implements MarkRepo {
     @Autowired
-    public MarkRepoSpringOrmImpl(EntityManagerHelper helper) {
-        super(helper, Mark.class, MARK_NOT_EXISTS);
+    public MarkRepoSpringOrmImpl() {
+        super(Mark.class, MARK_NOT_EXISTS);
     }
 
     @Override//todo РЕАЛИЗОВАТЬ И ПРОТЕСТИРОВАТЬ (Этот в последнюю очередь)
@@ -38,7 +36,7 @@ public class MarkRepoSpringOrmImpl extends AbstractSpringOrm<Mark> implements Ma
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Set<Mark> getAllMarksByStudentId(int studentId) {
         Student student = getStudentById(studentId);
         if (student == null) return new HashSet<>();
@@ -46,16 +44,14 @@ public class MarkRepoSpringOrmImpl extends AbstractSpringOrm<Mark> implements Ma
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Mark getMark(int id) {
         return getByNamedQueryIntArgument("getMarkById", id, ID);
     }
 
     @Override
-    @JpaTransaction
     public boolean putMarkToStudent(Mark mark, int studentId) {
         Student student = getStudentById(studentId);
-        EntityManager em = helper.getEntityManager();
         if (STUDENT_NOT_EXISTS == student) {
             log.debug("Нельзя добавить оценку ученику, которого нет в БД");
             return false;
@@ -73,7 +69,6 @@ public class MarkRepoSpringOrmImpl extends AbstractSpringOrm<Mark> implements Ma
     }
 
     @Override
-    @JpaTransaction
     public boolean deleteMark(int id) {
         Mark mark = getByNamedQueryIntArgument("getMarkById", id, ID);
         if (MARK_NOT_EXISTS == mark) {
@@ -84,11 +79,8 @@ public class MarkRepoSpringOrmImpl extends AbstractSpringOrm<Mark> implements Ma
     }
 
     private Student getStudentById(int studentId) {
-        EntityManager em = helper.getEntityManager();
-        TypedQuery<Student> typedQuery = em
-                .createNamedQuery("getStudentById", Student.class)
-                .setParameter(ID, studentId);
-        Student student = typedQuery.getSingleResult();
+        Student student = em.createNamedQuery("getStudentById", Student.class)
+                .setParameter(ID, studentId).getSingleResult();
         log.debug("Достали {} из бд", student);
         if (student == null) return STUDENT_NOT_EXISTS;
         return student;

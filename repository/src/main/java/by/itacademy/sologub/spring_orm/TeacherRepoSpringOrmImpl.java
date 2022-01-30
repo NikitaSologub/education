@@ -1,13 +1,12 @@
 package by.itacademy.sologub.spring_orm;
 
+import by.itacademy.sologub.TeacherRepo;
 import by.itacademy.sologub.model.Salary;
 import by.itacademy.sologub.model.Teacher;
-import by.itacademy.sologub.TeacherRepo;
-import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
-import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,15 +18,16 @@ import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
 
 @Slf4j
+@Transactional
 @Repository
 public class TeacherRepoSpringOrmImpl extends AbstractSpringOrm<Teacher> implements TeacherRepo {
     @Autowired
-    protected TeacherRepoSpringOrmImpl(EntityManagerHelper helper) {
-        super(helper, Teacher.class, TEACHER_NOT_EXISTS);
+    protected TeacherRepoSpringOrmImpl() {
+        super(Teacher.class, TEACHER_NOT_EXISTS);
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Set<Teacher> getTeachersSet() {
         List<Teacher> teachers = findAll();
         log.info("возвращаем {}", teachers);
@@ -35,19 +35,19 @@ public class TeacherRepoSpringOrmImpl extends AbstractSpringOrm<Teacher> impleme
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Teacher getTeacherIfExistsOrGetSpecialValue(int id) {
         return getByNamedQueryIntArgument("getTeacherById", id, ID);
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Teacher getTeacherIfExistsOrGetSpecialValue(String login) {
         return getByNamedQueryStringArgument("getTeacherByLogin", login, LOGIN);
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Teacher getTeacherIfExistsOrGetSpecialValue(String login, String password) {
         Teacher t = getByNamedQueryStringArgument("getTeacherByLogin", login, LOGIN);
         if (TEACHER_NOT_EXISTS != t) {
@@ -62,13 +62,11 @@ public class TeacherRepoSpringOrmImpl extends AbstractSpringOrm<Teacher> impleme
     }
 
     @Override
-    @JpaTransaction
     public boolean putTeacherIfNotExists(Teacher teacher) {
         return inputIfNotExists(teacher);
     }
 
     @Override
-    @JpaTransaction
     public boolean changeTeachersParametersIfExists(Teacher newTeacher) {
         Teacher old = getByNamedQueryIntArgument("getTeacherById", newTeacher.getId(), ID);
         Set<Salary> salaries = old.getSalaries();
@@ -77,7 +75,6 @@ public class TeacherRepoSpringOrmImpl extends AbstractSpringOrm<Teacher> impleme
     }
 
     @Override
-    @JpaTransaction
     public boolean deleteTeacher(String login) {
         Teacher teacher = getByNamedQueryStringArgument("getTeacherByLogin", login, LOGIN);
         if (TEACHER_NOT_EXISTS == teacher) {
@@ -89,7 +86,6 @@ public class TeacherRepoSpringOrmImpl extends AbstractSpringOrm<Teacher> impleme
     }
 
     @Override
-    @JpaTransaction
     public boolean deleteTeacher(Teacher teacher) {
         if (TEACHER_NOT_EXISTS == teacher) {
             log.info("учителя {} нет в БД", teacher);
@@ -100,7 +96,7 @@ public class TeacherRepoSpringOrmImpl extends AbstractSpringOrm<Teacher> impleme
     }
 
     private void excludeTeacherFromGroups(int id) {
-        int groupNum = helper.getEntityManager()
+        int groupNum = em
                 .createNamedQuery("setNullWhereTeacherId")
                 .setParameter(ID, id)
                 .executeUpdate();

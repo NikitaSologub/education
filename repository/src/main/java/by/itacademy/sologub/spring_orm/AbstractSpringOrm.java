@@ -1,37 +1,36 @@
 package by.itacademy.sologub.spring_orm;
 
 import by.itacademy.sologub.model.AbstractEntity;
-import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Slf4j
-@Repository
+@Component
 public abstract class AbstractSpringOrm<T extends AbstractEntity> {
-    protected final EntityManagerHelper helper;
     protected final Class<T> type;
     protected final T emptyObj;
+    @PersistenceContext(unitName = "entityManagerFactory")
+    protected EntityManager em;
 
     @Autowired
-    protected AbstractSpringOrm(EntityManagerHelper helper, Class<T> type, T emptyObj) {
-        this.helper = helper;
+    public AbstractSpringOrm(Class<T> type, T emptyObj) {
         this.type = type;
         this.emptyObj = emptyObj;
     }
 
     protected List<T> findAll() {
-        return helper.getEntityManager()
-                .createQuery("from " + type.getSimpleName(), type)
+        return em.createQuery("from " + type.getSimpleName(), type)
                 .getResultList();
     }
 
     protected T findOneByIdIfExists(int id) {
-        T entity = helper.getEntityManager().find(type, id);
+        T entity = em.find(type, id);
         if (entity == null) {
             log.debug("Обьекта {} по id={} не существует в БД", type, id);
             return emptyObj;
@@ -44,7 +43,6 @@ public abstract class AbstractSpringOrm<T extends AbstractEntity> {
             log.debug("Нельзя вставить обьект который уже существует в БД или является специальным");
             return false;
         }
-        EntityManager em = helper.getEntityManager();
         em.persist(obj);
         boolean result = em.contains(obj);
         log.debug("Результат добавления{} = {} ", obj, result);
@@ -56,7 +54,6 @@ public abstract class AbstractSpringOrm<T extends AbstractEntity> {
             log.debug("Нельзя обновить обьект которого нет в БД");
             return false;
         }
-        EntityManager em = helper.getEntityManager();
         obj = em.merge(obj);
         boolean result = em.contains(obj);
         log.debug("Результат изменения{} = {} ", obj, result);
@@ -68,31 +65,36 @@ public abstract class AbstractSpringOrm<T extends AbstractEntity> {
             log.debug("Нельзя удалить обьект которого нет в БД");
             return false;
         }
-        EntityManager em = helper.getEntityManager();
-        em.remove(entity);
-        return !em.contains(entity);
+        T object = em.find(type, entity.getId());
+        log.debug("пытаемся удалить обьект {} из БД", object);
+        em.remove(object);
+        return !em.contains(object);
     }
 
     protected T getByNamedQueryIntArgument(String queryName, int arg, String columnName) {
+        T result;
         if (arg <= 0) return emptyObj;
-        EntityManager em = helper.getEntityManager();
-        TypedQuery<T> typedQuery = em
-                .createNamedQuery(queryName, type)
-                .setParameter(columnName, arg);
-        T result = typedQuery.getSingleResult();
+        try {
+            result = em.createNamedQuery(queryName, type)
+                    .setParameter(columnName, arg)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return emptyObj;
+        }
         log.debug("Достали {} из бд", result);
-        if (result == null) return emptyObj;
         return result;
     }
 
     protected T getByNamedQueryStringArgument(String queryName, String arg, String columnName) {
-        EntityManager manager = helper.getEntityManager();
-        TypedQuery<T> typedQuery = manager
-                .createNamedQuery(queryName, type)
-                .setParameter(columnName, arg);
-        T result = typedQuery.getSingleResult();
+        T result;
+        try {
+            result = em.createNamedQuery(queryName, type)
+                    .setParameter(columnName, arg)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return emptyObj;
+        }
         log.debug("Достали {} из бд", result);
-        if (result == null) return emptyObj;
         return result;
     }
 }

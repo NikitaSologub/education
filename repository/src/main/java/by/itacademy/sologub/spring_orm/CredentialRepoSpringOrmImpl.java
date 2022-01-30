@@ -1,33 +1,33 @@
 package by.itacademy.sologub.spring_orm;
 
-import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.CredentialRepo;
-import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
-import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;
+import by.itacademy.sologub.model.Credential;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import static by.itacademy.sologub.constants.Attributes.LOGIN;
 import static by.itacademy.sologub.constants.ConstantObject.CREDENTIAL_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
 
 @Slf4j
+@Transactional
 @Repository
 public class CredentialRepoSpringOrmImpl extends AbstractSpringOrm<Credential> implements CredentialRepo {
     @Autowired
-    public CredentialRepoSpringOrmImpl(EntityManagerHelper helper) {
-        super(helper, Credential.class, CREDENTIAL_NOT_EXISTS);
+    public CredentialRepoSpringOrmImpl() {
+        super(Credential.class, CREDENTIAL_NOT_EXISTS);
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Credential getCredentialIfExistsOrGetSpecialValue(String login) {
         return getByNamedQueryStringArgument("getCredentialByLogin", login, LOGIN);
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Credential getCredentialIfExistsOrGetSpecialValue(String login, String password) {
         Credential c = getByNamedQueryStringArgument("getCredentialByLogin", login, LOGIN);
         if (CREDENTIAL_NOT_EXISTS != c) {
@@ -42,7 +42,6 @@ public class CredentialRepoSpringOrmImpl extends AbstractSpringOrm<Credential> i
     }
 
     @Override
-    @JpaTransaction
     public boolean putCredentialIfNotExists(String login, String password) {
         return inputIfNotExists(new Credential()
                 .withLogin(login)
@@ -50,7 +49,6 @@ public class CredentialRepoSpringOrmImpl extends AbstractSpringOrm<Credential> i
     }
 
     @Override
-    @JpaTransaction
     public int putCredentialIfNotExistsAndGetId(Credential newC) {
         boolean isAdded = inputIfNotExists(newC);
         if (isAdded) {
@@ -61,7 +59,6 @@ public class CredentialRepoSpringOrmImpl extends AbstractSpringOrm<Credential> i
     }
 
     @Override
-    @JpaTransaction
     public boolean changeCredentialIfExists(String login, String password) {
         Credential c = getByNamedQueryStringArgument("getCredentialByLogin", login, LOGIN);
         if (CREDENTIAL_NOT_EXISTS == c) {
@@ -72,7 +69,6 @@ public class CredentialRepoSpringOrmImpl extends AbstractSpringOrm<Credential> i
     }
 
     @Override
-    @JpaTransaction
     public boolean deleteCredentialIfExists(String login) {
         if (login == null) return false;
         Credential credential = getByNamedQueryStringArgument("getCredentialByLogin", login, LOGIN);
@@ -85,7 +81,6 @@ public class CredentialRepoSpringOrmImpl extends AbstractSpringOrm<Credential> i
     }
 
     @Override
-    @JpaTransaction
     public boolean deleteCredentialIfExists(int id) {
         Credential credential = findOneByIdIfExists(id);
         if (CREDENTIAL_NOT_EXISTS == credential) {

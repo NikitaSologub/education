@@ -1,12 +1,11 @@
 package by.itacademy.sologub.spring_orm;
 
-import by.itacademy.sologub.model.Admin;
 import by.itacademy.sologub.AdminRepo;
-import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
-import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;
+import by.itacademy.sologub.model.Admin;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -17,15 +16,16 @@ import static by.itacademy.sologub.constants.ConstantObject.ADMIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG;
 
 @Slf4j
+@Transactional
 @Repository
 public class AdminRepoSpringOrmImpl extends AbstractSpringOrm<Admin> implements AdminRepo {
     @Autowired
-    public AdminRepoSpringOrmImpl(EntityManagerHelper helper) {
-        super(helper, Admin.class, ADMIN_NOT_EXISTS);
+    public AdminRepoSpringOrmImpl() {
+        super(Admin.class, ADMIN_NOT_EXISTS);
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Set<Admin> getAdminsList() {
         List<Admin> admins = findAll();
         log.info("получили список админов {} из БД", admins);
@@ -33,7 +33,7 @@ public class AdminRepoSpringOrmImpl extends AbstractSpringOrm<Admin> implements 
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Admin getAdminIfExistsOrGetSpecialValue(String login) {
         Admin admin = getByNamedQueryStringArgument("getAdminByLogin", login, LOGIN);
         if (ADMIN_NOT_EXISTS == admin) {
@@ -44,7 +44,7 @@ public class AdminRepoSpringOrmImpl extends AbstractSpringOrm<Admin> implements 
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Admin getAdminIfExistsOrGetSpecialValue(String login, String password) {
         Admin admin = getByNamedQueryStringArgument("getAdminByLogin", login, LOGIN);
         if (ADMIN_NOT_EXISTS != admin) {
@@ -59,19 +59,16 @@ public class AdminRepoSpringOrmImpl extends AbstractSpringOrm<Admin> implements 
     }
 
     @Override
-    @JpaTransaction
     public boolean putAdminIfNotExists(Admin admin) {
         return inputIfNotExists(admin);
     }
 
     @Override
-    @JpaTransaction
     public boolean changeAdminParametersIfExists(Admin newAdmin) {
         return updateIfExists(newAdmin);
     }
 
     @Override
-    @JpaTransaction
     public boolean deleteAdmin(String login) {
         Admin admin = getByNamedQueryStringArgument("getAdminByLogin", login, LOGIN);
         if (ADMIN_NOT_EXISTS == admin) {
@@ -82,7 +79,6 @@ public class AdminRepoSpringOrmImpl extends AbstractSpringOrm<Admin> implements 
     }
 
     @Override
-    @JpaTransaction
     public boolean deleteAdmin(Admin admin) {
         return removeIfExists(admin);
     }

@@ -1,16 +1,14 @@
 package by.itacademy.sologub.spring_orm;
 
+import by.itacademy.sologub.StudentRepo;
 import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.model.Student;
-import by.itacademy.sologub.StudentRepo;
-import by.itacademy.sologub.spring_orm.aspects.JpaTransaction;
-import by.itacademy.sologub.spring_orm.helper.EntityManagerHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.TypedQuery;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,15 +20,16 @@ import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
 
 @Slf4j
+@Transactional
 @Repository
 public class StudentRepoSpringOrmImpl extends AbstractSpringOrm<Student> implements StudentRepo {
     @Autowired
-    public StudentRepoSpringOrmImpl(EntityManagerHelper helper) {
-        super(helper, Student.class, STUDENT_NOT_EXISTS);
+    public StudentRepoSpringOrmImpl() {
+        super(Student.class, STUDENT_NOT_EXISTS);
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Set<Student> getStudentsSet() {
         List<Student> students = findAll();
         log.info("возвращаем {}", students);
@@ -38,7 +37,7 @@ public class StudentRepoSpringOrmImpl extends AbstractSpringOrm<Student> impleme
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Set<Student> getStudentsByGroupId(int groupId) {
         Group group = getGroupById(groupId);
         if (GROUP_NOT_EXISTS == group) {
@@ -50,29 +49,28 @@ public class StudentRepoSpringOrmImpl extends AbstractSpringOrm<Student> impleme
     }
 
     private Group getGroupById(int groupId) {
-        TypedQuery<Group> typedQuery = helper.getEntityManager()
-                .createNamedQuery("getGroupById", Group.class)
-                .setParameter(ID, groupId);
-        Group group = typedQuery.getSingleResult();
+        Group group = em.createNamedQuery("getGroupById", Group.class)
+                .setParameter(ID, groupId)
+                .getSingleResult();
         log.debug("Достали {} из бд", group);
         if (group == null) return GROUP_NOT_EXISTS;
         return group;
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Student getStudentIfExistsOrGetSpecialValue(int id) {
         return getByNamedQueryIntArgument("getStudentById", id, ID);
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Student getStudentIfExistsOrGetSpecialValue(String login) {
         return getByNamedQueryStringArgument("getStudentByLogin", login, LOGIN);
     }
 
     @Override
-    @JpaTransaction
+    @Transactional(readOnly = true)
     public Student getStudentIfExistsOrGetSpecialValue(String login, String password) {
         Student s = getByNamedQueryStringArgument("getStudentByLogin", login, LOGIN);
         if (STUDENT_NOT_EXISTS != s) {
@@ -87,13 +85,11 @@ public class StudentRepoSpringOrmImpl extends AbstractSpringOrm<Student> impleme
     }
 
     @Override
-    @JpaTransaction
     public boolean putStudentIfNotExists(Student student) {
         return inputIfNotExists(student);
     }
 
     @Override
-    @JpaTransaction
     public boolean changeStudentParametersIfExists(Student newStudent) {
         Student old = getByNamedQueryIntArgument("getStudentById", newStudent.getId(), ID);
         Set<Mark> marks = old.getMarks();
@@ -102,7 +98,6 @@ public class StudentRepoSpringOrmImpl extends AbstractSpringOrm<Student> impleme
     }
 
     @Override
-    @JpaTransaction
     public boolean deleteStudent(String login) {
         Student student = getByNamedQueryStringArgument("getStudentByLogin", login, LOGIN);
         if (STUDENT_NOT_EXISTS == student) {
@@ -113,7 +108,6 @@ public class StudentRepoSpringOrmImpl extends AbstractSpringOrm<Student> impleme
     }
 
     @Override
-    @JpaTransaction
     public boolean deleteStudent(Student student) {
         return removeIfExists(student);
     }
