@@ -117,17 +117,6 @@ public class ApplicationConfig implements WebMvcConfigurer {
         properties.setProperty("connection.url", "jdbc:postgresql://localhost:5432/edu");
         properties.setProperty("connection.username", "wombat");
         properties.setProperty("connection.password", "wombat");
-
-//        properties.setProperty("dialect", "org.hibernate.dialect.PostgreSQL10Dialect");
-//        properties.setProperty("show_sql", "true");
-//        properties.setProperty("format_sql", "true");
-//        properties.setProperty("hbm2ddl.auto", "none");
-//        properties.setProperty("current_session_context_class", "thread");
-//        properties.setProperty("connection.pool_size", "2");
-//        properties.setProperty("hibernate.c3p0.acquire_increment", "2");
-//        properties.setProperty("hibernate.c3p0.max_size", "10");
-//        properties.setProperty("hibernate.c3p0.min_size", "2");
-//        properties.setProperty("hibernate.c3p0.max_statements", "100");
         return properties;
     }
 
@@ -136,7 +125,7 @@ public class ApplicationConfig implements WebMvcConfigurer {
         LocalContainerEntityManagerFactoryBean emFactoryBean = new LocalContainerEntityManagerFactoryBean();
         emFactoryBean.setDataSource(dataSource);
         emFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        emFactoryBean.setPackagesToScan("by.itacademy.sologub");
+        emFactoryBean.setPackagesToScan("by.itacademy.sologub.model");
         emFactoryBean.setJpaProperties(jpaProperties);
         return emFactoryBean;
     }
