@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -34,6 +35,7 @@ import java.util.Properties;
 @Configuration
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableTransactionManagement
+@EnableJpaRepositories(basePackages = "by.itacademy.sologub.spring_data")
 public class ApplicationConfig implements WebMvcConfigurer {
     private static final String VIEW_PREFIX = "/view/";
     private static final String VIEW_POSTFIX = ".jsp";
@@ -131,7 +133,7 @@ public class ApplicationConfig implements WebMvcConfigurer {
     }
 
     @Bean // TransactionManager - для работы с SpringOrmRepo
-    PlatformTransactionManager platformTransactionManager(@Qualifier("entityManagerFactory") @Autowired EntityManagerFactory emf) {
+    PlatformTransactionManager transactionManager(@Qualifier("entityManagerFactory") @Autowired EntityManagerFactory emf) {
         JpaTransactionManager jpaTxManager = new JpaTransactionManager();
         jpaTxManager.setEntityManagerFactory(emf);
         return jpaTxManager;
