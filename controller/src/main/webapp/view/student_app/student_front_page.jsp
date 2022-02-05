@@ -3,11 +3,11 @@
 <html>
 <head>
     <title>Student front page</title>
-    <link rel="shortcut icon" href="../img/book_favicon.png" type="image/png">
+    <link rel="shortcut icon" href="../../img/book_favicon.png" type="image/png">
 </head>
 <body>
 <h1>Welcome in Student front page</h1>
 <jsp:include page="/view/header.jsp"/>
-<a href="${pageContext.request.contextPath}/LogoutController">Log out.</a>
+<a href="${pageContext.request.contextPath}/logout">Log out.</a>
 </body>
 </html>
