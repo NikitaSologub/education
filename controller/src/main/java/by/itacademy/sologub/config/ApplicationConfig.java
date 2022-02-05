@@ -16,6 +16,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -33,10 +35,11 @@ import java.util.Properties;
 @PropertySource("classpath:db_config.properties")
 @EnableWebMvc
 @Configuration
+@EnableWebSecurity
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "by.itacademy.sologub.spring_data")
-public class ApplicationConfig implements WebMvcConfigurer {
+public class ApplicationConfig extends AbstractSecurityWebApplicationInitializer implements WebMvcConfigurer {
     private static final String VIEW_PREFIX = "/view/";
     private static final String VIEW_POSTFIX = ".jsp";
     private static final String CSS_PATH = "/css/**";
@@ -62,11 +65,11 @@ public class ApplicationConfig implements WebMvcConfigurer {
 
     @Override // добавление перехватчика скрытого метода
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loggingInterceptor());
+        registry.addInterceptor(hiddenMethodInterceptor());
     }
 
     @Bean // создание перехватчика скрытого метода
-    HiddenMethodInterceptor loggingInterceptor() {
+    HiddenMethodInterceptor hiddenMethodInterceptor() {
         return new HiddenMethodInterceptor();
     }
 
