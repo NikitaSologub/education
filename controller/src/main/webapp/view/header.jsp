@@ -3,8 +3,7 @@
 <html>
 <body>
 <h6 class="session">
-    <c:out value="В системе пользователь: ${sessionScope.sessionEntity.lastname} ${sessionScope.sessionEntity.firstname}
-    ${sessionScope.sessionEntity.patronymic} под ником ${sessionScope.sessionEntity.credential.login}"/>
+    <c:out value="В системе пользователь под ником : ${sessionScope.simpleUserLogin}"/>
 </h6>
 <h3 class="message">
     <c:if test="${not empty requestScope.message}">
