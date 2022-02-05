@@ -1,5 +1,6 @@
 package by.itacademy.sologub.config.auth_checker;
 
+import by.itacademy.sologub.services.authentication.model.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,11 +23,22 @@ public class UrlRedirectAfterAuthenticationSuccessHandler extends SimpleUrlAuthe
     @Override
     protected void handle(HttpServletRequest req, HttpServletResponse res, Authentication auth) throws IOException {
         String targetUrl = determineTargetUrl(auth);
+        putUserLoginAttributeToSession(req, auth);
         if (res.isCommitted()) {
             log.info("response is already committed we can't redirect our request to url={}", targetUrl);
             return;
         }
         redirectStrategy.sendRedirect(req, res, targetUrl);
+    }
+
+    private void putUserLoginAttributeToSession(HttpServletRequest req, Authentication auth) {
+        String simpleUserLogin = (String) req.getSession().getAttribute("simpleUserLogin");
+        if (simpleUserLogin == null) {
+            UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+            String userLogin = principal.getUsername();
+            log.info("simpleUserLogin={} added to ModelAndView", userLogin);
+            req.getSession().setAttribute("simpleUserLogin", userLogin);
+        }
     }
 
     private String determineTargetUrl(Authentication auth) {

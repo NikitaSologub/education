@@ -1,6 +1,5 @@
 package by.itacademy.sologub.config;
 
-import by.itacademy.sologub.controllers.interceptors.AddAttributeToSessionInterceptor;
 import by.itacademy.sologub.controllers.interceptors.HiddenMethodInterceptor;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import org.hibernate.SessionFactory;
@@ -67,17 +66,11 @@ public class ApplicationConfig extends AbstractSecurityWebApplicationInitializer
     @Override // добавление перехватчика скрытого метода
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(hiddenMethodInterceptor());
-        registry.addInterceptor(addPrincipalInterceptor());
     }
 
     @Bean // создание перехватчика скрытого метода
     HiddenMethodInterceptor hiddenMethodInterceptor() {
         return new HiddenMethodInterceptor();
-    }
-
-    @Bean // создание перехватчика скрытого метода
-    AddAttributeToSessionInterceptor addPrincipalInterceptor() {
-        return new AddAttributeToSessionInterceptor();
     }
 
     @Bean // определение ViewResolver для jsp
