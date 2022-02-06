@@ -6,8 +6,8 @@ import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.spring_data.crud.GroupDataAccess;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,15 +17,11 @@ import java.util.stream.Collectors;
 import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 
 @Slf4j
+@RequiredArgsConstructor
 @Transactional
 @Repository
 public class GroupRepoSpringDataImpl implements GroupRepo {
     private final GroupDataAccess groupDao;
-
-    @Autowired
-    public GroupRepoSpringDataImpl(GroupDataAccess groupDao) {
-        this.groupDao = groupDao;
-    }
 
     @Override
     @Transactional(readOnly = true)

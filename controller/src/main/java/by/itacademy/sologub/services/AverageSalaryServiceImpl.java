@@ -1,19 +1,15 @@
 package by.itacademy.sologub.services;
 
 import by.itacademy.sologub.model.Salary;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class AverageSalaryServiceImpl implements AverageSalaryService {
     private final SalaryService salaryService;
-
-    @Autowired
-    public AverageSalaryServiceImpl(SalaryService salaryService) {
-        this.salaryService = salaryService;
-    }
 
     @Override
     public String getAverageSalary(int teacherId) {

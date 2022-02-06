@@ -1,10 +1,9 @@
 package by.itacademy.sologub.postgres;
 
-import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.CredentialRepo;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import by.itacademy.sologub.model.Credential;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -26,13 +25,9 @@ import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_CREDENTIAL_IF_N
 import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_CREDENTIAL;
 
 @Slf4j
+@RequiredArgsConstructor
 @Repository
 public class CredentialRepoPostgresImpl extends AbstractPostgresRepo<Credential> implements CredentialRepo {
-    @Autowired
-    public CredentialRepoPostgresImpl(ComboPooledDataSource pool) {
-        super(pool);
-    }
-
     @Override
     protected Credential extractObject(ResultSet rs) throws SQLException {
         return new Credential()

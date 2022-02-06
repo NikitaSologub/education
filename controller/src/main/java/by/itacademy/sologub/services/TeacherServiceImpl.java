@@ -1,9 +1,9 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.TeacherRepo;
+import by.itacademy.sologub.model.Teacher;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -12,16 +12,12 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class TeacherServiceImpl extends AbstractService implements TeacherService {
     private static final String PREFIX = "teacherRepo";
     private final Map<String, TeacherRepo> repoMap;
     private volatile TeacherRepo repo = null;
-
-    @Autowired
-    public TeacherServiceImpl(Map<String, TeacherRepo> repoMap) {
-        this.repoMap = repoMap;
-    }
 
     @PostConstruct
     public void init() {

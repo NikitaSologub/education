@@ -5,7 +5,7 @@ import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.services.MarkService;
 import by.itacademy.sologub.services.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,17 +26,12 @@ import static by.itacademy.sologub.constants.Constant.STUDENT_ID;
 import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 
-@RestController
+@RequiredArgsConstructor
 @RequestMapping("/rest/students/{studentId}/marks")
+@RestController
 public class MarkRestController {
     private final MarkService markService;
     private final StudentService studentService;
-
-    @Autowired
-    public MarkRestController(MarkService markService, StudentService studentService) {
-        this.markService = markService;
-        this.studentService = studentService;
-    }
 
     @GetMapping
     public Set<Mark> getMarksByStudentId(@PathVariable(STUDENT_ID) int id) {

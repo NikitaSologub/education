@@ -3,7 +3,6 @@ package by.itacademy.sologub.spring_orm;
 import by.itacademy.sologub.AdminRepo;
 import by.itacademy.sologub.model.Admin;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,7 @@ import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG
 @Transactional
 @Repository
 public class AdminRepoSpringOrmImpl extends AbstractSpringOrm<Admin> implements AdminRepo {
-    @Autowired
+
     public AdminRepoSpringOrmImpl() {
         super(Admin.class, ADMIN_NOT_EXISTS);
     }

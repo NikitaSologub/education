@@ -1,12 +1,11 @@
 package by.itacademy.sologub.postgres;
 
+import by.itacademy.sologub.TeacherRepo;
 import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.model.Teacher;
-import by.itacademy.sologub.TeacherRepo;
 import by.itacademy.sologub.role.Role;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -29,13 +28,9 @@ import static by.itacademy.sologub.postgres.queries.SqlQuery.DELETE_ALL_SALARIES
 import static by.itacademy.sologub.postgres.queries.SqlQuery.EXCLUDE_TEACHER_FROM_ALL_GROUPS_BY_TEACHER_ID;
 
 @Slf4j
+@RequiredArgsConstructor
 @Repository
 public class TeacherRepoPostgresImpl extends AbstractUserPostgresRepo<Teacher> implements TeacherRepo {
-    @Autowired
-    public TeacherRepoPostgresImpl(ComboPooledDataSource pool) {
-        super(pool);
-    }
-
     @Override
     public Teacher getTeacherIfExistsOrGetSpecialValue(String login) {
         return getUserIfExistsOrGetSpecialValue(login);

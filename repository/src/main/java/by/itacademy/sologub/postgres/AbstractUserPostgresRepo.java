@@ -1,7 +1,7 @@
 package by.itacademy.sologub.postgres;
 
 import by.itacademy.sologub.model.User;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -25,11 +25,8 @@ import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_CREDENTIAL_B
 import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_USER_BY_CREDENTIAL_ID;
 
 @Slf4j
+@RequiredArgsConstructor
 public abstract class AbstractUserPostgresRepo<T extends User> extends AbstractPostgresRepo<T> {
-
-    public AbstractUserPostgresRepo(ComboPooledDataSource pool) {
-        super(pool);
-    }
 
     protected abstract String getRole();
 

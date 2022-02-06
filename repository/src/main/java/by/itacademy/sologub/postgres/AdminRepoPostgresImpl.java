@@ -1,12 +1,11 @@
 package by.itacademy.sologub.postgres;
 
-import by.itacademy.sologub.model.Admin;
 import by.itacademy.sologub.AdminRepo;
+import by.itacademy.sologub.model.Admin;
 import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.role.Role;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -25,27 +24,9 @@ import static by.itacademy.sologub.constants.ConstantObject.ADMIN_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.ADMIN_PASSWORD_WRONG;
 
 @Slf4j
+@RequiredArgsConstructor
 @Repository
 public class AdminRepoPostgresImpl extends AbstractUserPostgresRepo<Admin> implements AdminRepo {
-    @Autowired
-    public AdminRepoPostgresImpl(ComboPooledDataSource pool) {
-        super(pool);
-    }
-
-    @Override //todo - вынести метод ниже
-    protected Admin extractObject(ResultSet rs) throws SQLException {
-        return new Admin()
-                .withId(rs.getInt(ID))
-                .withCredential(new Credential()
-                        .withId(rs.getInt(CREDENTIAL_ID_DB_FIELD))
-                        .withLogin(rs.getString(LOGIN))
-                        .withPassword(rs.getString(PASSWORD)))
-                .withFirstname(rs.getString(FIRSTNAME))
-                .withLastname(rs.getString(LASTNAME))
-                .withPatronymic(rs.getString(PATRONYMIC))
-                .withDateOfBirth(rs.getDate(DATE_OF_BIRTH_DB_FIELD).toLocalDate());
-    }
-
     @Override
     public Set<Admin> getAdminsList() {
         return getUsersSet();
@@ -95,5 +76,19 @@ public class AdminRepoPostgresImpl extends AbstractUserPostgresRepo<Admin> imple
     @Override
     protected Admin getPasswordWrong() {
         return ADMIN_PASSWORD_WRONG;
+    }
+
+    @Override
+    protected Admin extractObject(ResultSet rs) throws SQLException {
+        return new Admin()
+                .withId(rs.getInt(ID))
+                .withCredential(new Credential()
+                        .withId(rs.getInt(CREDENTIAL_ID_DB_FIELD))
+                        .withLogin(rs.getString(LOGIN))
+                        .withPassword(rs.getString(PASSWORD)))
+                .withFirstname(rs.getString(FIRSTNAME))
+                .withLastname(rs.getString(LASTNAME))
+                .withPatronymic(rs.getString(PATRONYMIC))
+                .withDateOfBirth(rs.getDate(DATE_OF_BIRTH_DB_FIELD).toLocalDate());
     }
 }

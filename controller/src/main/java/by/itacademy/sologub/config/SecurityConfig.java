@@ -1,6 +1,7 @@
 package by.itacademy.sologub.config;
 
 import by.itacademy.sologub.config.auth_checker.UrlRedirectAfterAuthenticationSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,14 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@RequiredArgsConstructor
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UrlRedirectAfterAuthenticationSuccessHandler urlRedirectHandler;
-
-    @Autowired
-    public SecurityConfig(UrlRedirectAfterAuthenticationSuccessHandler urlRedirectHandler) {
-        this.urlRedirectHandler = urlRedirectHandler;
-    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth, @Autowired UserDetailsService service) throws Exception {

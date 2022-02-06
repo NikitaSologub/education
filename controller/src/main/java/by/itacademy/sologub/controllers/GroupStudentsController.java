@@ -4,8 +4,8 @@ import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.services.GroupService;
 import by.itacademy.sologub.services.StudentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,15 +28,10 @@ import static by.itacademy.sologub.constants.Constant.STUDENT_ID;
 @Controller
 @RequestMapping("/groups/{groupId}/students")
 @Slf4j
+@RequiredArgsConstructor
 public class GroupStudentsController {
     private final GroupService groupService;
     private final StudentService studentService;
-
-    @Autowired
-    public GroupStudentsController(GroupService groupService, StudentService studentService) {
-        this.groupService = groupService;
-        this.studentService = studentService;
-    }
 
     @GetMapping
     public ModelAndView getView(@PathVariable(GROUP_ID) int groupId) {

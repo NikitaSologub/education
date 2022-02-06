@@ -2,8 +2,8 @@ package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.services.GroupService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,16 +22,12 @@ import static by.itacademy.sologub.constants.Constant.GROUP_ID;
 import static by.itacademy.sologub.constants.Constant.GROUP_LIST;
 import static by.itacademy.sologub.constants.Constant.MESSAGE;
 
-@Controller
-@RequestMapping("groups")
+@RequiredArgsConstructor
 @Slf4j
+@RequestMapping("groups")
+@Controller
 public class GroupController {
     private final GroupService groupService;
-
-    @Autowired
-    public GroupController(GroupService groupService) {
-        this.groupService = groupService;
-    }
 
     @GetMapping
     public ModelAndView getView() {

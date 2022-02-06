@@ -1,9 +1,9 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.SubjectRepo;
+import by.itacademy.sologub.model.Subject;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -13,16 +13,12 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class SubjectServiceImpl extends AbstractService implements SubjectService {
     private static final String PREFIX = "subjectRepo";
     private final Map<String, SubjectRepo> repoMap;
     private volatile SubjectRepo repo = null;
-
-    @Autowired
-    public SubjectServiceImpl(Map<String, SubjectRepo> repoMap) {
-        this.repoMap = repoMap;
-    }
 
     @PostConstruct
     public void init() {

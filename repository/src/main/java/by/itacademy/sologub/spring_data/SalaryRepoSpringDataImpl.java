@@ -5,8 +5,8 @@ import by.itacademy.sologub.model.Salary;
 import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.spring_data.crud.SalaryDataAccess;
 import by.itacademy.sologub.spring_data.crud.TeacherDataAccess;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,17 +19,12 @@ import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 
 @Slf4j
+@RequiredArgsConstructor
 @Transactional
 @Repository
 public class SalaryRepoSpringDataImpl implements SalaryRepo {
     private final SalaryDataAccess salaryDao;
     private final TeacherDataAccess teacherDao;
-
-    @Autowired
-    public SalaryRepoSpringDataImpl(SalaryDataAccess salaryDao, TeacherDataAccess teacherDao) {
-        this.salaryDao = salaryDao;
-        this.teacherDao = teacherDao;
-    }
 
     @Override
     @Transactional(readOnly = true)

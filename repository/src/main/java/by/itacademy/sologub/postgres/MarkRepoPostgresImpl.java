@@ -1,11 +1,10 @@
 package by.itacademy.sologub.postgres;
 
-import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.MarkRepo;
+import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.model.Subject;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -32,13 +31,9 @@ import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_MARK;
 import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_MARK;
 
 @Slf4j
+@RequiredArgsConstructor
 @Repository
 public class MarkRepoPostgresImpl extends AbstractPostgresRepo<Mark> implements MarkRepo {
-    @Autowired
-    public MarkRepoPostgresImpl(ComboPooledDataSource pool) {
-        super(pool);
-    }
-
     @Override
     protected Mark extractObject(ResultSet set) throws SQLException {
         return new Mark()

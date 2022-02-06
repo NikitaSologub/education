@@ -1,15 +1,14 @@
 package by.itacademy.sologub.postgres;
 
+import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.model.AbstractEntity;
 import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.model.Group;
-import by.itacademy.sologub.GroupRepo;
 import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.model.Teacher;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -53,13 +52,9 @@ import static by.itacademy.sologub.postgres.queries.SqlQuery.INCLUDE_SUBJECT_IN_
 import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_GROUP_RETURNING_GROUP_ID;
 
 @Slf4j
+@RequiredArgsConstructor
 @Repository
 public class GroupRepoPostgresImpl extends AbstractPostgresRepo<Group> implements GroupRepo {
-    @Autowired
-    public GroupRepoPostgresImpl(ComboPooledDataSource pool) {
-        super(pool);
-    }
-
     @Override
     protected Group extractObject(ResultSet set) throws SQLException {
         return new Group()

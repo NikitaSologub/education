@@ -3,8 +3,8 @@ package by.itacademy.sologub.spring_data;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.spring_data.crud.CredentialDataAccess;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,15 +12,11 @@ import static by.itacademy.sologub.constants.ConstantObject.CREDENTIAL_NOT_EXIST
 import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
 
 @Slf4j
+@RequiredArgsConstructor
 @Transactional
 @Repository
 public class CredentialRepoSpringDataImpl implements CredentialRepo {
     private final CredentialDataAccess credentialDao;
-
-    @Autowired
-    public CredentialRepoSpringDataImpl(CredentialDataAccess credentialDao) {
-        this.credentialDao = credentialDao;
-    }
 
     @Override
     @Transactional(readOnly = true)

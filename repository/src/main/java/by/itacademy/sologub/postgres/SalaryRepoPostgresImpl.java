@@ -1,10 +1,9 @@
 package by.itacademy.sologub.postgres;
 
-import by.itacademy.sologub.model.Salary;
 import by.itacademy.sologub.SalaryRepo;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import by.itacademy.sologub.model.Salary;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -29,13 +28,9 @@ import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_SALARY_BY_TEACH
 import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_SALARY_BY_ID;
 
 @Slf4j
+@RequiredArgsConstructor
 @Repository
 public class SalaryRepoPostgresImpl extends AbstractPostgresRepo<Salary> implements SalaryRepo {
-    @Autowired
-    public SalaryRepoPostgresImpl(ComboPooledDataSource pool) {
-        super(pool);
-    }
-
     @Override
     protected Salary extractObject(ResultSet rs) throws SQLException {
         return new Salary()

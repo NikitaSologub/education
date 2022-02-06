@@ -5,7 +5,6 @@ import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.model.Subject;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +19,7 @@ import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 @Transactional
 @Repository
 public class MarkRepoSpringOrmImpl extends AbstractSpringOrm<Mark> implements MarkRepo {
-    @Autowired
+
     public MarkRepoSpringOrmImpl() {
         super(Mark.class, MARK_NOT_EXISTS);
     }

@@ -1,10 +1,10 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.MarkRepo;
+import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.model.Subject;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -13,16 +13,12 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class MarkServiceImpl extends AbstractService implements MarkService {
     private static final String PREFIX = "markRepo";
     private final Map<String, MarkRepo> repoMap;
     private volatile MarkRepo repo;
-
-    @Autowired
-    public MarkServiceImpl(Map<String, MarkRepo> repoMap) {
-        this.repoMap = repoMap;
-    }
 
     @PostConstruct
     public void init() {

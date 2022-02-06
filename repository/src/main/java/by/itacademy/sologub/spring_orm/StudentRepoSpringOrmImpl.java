@@ -5,7 +5,6 @@ import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.model.Mark;
 import by.itacademy.sologub.model.Student;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,7 @@ import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRO
 @Transactional
 @Repository
 public class StudentRepoSpringOrmImpl extends AbstractSpringOrm<Student> implements StudentRepo {
-    @Autowired
+
     public StudentRepoSpringOrmImpl() {
         super(Student.class, STUDENT_NOT_EXISTS);
     }

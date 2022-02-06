@@ -5,8 +5,8 @@ import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.services.AverageSalaryService;
 import by.itacademy.sologub.services.SalaryService;
 import by.itacademy.sologub.services.TeacherService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,17 +32,11 @@ import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
 @Controller
 @RequestMapping("teachers/{teacherId}/salaries")
 @Slf4j
+@RequiredArgsConstructor
 public class SalaryController {
     private final TeacherService teacherService;
     private final SalaryService salaryService;
     private final AverageSalaryService averageSalaryService;
-
-    @Autowired
-    public SalaryController(TeacherService teacherService, SalaryService salaryService, AverageSalaryService avgService) {
-        this.teacherService = teacherService;
-        this.salaryService = salaryService;
-        this.averageSalaryService = avgService;
-    }
 
     @GetMapping
     public ModelAndView getView(@PathVariable(TEACHER_ID) int teacherId) {

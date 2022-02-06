@@ -4,8 +4,8 @@ import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.role.Role;
 import by.itacademy.sologub.services.StudentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,13 +34,9 @@ import static by.itacademy.sologub.constants.Constant.PERSONS_SET;
 @Controller
 @RequestMapping("students")
 @Slf4j
+@RequiredArgsConstructor
 public class StudentController {
     private final StudentService studentService;
-
-    @Autowired
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
-    }
 
     @GetMapping
     public ModelAndView getView() {

@@ -1,9 +1,9 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.model.Salary;
 import by.itacademy.sologub.SalaryRepo;
+import by.itacademy.sologub.model.Salary;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -13,16 +13,12 @@ import java.util.Map;
 import java.util.Set;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class SalaryServiceImpl extends AbstractService implements SalaryService {
     private static final String PREFIX = "salaryRepo";
     private final Map<String, SalaryRepo> repoMap;
     private volatile SalaryRepo repo = null;
-
-    @Autowired
-    public SalaryServiceImpl(Map<String, SalaryRepo> repoMap) {
-        this.repoMap = repoMap;
-    }
 
     @PostConstruct
     public void init() {

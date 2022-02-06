@@ -7,8 +7,8 @@ import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.spring_data.crud.GroupDataAccess;
 import by.itacademy.sologub.spring_data.crud.MarkDataAccess;
 import by.itacademy.sologub.spring_data.crud.SubjectDataAccess;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,19 +20,13 @@ import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 
 @Slf4j
+@RequiredArgsConstructor
 @Transactional
 @Repository
 public class SubjectRepoSpringDataImpl implements SubjectRepo {
     private final SubjectDataAccess subjectDao;
     private final GroupDataAccess groupDao;
     private final MarkDataAccess markDao;
-
-    @Autowired
-    public SubjectRepoSpringDataImpl(SubjectDataAccess subjectDao, GroupDataAccess groupDao, MarkDataAccess markDao) {
-        this.subjectDao = subjectDao;
-        this.groupDao = groupDao;
-        this.markDao = markDao;
-    }
 
     @Override
     @Transactional(readOnly = true)

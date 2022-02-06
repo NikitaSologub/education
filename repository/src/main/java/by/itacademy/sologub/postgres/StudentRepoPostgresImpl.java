@@ -1,12 +1,11 @@
 package by.itacademy.sologub.postgres;
 
+import by.itacademy.sologub.StudentRepo;
 import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.model.Student;
-import by.itacademy.sologub.StudentRepo;
 import by.itacademy.sologub.role.Role;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -29,13 +28,9 @@ import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRO
 import static by.itacademy.sologub.postgres.queries.SqlQuery.GET_STUDENT_SET_BY_GROUP_ID;
 
 @Slf4j
+@RequiredArgsConstructor
 @Repository
 public class StudentRepoPostgresImpl extends AbstractUserPostgresRepo<Student> implements StudentRepo {
-    @Autowired
-    public StudentRepoPostgresImpl(ComboPooledDataSource pool) {
-        super(pool);
-    }
-
     @Override
     public Set<Student> getStudentsSet() {
         return getUsersSet();

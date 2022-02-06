@@ -2,8 +2,8 @@ package by.itacademy.sologub.controllers;
 
 import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.services.SubjectService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,13 +25,9 @@ import static by.itacademy.sologub.constants.Constant.SUBJECTS_SET;
 @Controller
 @RequestMapping("subjects")
 @Slf4j
+@RequiredArgsConstructor
 public class SubjectController {
     private final SubjectService service;
-
-    @Autowired
-    public SubjectController(SubjectService service) {
-        this.service = service;
-    }
 
     @GetMapping
     public ModelAndView getView() {

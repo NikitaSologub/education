@@ -4,8 +4,8 @@ import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.services.GroupService;
 import by.itacademy.sologub.services.TeacherService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,23 +31,18 @@ import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
 @Controller
 @RequestMapping("groups/{groupId}")
 @Slf4j
+@RequiredArgsConstructor
 public class GroupEditController {
     private final TeacherService teacherService;
     private final GroupService groupService;
 
-    @Autowired
-    public GroupEditController(TeacherService teacherService, GroupService groupService) {
-        this.teacherService = teacherService;
-        this.groupService = groupService;
-    }
-
     @GetMapping
-    public ModelAndView getView(@PathVariable(GROUP_ID) int groupId, @RequestParam(name = TEACHER_ID,defaultValue = "0") int teacherId) {
+    public ModelAndView getView(@PathVariable(GROUP_ID) int groupId, @RequestParam(name = TEACHER_ID, defaultValue = "0") int teacherId) {
         return refreshGroupAndForward(teacherId, groupId, "вы на странице редактирования группы");
     }
 
     @PostMapping("/edit")
-    public ModelAndView doPost(@PathVariable(GROUP_ID) int groupId, @RequestParam(name = TEACHER_ID,defaultValue = "0") int teacherId,
+    public ModelAndView doPost(@PathVariable(GROUP_ID) int groupId, @RequestParam(name = TEACHER_ID, defaultValue = "0") int teacherId,
                                @RequestParam(TITLE) String newTitle, @RequestParam(DESCRIPTION) String newDescription) {
         Group newGr = groupService.getGroupById(groupId);
         newGr.setTitle(newTitle);

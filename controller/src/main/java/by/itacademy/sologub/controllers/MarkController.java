@@ -6,8 +6,8 @@ import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.services.MarkService;
 import by.itacademy.sologub.services.StudentService;
 import by.itacademy.sologub.services.SubjectService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,17 +36,11 @@ import static by.itacademy.sologub.constants.Constant.SUBJECT_ID;
 @Controller
 @RequestMapping("students/{studentId}/marks")
 @Slf4j
+@RequiredArgsConstructor
 public class MarkController {
     private final MarkService markService;
     private final StudentService studentService;
     private final SubjectService subjectService;
-
-    @Autowired
-    public MarkController(MarkService markService, StudentService studentService, SubjectService subjectService) {
-        this.markService = markService;
-        this.studentService = studentService;
-        this.subjectService = subjectService;
-    }
 
     @GetMapping
     public ModelAndView getView(@RequestParam(LOGIN) String login, @PathVariable(STUDENT_ID) int studentId) {

@@ -3,7 +3,7 @@ package by.itacademy.sologub.rest_controllers;
 import by.itacademy.sologub.model.AbstractEntity;
 import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.services.TeacherService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,15 +22,11 @@ import java.util.Set;
 import static by.itacademy.sologub.constants.Attributes.ID;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 
-@RestController
+@RequiredArgsConstructor
 @RequestMapping("/rest/teachers")
+@RestController
 public class TeacherRestController {
     private final TeacherService teacherService;
-
-    @Autowired
-    public TeacherRestController(TeacherService teacherService) {
-        this.teacherService = teacherService;
-    }
 
     @GetMapping
     public Set<Teacher> getAll() {

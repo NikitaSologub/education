@@ -1,8 +1,8 @@
 package by.itacademy.sologub.spring_orm;
 
 import by.itacademy.sologub.model.AbstractEntity;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -11,18 +11,13 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public abstract class AbstractSpringOrm<T extends AbstractEntity> {
     protected final Class<T> type;
     protected final T emptyObj;
     @PersistenceContext(unitName = "entityManagerFactory")
     protected EntityManager em;
-
-    @Autowired
-    public AbstractSpringOrm(Class<T> type, T emptyObj) {
-        this.type = type;
-        this.emptyObj = emptyObj;
-    }
 
     protected List<T> findAll() {
         return em.createQuery("from " + type.getSimpleName(), type)

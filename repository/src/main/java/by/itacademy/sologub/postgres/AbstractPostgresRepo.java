@@ -2,6 +2,7 @@ package by.itacademy.sologub.postgres;
 
 import by.itacademy.sologub.model.AbstractEntity;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -12,12 +13,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
+@RequiredArgsConstructor
 public abstract class AbstractPostgresRepo<T extends AbstractEntity> {
     protected volatile ComboPooledDataSource pool;
-
-    public AbstractPostgresRepo(ComboPooledDataSource pool) {
-        this.pool = pool;
-    }
 
     protected void closeResource(AutoCloseable resource) {
         if (resource != null) {

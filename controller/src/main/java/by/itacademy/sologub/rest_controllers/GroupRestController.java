@@ -5,7 +5,7 @@ import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.services.GroupService;
 import by.itacademy.sologub.services.StudentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,17 +26,12 @@ import static by.itacademy.sologub.constants.Constant.STUDENT_ID;
 import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 
-@RestController
+@RequiredArgsConstructor
 @RequestMapping("/rest/groups")
+@RestController
 public class GroupRestController {
     private final GroupService groupService;
     private final StudentService studentService;
-
-    @Autowired
-    public GroupRestController(GroupService groupService, StudentService studentService) {
-        this.groupService = groupService;
-        this.studentService = studentService;
-    }
 
     @GetMapping
     public List<Group> getAll() {

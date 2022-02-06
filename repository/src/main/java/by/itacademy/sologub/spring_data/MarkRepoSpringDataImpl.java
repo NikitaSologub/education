@@ -6,8 +6,8 @@ import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.spring_data.crud.MarkDataAccess;
 import by.itacademy.sologub.spring_data.crud.StudentDataAccess;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,17 +19,12 @@ import static by.itacademy.sologub.constants.ConstantObject.MARK_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 
 @Slf4j
+@RequiredArgsConstructor
 @Transactional
 @Repository
 public class MarkRepoSpringDataImpl implements MarkRepo {
     private final StudentDataAccess studentDao;
     private final MarkDataAccess markDao;
-
-    @Autowired
-    public MarkRepoSpringDataImpl(StudentDataAccess studentDao, MarkDataAccess markDao) {
-        this.studentDao = studentDao;
-        this.markDao = markDao;
-    }
 
     @Override
     @Transactional(readOnly = true)

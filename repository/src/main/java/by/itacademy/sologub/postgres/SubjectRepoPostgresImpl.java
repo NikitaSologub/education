@@ -1,10 +1,9 @@
 package by.itacademy.sologub.postgres;
 
-import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.SubjectRepo;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import by.itacademy.sologub.model.Subject;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -29,13 +28,9 @@ import static by.itacademy.sologub.postgres.queries.SqlQuery.SET_SUBJECT;
 import static by.itacademy.sologub.postgres.queries.SqlQuery.UPDATE_SUBJECT_BY_ID;
 
 @Slf4j
+@RequiredArgsConstructor
 @Repository
 public class SubjectRepoPostgresImpl extends AbstractPostgresRepo<Subject> implements SubjectRepo {
-    @Autowired
-    public SubjectRepoPostgresImpl(ComboPooledDataSource pool) {
-        super(pool);
-    }
-
     @Override
     protected Subject extractObject(ResultSet rs) throws SQLException {
         return new Subject()

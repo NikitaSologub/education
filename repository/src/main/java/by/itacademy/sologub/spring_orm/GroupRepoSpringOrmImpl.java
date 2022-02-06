@@ -6,7 +6,6 @@ import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.model.Teacher;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +18,7 @@ import static by.itacademy.sologub.constants.ConstantObject.GROUP_NOT_EXISTS;
 @Transactional
 @Repository
 public class GroupRepoSpringOrmImpl extends AbstractSpringOrm<Group> implements GroupRepo {
-    @Autowired
+
     protected GroupRepoSpringOrmImpl() {
         super(Group.class, GROUP_NOT_EXISTS);
     }

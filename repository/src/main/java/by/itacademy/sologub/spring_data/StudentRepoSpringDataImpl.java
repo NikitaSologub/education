@@ -7,8 +7,8 @@ import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.spring_data.crud.CredentialDataAccess;
 import by.itacademy.sologub.spring_data.crud.GroupDataAccess;
 import by.itacademy.sologub.spring_data.crud.StudentDataAccess;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,19 +21,13 @@ import static by.itacademy.sologub.constants.ConstantObject.STUDENT_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.STUDENT_PASSWORD_WRONG;
 
 @Slf4j
+@RequiredArgsConstructor
 @Transactional
 @Repository
 public class StudentRepoSpringDataImpl implements StudentRepo {
     private final StudentDataAccess studentDao;
     private final CredentialDataAccess credentialDao;
     private final GroupDataAccess groupDao;
-
-    @Autowired
-    public StudentRepoSpringDataImpl(CredentialDataAccess credentialDao, StudentDataAccess studentDao, GroupDataAccess groupDao) {
-        this.studentDao = studentDao;
-        this.credentialDao = credentialDao;
-        this.groupDao = groupDao;
-    }
 
     @Override
     @Transactional(readOnly = true)

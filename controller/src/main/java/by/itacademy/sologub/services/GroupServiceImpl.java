@@ -1,12 +1,12 @@
 package by.itacademy.sologub.services;
 
-import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.GroupRepo;
+import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.model.Student;
 import by.itacademy.sologub.model.Subject;
 import by.itacademy.sologub.model.Teacher;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -15,16 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class GroupServiceImpl extends AbstractService implements GroupService {
     private static final String PREFIX = "groupRepo";
     private final Map<String, GroupRepo> repoMap;
     private volatile GroupRepo repo = null;
-
-    @Autowired
-    public GroupServiceImpl(Map<String, GroupRepo> repoMap) {
-        this.repoMap = repoMap;
-    }
 
     @PostConstruct
     public void init() {

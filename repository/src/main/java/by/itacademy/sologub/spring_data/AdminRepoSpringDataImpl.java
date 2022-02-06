@@ -5,8 +5,8 @@ import by.itacademy.sologub.model.Admin;
 import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.spring_data.crud.AdminDataAccess;
 import by.itacademy.sologub.spring_data.crud.CredentialDataAccess;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,16 +18,11 @@ import static by.itacademy.sologub.constants.ConstantObject.CREDENTIAL_NOT_EXIST
 
 @Slf4j
 @Transactional
+@RequiredArgsConstructor
 @Repository
 public class AdminRepoSpringDataImpl implements AdminRepo {
     private final AdminDataAccess adminDao;
     private final CredentialDataAccess credentialDao;
-
-    @Autowired
-    public AdminRepoSpringDataImpl(AdminDataAccess adminDao, CredentialDataAccess credentialDao) {
-        this.adminDao = adminDao;
-        this.credentialDao = credentialDao;
-    }
 
     @Override
     @Transactional(readOnly = true)

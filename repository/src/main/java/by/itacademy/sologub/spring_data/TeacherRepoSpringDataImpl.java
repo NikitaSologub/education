@@ -5,8 +5,8 @@ import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.spring_data.crud.CredentialDataAccess;
 import by.itacademy.sologub.spring_data.crud.TeacherDataAccess;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,17 +17,12 @@ import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRONG;
 
 @Slf4j
+@RequiredArgsConstructor
 @Transactional
 @Repository
 public class TeacherRepoSpringDataImpl implements TeacherRepo {
     private final TeacherDataAccess teacherDao;
     private final CredentialDataAccess credentialDao;
-
-    @Autowired
-    public TeacherRepoSpringDataImpl(TeacherDataAccess teacherDao, CredentialDataAccess credentialDao) {
-        this.teacherDao = teacherDao;
-        this.credentialDao = credentialDao;
-    }
 
     @Override
     @Transactional(readOnly = true)

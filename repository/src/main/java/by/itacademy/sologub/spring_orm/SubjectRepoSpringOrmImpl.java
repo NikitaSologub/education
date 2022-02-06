@@ -4,11 +4,9 @@ import by.itacademy.sologub.SubjectRepo;
 import by.itacademy.sologub.model.Group;
 import by.itacademy.sologub.model.Subject;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -22,7 +20,7 @@ import static by.itacademy.sologub.constants.ConstantObject.SUBJECT_NOT_EXISTS;
 @Transactional
 @Repository
 public class SubjectRepoSpringOrmImpl extends AbstractSpringOrm<Subject> implements SubjectRepo {
-    @Autowired
+
     public SubjectRepoSpringOrmImpl() {
         super(Subject.class, SUBJECT_NOT_EXISTS);
     }
@@ -71,15 +69,14 @@ public class SubjectRepoSpringOrmImpl extends AbstractSpringOrm<Subject> impleme
             log.info("нельзя удалить предмет которого нет в БД");
             return false;
         }
-        Subject s = em.find(Subject.class,subject.getId());
-        log.info("перед удалением {} ",s);
+        Subject s = em.find(Subject.class, subject.getId());
+        log.info("перед удалением {} ", s);
         deleteAllMarksBySubjectId(subject.getId());
-        log.info("перед удалением Subject есть он в БД = {} ",em.contains(s));
+        log.info("перед удалением Subject есть он в БД = {} ", em.contains(s));
         em.remove(s);
         boolean isRemoved = em.contains(s);
-        log.info("после удаления Subject есть он в БД = {} ",isRemoved);
+        log.info("после удаления Subject есть он в БД = {} ", isRemoved);
         return isRemoved;
-//        return deleteSubjectById(subject.getId());
     }
 
     private void deleteAllMarksBySubjectId(int id) {
@@ -87,14 +84,6 @@ public class SubjectRepoSpringOrmImpl extends AbstractSpringOrm<Subject> impleme
                 .setParameter(ID, id)
                 .executeUpdate();
         log.debug("Удалили в БД {} Marks у которых subjectId={}", markRows, id);
-    }
-
-    private boolean deleteSubjectById(int id) {
-        boolean result = em.createNamedQuery("deleteSubjectById")
-                .setParameter(ID, id)
-                .executeUpdate() == 1;
-        log.debug("Удаление Subject в БД у которого Id={} результат={}", id, result);
-        return result;
     }
 
     private Group getGroupById(int groupId) {

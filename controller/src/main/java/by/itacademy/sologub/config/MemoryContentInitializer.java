@@ -1,22 +1,22 @@
 package by.itacademy.sologub.config;
 
-import by.itacademy.sologub.model.Admin;
 import by.itacademy.sologub.memory.AdminRepoMemoryImpl;
+import by.itacademy.sologub.memory.GroupRepoMemoryImpl;
+import by.itacademy.sologub.memory.MarkRepoMemoryImpl;
+import by.itacademy.sologub.memory.SalaryRepoMemoryImpl;
+import by.itacademy.sologub.memory.StudentRepoMemoryImpl;
+import by.itacademy.sologub.memory.SubjectRepoMemoryImpl;
+import by.itacademy.sologub.memory.TeacherRepoMemoryImpl;
+import by.itacademy.sologub.model.Admin;
 import by.itacademy.sologub.model.Credential;
 import by.itacademy.sologub.model.Group;
-import by.itacademy.sologub.memory.GroupRepoMemoryImpl;
 import by.itacademy.sologub.model.Mark;
-import by.itacademy.sologub.memory.MarkRepoMemoryImpl;
 import by.itacademy.sologub.model.Salary;
-import by.itacademy.sologub.memory.SalaryRepoMemoryImpl;
 import by.itacademy.sologub.model.Student;
-import by.itacademy.sologub.memory.StudentRepoMemoryImpl;
 import by.itacademy.sologub.model.Subject;
-import by.itacademy.sologub.memory.SubjectRepoMemoryImpl;
 import by.itacademy.sologub.model.Teacher;
-import by.itacademy.sologub.memory.TeacherRepoMemoryImpl;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -27,8 +27,9 @@ import java.time.Month;
 
 import static by.itacademy.sologub.constants.Constant.MEMORY_TYPE;
 
-@PropertySource("classpath:db_config.properties")
 @Slf4j
+@RequiredArgsConstructor
+@PropertySource("classpath:db_config.properties")
 @Component
 public class MemoryContentInitializer {
     private final AdminRepoMemoryImpl adminRepo;
@@ -40,20 +41,6 @@ public class MemoryContentInitializer {
     private final SubjectRepoMemoryImpl subjectRepo;
     private @Value("${type}")
     String type;
-
-    @Autowired
-    private MemoryContentInitializer(AdminRepoMemoryImpl adminRepoMemory, TeacherRepoMemoryImpl teacherRepoMemory,
-                                     StudentRepoMemoryImpl studentRepoMemory, GroupRepoMemoryImpl groupRepoMemory,
-                                     SalaryRepoMemoryImpl salaryRepoMemory, MarkRepoMemoryImpl markRepoMemory,
-                                     SubjectRepoMemoryImpl subjectRepoMemory) {
-        this.adminRepo = adminRepoMemory;
-        this.teacherRepo = teacherRepoMemory;
-        this.studentRepo = studentRepoMemory;
-        this.groupRepo = groupRepoMemory;
-        this.salaryRepo = salaryRepoMemory;
-        this.markRepo = markRepoMemory;
-        this.subjectRepo = subjectRepoMemory;
-    }
 
     @PostConstruct
     private void setContextIfMemory() {

@@ -4,7 +4,6 @@ import by.itacademy.sologub.TeacherRepo;
 import by.itacademy.sologub.model.Salary;
 import by.itacademy.sologub.model.Teacher;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,7 @@ import static by.itacademy.sologub.constants.ConstantObject.TEACHER_PASSWORD_WRO
 @Transactional
 @Repository
 public class TeacherRepoSpringOrmImpl extends AbstractSpringOrm<Teacher> implements TeacherRepo {
-    @Autowired
+
     protected TeacherRepoSpringOrmImpl() {
         super(Teacher.class, TEACHER_NOT_EXISTS);
     }

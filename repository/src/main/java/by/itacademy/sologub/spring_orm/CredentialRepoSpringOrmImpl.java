@@ -3,7 +3,6 @@ package by.itacademy.sologub.spring_orm;
 import by.itacademy.sologub.CredentialRepo;
 import by.itacademy.sologub.model.Credential;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +14,7 @@ import static by.itacademy.sologub.constants.ConstantObject.PASSWORD_WRONG;
 @Transactional
 @Repository
 public class CredentialRepoSpringOrmImpl extends AbstractSpringOrm<Credential> implements CredentialRepo {
-    @Autowired
+
     public CredentialRepoSpringOrmImpl() {
         super(Credential.class, CREDENTIAL_NOT_EXISTS);
     }

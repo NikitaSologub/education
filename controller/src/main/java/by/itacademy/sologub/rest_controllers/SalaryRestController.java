@@ -5,7 +5,7 @@ import by.itacademy.sologub.model.Salary;
 import by.itacademy.sologub.model.Teacher;
 import by.itacademy.sologub.services.SalaryService;
 import by.itacademy.sologub.services.TeacherService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,17 +26,12 @@ import static by.itacademy.sologub.constants.Constant.TEACHER_ID;
 import static by.itacademy.sologub.constants.ConstantObject.SALARY_NOT_EXISTS;
 import static by.itacademy.sologub.constants.ConstantObject.TEACHER_NOT_EXISTS;
 
-@RestController
+@RequiredArgsConstructor
 @RequestMapping("/rest/teachers/{teacherId}/salaries")
+@RestController
 public class SalaryRestController {
     private final SalaryService salaryService;
     private final TeacherService teacherService;
-
-    @Autowired
-    public SalaryRestController(SalaryService salaryService, TeacherService teacherService) {
-        this.salaryService = salaryService;
-        this.teacherService = teacherService;
-    }
 
     @GetMapping
     public Set<Salary> getSalariesByStudentId(@PathVariable(TEACHER_ID) int id) {
