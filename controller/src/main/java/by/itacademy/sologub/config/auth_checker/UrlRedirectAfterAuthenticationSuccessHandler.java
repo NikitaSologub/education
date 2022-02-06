@@ -15,6 +15,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static by.itacademy.sologub.constants.Constant.ADMIN_FRONT_PAGE;
+import static by.itacademy.sologub.constants.Constant.STUDENT_FRONT_PAGE;
+import static by.itacademy.sologub.constants.Constant.TEACHER_FRONT_PAGE;
+
 @Slf4j
 @Component
 public class UrlRedirectAfterAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -47,11 +51,11 @@ public class UrlRedirectAfterAuthenticationSuccessHandler extends SimpleUrlAuthe
                 .collect(Collectors.toList());
         String url;
         if (isAdmin(roles)) {
-            url = "/view/admin_front_page.jsp";
+            url = ADMIN_FRONT_PAGE;
         } else if (isTeacher(roles)) {
-            url = "/view/teacher_app/teacher_front_page.jsp";
+            url = TEACHER_FRONT_PAGE;
         } else if (isStudent(roles)) {
-            url = "/view/student_app/student_front_page.jsp";
+            url = STUDENT_FRONT_PAGE ;
         } else {
             url = "/Access_Denied";
         }

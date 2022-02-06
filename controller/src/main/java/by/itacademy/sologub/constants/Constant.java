@@ -14,24 +14,11 @@ public final class Constant {
 
     //jsp urls
     public static final String LOGIN_PAGE = "/view/login_page.jsp";
-    public static final String REGISTRATION_PAGE = "/view/registration_page.jsp";
     public static final String ADMIN_FRONT_PAGE = "/view/admin_front_page.jsp";
-    public static final String ADMIN_TEACHERS_PAGE = "/view/admin_teachers_page.jsp";
-    public static final String ADMIN_STUDENTS_PAGE = "/view/admin_students_page.jsp";
-    public static final String ADMIN_SALARIES_PAGE = "/view/admin_salaries_page.jsp";
-    public static final String ADMIN_GROUPS_PAGE = "/view/admin_groups_page.jsp";
-    public static final String ADMIN_GROUP_EDIT_PAGE = "/view/admin_group_edit_page.jsp";
-    public static final String ADMIN_GROUP_STUDENTS_PAGE = "/view/admin_group_students_page.jsp";
-    public static final String ADMIN_GROUP_SUBJECTS_PAGE = "/view/admin_group_subjects_page.jsp";
-    public static final String ADMIN_SUBJECTS_PAGE = "/view/admin_subjects_page.jsp";
-    public static final String ADMIN_STUDENTS_MARKS_PAGE = "/view/admin_students_marks_page.jsp";
     public static final String STUDENT_FRONT_PAGE = "/view/student_front_page.jsp";
     public static final String TEACHER_FRONT_PAGE = "/view/teacher_front_page.jsp";
 
     //ModelAndView short names
-    public static final String LOGIN_VIEW = "login_page";
-    public static final String REGISTRATION_VIEW = "registration_page";
-    public static final String ADMIN_FRONT_VIEW = "admin_front_page";
     public static final String ADMIN_TEACHERS_VIEW = "admin_teachers_page";
     public static final String ADMIN_STUDENTS_VIEW = "admin_students_page";
     public static final String ADMIN_SALARIES_VIEW = "admin_salaries_page";
@@ -41,11 +28,8 @@ public final class Constant {
     public static final String ADMIN_GROUP_SUBJECTS_VIEW = "admin_group_subjects_page";
     public static final String ADMIN_SUBJECTS_VIEW = "admin_subjects_page";
     public static final String ADMIN_STUDENTS_MARKS_VIEW = "admin_students_marks_page";
-    public static final String STUDENT_FRONT_VIEW = "student_front_page";
-    public static final String TEACHER_FRONT_VIEW = "teacher_front_page";
 
     //attributes
-    public static final String SESSION_ENTITY = "sessionEntity";
     public static final String HIDDEN_METHOD_PARAMETER = "hidden_method";
     public static final String MESSAGE = "message";
     public static final String ERROR_MESSAGE = "errorMessage";

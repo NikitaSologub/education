@@ -31,11 +31,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()//разрешаем доступ сторонних ресурсов (css или картинки) к нашим jsp
                 .httpBasic().and()//предлагаем базовый вариант авторизации
                 .authorizeRequests()// АВТОРИЗОВАТЬ ЗАПРОС
-                .antMatchers("/view/*").hasRole("ADMIN")//на эти ресурсы можно только админу
-                .antMatchers("/groups/**", "/subjects/**").hasRole("ADMIN")//только дял админа
-                .antMatchers("/students/**", "/teachers/**").hasRole("ADMIN")//только дял админа
-                .antMatchers("/view/teacher_app/*").hasRole("TEACHER")//только дял учителя
-                .antMatchers("/view/student_app/*").hasRole("STUDENT")//только дял студента
+                .antMatchers("/view/admin_*").hasRole("ADMIN")//на эти ресурсы можно только админу
+                .antMatchers("/groups/**", "/subjects/**").hasRole("ADMIN")//только для админа
+                .antMatchers("/students/**", "/teachers/**").hasRole("ADMIN")//только для админа
+                .antMatchers("/view/teacher_*").hasRole("TEACHER")//только для учителя
+                .antMatchers("/view/student_*").hasRole("STUDENT")//только для студента
                 .antMatchers("/rest/**").authenticated()//доступ всем кто прошел аутентификацию
                 .and().formLogin()//получаем в браузере базовую страницу входа
                 .successHandler(urlRedirectHandler)//если знаем роль то перейдем на нужную страницу
