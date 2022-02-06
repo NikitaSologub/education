@@ -29,6 +29,9 @@ public final class Constant {
     public static final String ADMIN_SUBJECTS_VIEW = "admin_subjects_page";
     public static final String ADMIN_STUDENTS_MARKS_VIEW = "admin_students_marks_page";
 
+    public static final String STUDENT_ALL_MARKS_VIEW = "student_all_marks_page";
+    public static final String TEACHER_SALARIES_VIEW = "teacher_salaries_page";
+
     //attributes
     public static final String HIDDEN_METHOD_PARAMETER = "hidden_method";
     public static final String MESSAGE = "message";

@@ -15,6 +15,7 @@ import java.util.Set;
 
 import static by.itacademy.sologub.constants.Attributes.STUDENT;
 import static by.itacademy.sologub.constants.Constant.OBJECTS_SET;
+import static by.itacademy.sologub.constants.Constant.STUDENT_ALL_MARKS_VIEW;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +28,7 @@ public class MarkControllerForStudent {
     public ModelAndView getAllMarks(Principal principal) {
         Student student = studentService.getStudentIfExistsOrGetSpecialValue(principal.getName());
         Set<Mark> markSet = markService.getAllMarksByStudentId(student.getId());
-        ModelAndView mav = new ModelAndView("student_all_marks_page");
+        ModelAndView mav = new ModelAndView(STUDENT_ALL_MARKS_VIEW);
         mav.getModel().put(STUDENT, student);
         mav.getModel().put(OBJECTS_SET, markSet);
         return mav;
