@@ -1,6 +1,6 @@
 package by.itacademy.sologub.config;
 
-import by.itacademy.sologub.config.auth_checker.UrlRedirectAfterAuthenticationSuccessHandler;
+import by.itacademy.sologub.services.authentication.UrlRedirectAfterAuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package by.itacademy.sologub.config.auth_checker;
+package by.itacademy.sologub.services.authentication;
 
 import by.itacademy.sologub.services.authentication.model.UserPrincipal;
 import lombok.extern.slf4j.Slf4j;
