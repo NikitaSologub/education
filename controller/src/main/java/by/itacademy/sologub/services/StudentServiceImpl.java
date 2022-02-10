@@ -17,7 +17,7 @@ import java.util.Set;
 public class StudentServiceImpl extends AbstractService implements StudentService {
     private static final String PREFIX = "studentRepo";
     private final Map<String, StudentRepo> repoMap;
-    private volatile StudentRepo repo;
+    private StudentRepo repo;
 
     @PostConstruct
     public void init() {

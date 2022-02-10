@@ -17,7 +17,7 @@ import java.util.Set;
 public class AdminServiceImpl extends AbstractService implements AdminService {
     private static final String PREFIX = "adminRepo";
     private final Map<String, AdminRepo> repoMap;
-    private volatile AdminRepo repo = null;
+    private AdminRepo repo = null;
 
     @PostConstruct
     public void init() {

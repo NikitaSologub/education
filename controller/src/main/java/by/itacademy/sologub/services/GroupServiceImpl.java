@@ -20,7 +20,7 @@ import java.util.Map;
 public class GroupServiceImpl extends AbstractService implements GroupService {
     private static final String PREFIX = "groupRepo";
     private final Map<String, GroupRepo> repoMap;
-    private volatile GroupRepo repo = null;
+    private GroupRepo repo = null;
 
     @PostConstruct
     public void init() {

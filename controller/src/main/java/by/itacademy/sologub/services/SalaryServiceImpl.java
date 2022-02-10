@@ -18,7 +18,7 @@ import java.util.Set;
 public class SalaryServiceImpl extends AbstractService implements SalaryService {
     private static final String PREFIX = "salaryRepo";
     private final Map<String, SalaryRepo> repoMap;
-    private volatile SalaryRepo repo = null;
+    private SalaryRepo repo = null;
 
     @PostConstruct
     public void init() {

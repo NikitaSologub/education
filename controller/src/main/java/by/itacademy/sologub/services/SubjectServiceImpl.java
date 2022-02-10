@@ -18,7 +18,7 @@ import java.util.Set;
 public class SubjectServiceImpl extends AbstractService implements SubjectService {
     private static final String PREFIX = "subjectRepo";
     private final Map<String, SubjectRepo> repoMap;
-    private volatile SubjectRepo repo = null;
+    private SubjectRepo repo = null;
 
     @PostConstruct
     public void init() {

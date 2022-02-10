@@ -18,7 +18,7 @@ import java.util.Set;
 public class MarkServiceImpl extends AbstractService implements MarkService {
     private static final String PREFIX = "markRepo";
     private final Map<String, MarkRepo> repoMap;
-    private volatile MarkRepo repo;
+    private MarkRepo repo;
 
     @PostConstruct
     public void init() {
