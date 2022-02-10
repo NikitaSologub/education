@@ -1,5 +1,7 @@
 package by.itacademy.sologub;
 
+import by.itacademy.sologub.model.Credential;
+
 public interface CredentialRepo {
     Credential getCredentialIfExistsOrGetSpecialValue(String login);
 

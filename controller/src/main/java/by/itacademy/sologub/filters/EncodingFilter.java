@@ -1,10 +1,18 @@
 package by.itacademy.sologub.filters;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
-import static by.itacademy.sologub.constants.Constant.*;
+import static by.itacademy.sologub.constants.Constant.ALL_URL;
+import static by.itacademy.sologub.constants.Constant.CONTENT_TYPE;
+import static by.itacademy.sologub.constants.Constant.REQUEST_ENCODING;
+import static by.itacademy.sologub.constants.Constant.UTF_8;
 
 @WebFilter(ALL_URL)
 public class EncodingFilter implements Filter {

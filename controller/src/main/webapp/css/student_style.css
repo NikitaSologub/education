@@ -1,0 +1,30 @@
+body{
+    background: url("../img/wallpaper_2.jpg");
+    font-family: "Roboto", sans-serif;
+    margin: 50px;
+    padding: 0;
+    background-size: 100%;
+}
+
+.message{
+    margin: 15px 0 0;
+    color: #008075;
+    font-size: 25px;
+}
+.session{
+    margin: 15px 0 0;
+    color: #001e7f;
+    font-size: 25px;
+}
+
+.average{
+    margin: 15px 0 0;
+    color: #bd6202;
+    font-size: 25px;
+}
+.table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border: 3px solid purple;
+}
